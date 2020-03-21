@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dumb : MonoBehaviour
+public class Dumb1 : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
