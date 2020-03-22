@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class DataBuilder : MonoBehaviour
+public class ClickTimer : MonoBehaviour
 {
     public string fileName;
     public float bpm;

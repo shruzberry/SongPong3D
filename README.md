@@ -7,17 +7,16 @@
 
 ## Task Lists
 ### Sean
-- Create a tools that generates hit times for any song 
+- Create a tools that generates hit times for any song
 
--- Use BPM
+-- Create TSV with ClickTimer
 
--- Click timer option
+-- Think of solution to remove wrong notes
+--- Generate values with a temp character. (must be manually approved)
 
-- Song Surfer to change time in song
-
--- Happens after ball drop  
 ### Kevin
-- import all assets from Java version
-
 - Physics/ball drop and bounce
 
+-- Spawn basic ball using a tsv row
+
+- Make file path to song simpler

@@ -1,15 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
+
+// TODO: create a function similar to the slider function to...
+// 1) Load song by name onto the audio player
+// 2) Locate the correct song data file for reading (.tsv)
+//    - songName_notes.tsv (for the notes)
+//    - songName_data.dat (for bpm, deelay, and style)
+//    - Put all in folder named songName
+// 3) Create Ball prefabs from file data
+// 4) Set slider back to start of song
 
 public class Song : MonoBehaviour
 {
+    // Song Info
     public string songPath;
     public string notemapPath;
+    public float songBPM = 1;
+    private AudioSource song; // The Song that will be located and changed
 
+    // UI
+    public Text display;
+    public Slider songSlider;
+
+    // Notes
     private List<string> notes = new List<string>();
     private int noteIndex = 0;
+
+    // Time
+    private float songTime = 0.0f; // Time to change the song to on slider input
+    private int currentBeat;
+
+    void Awake()
+    {
+        song = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -18,7 +45,11 @@ public class Song : MonoBehaviour
 
     void Update()
     {
-        
+        // read out the beat number to thee screen
+        currentBeat = (int)((song.time / 60.0f) * songBPM);
+        display.text = "Beat: " + currentBeat.ToString();
+        // move slider with song
+        songSlider.value = (song.time / song.clip.length);
     }
 
     public void readNote(int index){
@@ -37,6 +68,13 @@ public class Song : MonoBehaviour
         }
     }
 
-    public void closeSong(){
+    // called automatically when slider is changed
+    public void setTime(float time)
+    {
+        if (Input.GetMouseButtonDown(0))
+        {// This avoids the audio from crackling as the song and the slider are both updating each other
+          song.time = (song.clip.length * time);
+          song.Play();
+        }
     }
 }

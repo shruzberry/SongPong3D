@@ -9,7 +9,6 @@ public class BallDropper : MonoBehaviour
     public Song song;
     public GameObject simpleBall;
 
-
     // SPAWN
     private int ballCounter = 0; // how many balls are in this song
     private int dropIndex = 0; // keeps track of which ball to drop next
@@ -39,7 +38,7 @@ public class BallDropper : MonoBehaviour
             spawnSimpleBall(1);
             first = false;
         }
-        
+
         checkDrop();
     }
 
@@ -54,9 +53,9 @@ private bool test = true;
         // get the current line of the note map
 
         // check if spawn time < current time
-		
+
         // spawn ball based on type
-        
+
 	}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -64,7 +63,7 @@ private bool test = true;
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void spawnSimpleBall(int column){
-        
+
         Vector3 spawnPos = new Vector3(ballCols[column-1], 100, 1);
 
         Instantiate(simpleBall, Camera.main.ScreenToWorldPoint(spawnPos), Quaternion.identity);
@@ -72,10 +71,10 @@ private bool test = true;
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * 
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/   
+ *
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * COLUMNS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -86,9 +85,9 @@ private bool test = true;
         int screenPadding = (int)(width * 0.1); // padding is 10% of screen width on each side (20% total)
 		int effScreenW = width - 2 * screenPadding; // the screen width minus the padding
 	    //print("ScreenW: " + width + "screenPadding: " + screenPadding + " EffScreenWidth: " + effScreenW);
-		
+
 		int colStep = effScreenW / NUM_COL; // amount of x to move per column
-		
+
 		for(int i = 0; i < NUM_COL+1; i++) {
 			ballCols[i] = colStep * i + screenPadding;
 			//print("Column " + i + " is located at x = " + ballCols[i]);
