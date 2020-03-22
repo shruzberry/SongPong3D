@@ -19,7 +19,7 @@ public class SimpleBall : MonoBehaviour
     }
     void Start()
     {
-        print("SIMPLE BALL START");
+
     }
 
     void Update()

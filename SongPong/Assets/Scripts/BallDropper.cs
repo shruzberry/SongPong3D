@@ -4,27 +4,81 @@ using UnityEngine;
 
 public class BallDropper : MonoBehaviour
 {
-
-    // COLUMNS
-    private int[] ballCols;
-    private bool showColumns = true;
-    private static int NUM_COL = 16;
+    // REFERENCES
+    public GameTimer gt;
+    public Song song;
     public GameObject simpleBall;
 
+
+    // SPAWN
+    private int ballCounter = 0; // how many balls are in this song
+    private int dropIndex = 0; // keeps track of which ball to drop next
+
+    // COLUMNS
+    private int[] ballCols; // x-positions of each column in screen coordinates
+    private bool showColumns = true; // if true, show columns
+    private static int NUM_COL = 16; // number of ball columns
+
     void Awake() {
+        gt = gameObject.GetComponent<GameTimer>();
+        song = gameObject.GetComponent<Song>();
     }
     void Start()
     {
-        print("BD START");
         calcColumns();
-        Instantiate(simpleBall, new Vector3(0, 0, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
+    private bool first = true;
     void Update()
     {
         drawColumns();
+
+        // Test spawning ball
+        if(first){
+            spawnSimpleBall(1);
+            first = false;
+        }
+        
+        checkDrop();
     }
+
+private bool test = true;
+    public void checkDrop() {
+		double currentTime = gt.getGameTime();
+        if(test){
+            song.readNote(0);
+            test = false;
+        }
+
+        // get the current line of the note map
+
+        // check if spawn time < current time
+		
+        // spawn ball based on type
+        
+	}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * SPAWN
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void spawnSimpleBall(int column){
+        
+        Vector3 spawnPos = new Vector3(ballCols[column-1], 100, 1);
+
+        Instantiate(simpleBall, Camera.main.ScreenToWorldPoint(spawnPos), Quaternion.identity);
+        ballCounter++;
+    }
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * 
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/   
+
+    
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * COLUMNS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void calcColumns(){
         ballCols = new int[NUM_COL+1]; // need n+1 lines to make n columns
