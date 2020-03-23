@@ -5,9 +5,9 @@ using UnityEngine;
 public class BallDropper : MonoBehaviour
 {
     // REFERENCES
-    public GameTimer gt;
-    public Song song;
+    private Song song;
     public GameObject simpleBall;
+    public float ballDropY = 200;
 
     // SPAWN
     private int ballCounter = 0; // how many balls are in this song
@@ -19,8 +19,8 @@ public class BallDropper : MonoBehaviour
     private static int NUM_COL = 16; // number of ball columns
 
     void Awake() {
-        gt = gameObject.GetComponent<GameTimer>();
         song = gameObject.GetComponent<Song>();
+        
     }
     void Start()
     {
@@ -44,7 +44,6 @@ public class BallDropper : MonoBehaviour
 
 private bool test = true;
     public void checkDrop() {
-		double currentTime = gt.getGameTime();
         if(test){
             song.readNote(0);
             test = false;
@@ -64,9 +63,10 @@ private bool test = true;
 
     public void spawnSimpleBall(int column){
 
-        Vector3 spawnPos = new Vector3(ballCols[column-1], 100, 1);
+        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(ballCols[column-1], Screen.height + ballDropY, 0));
+        spawnPos.z = 0;
 
-        Instantiate(simpleBall, Camera.main.ScreenToWorldPoint(spawnPos), Quaternion.identity);
+        Instantiate(simpleBall, spawnPos, Quaternion.identity);
         ballCounter++;
     }
 
@@ -97,7 +97,7 @@ private bool test = true;
 
     void drawColumns(){
         int height = Screen.height;
-        int z = 1;
+        int z = 0;
         if (ballCols != null && showColumns)
         {
             // Draw a white line over each column
