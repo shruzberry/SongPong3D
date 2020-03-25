@@ -9,14 +9,15 @@
 ### Sean
 - Create a tools that generates hit times for any song
 
--- Create TSV with ClickTimer
+-- Create notes and add them to TSV with ClickTimer
 
--- Think of solution to remove wrong notes
+-- Have Delete Button on Ball that is tied to the sheet data, allowing it to be deleted
+
 --- Generate values with a temp character. (must be manually approved)
 
 ### Kevin
-- Physics/ball drop and bounce
+- Bounce on next hit times
 
--- Spawn basic ball using a tsv row
+-- Read ball info from .csv
 
 - Make file path to song simpler
