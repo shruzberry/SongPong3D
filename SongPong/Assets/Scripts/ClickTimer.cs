@@ -6,20 +6,43 @@ using System.IO;
 
 public class ClickTimer : MonoBehaviour
 {
-    public string fileName;
+    // Song Data
+    public string songName;
     public float bpm;
 
-    private string path;
-    private StreamWriter writer;
+    // Interface
+    public GameObject ballBuilderUi;
+
+    // File Writing
+    private string notesPath;
+    private StreamWriter noteWriter;
+    private int nextId;
+
+    /*********************************
+    *       Custom Functions         *
+    **********************************/
+    
+    int GetNextId()
+    {// Finds the lowest available ID in the tsv
+        return 0;
+    }
+
+    void AddNote()
+    {// Adds a note to the song's datasheet
+        nextId = GetNextId();
+        noteWriter.WriteLine(nextId + "\t"); //TODO: implement time and position
+    }
+
+    /*********************************
+    *       Runtime Functions        *
+    **********************************/
 
     void Awake()
     {
-        path = "Assets/Resources/SongData/" + fileName + ".csv";
-        writer = new StreamWriter(path, true);
-    }
+        // Connect Objects
+        notesPath = "Assets/Resources/SongData/" + songName + "/" + songName + "_notes" + ".tsv";
+        noteWriter = new StreamWriter(notesPath, true);
 
-    void AddPlaceholder()
-    {
-        writer.WriteLine("null, ");
+        nextId = GetNextId();
     }
 }
