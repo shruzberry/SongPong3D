@@ -9,6 +9,7 @@ public class SimpleBall : MonoBehaviour
     // ATTRIBUTES
     private int ballNum;
     private float size;
+    private float radius;
 
     // COMPONENTS
     private Rigidbody2D rb;
@@ -29,7 +30,9 @@ public class SimpleBall : MonoBehaviour
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
-        size = GetComponent<SpriteRenderer>().bounds.size.y;
+        size = GetComponent<Collider2D>().bounds.size.y;
+
+        radius = size / 2;
     }
 
     void Start()

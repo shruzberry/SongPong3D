@@ -10,12 +10,17 @@ public class Paddle : MonoBehaviour
     public Vector2 screenBounds;
     private float paddleYAxis = -4;
     private float paddleRadius;
+    private float paddleHeight;
 
     // Start is called before the first frame update
+
+    void Awake(){
+        paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
+    }
     void Start()
     {
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
-        paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
     }
 
     // Update is called once per frame
@@ -24,9 +29,11 @@ public class Paddle : MonoBehaviour
         movePaddle();
     }
 
-    public float getPaddleYAxis(){
-        return paddleYAxis;
-    }
+    public float getPaddleYAxis(){return paddleYAxis;}
+
+    public float getPaddleRadius(){return paddleRadius;}
+
+    public float getPaddleHeight(){return paddleHeight;}
 
     private void movePaddle()
     {

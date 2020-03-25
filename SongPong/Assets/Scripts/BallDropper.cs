@@ -19,6 +19,7 @@ public class BallDropper : MonoBehaviour
     private Vector2 screenBounds;
 
     public float ballDropY = 200;
+    private float ballRadius;
     private float paddleY;
 
     // TIME
@@ -32,15 +33,12 @@ public class BallDropper : MonoBehaviour
 
     void Awake() {
         paddle = GameObject.Find("Paddle").GetComponent<Paddle>();
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        spawnTestBall();
     }
     void Start()
     {
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
-        paddleY = paddle.getPaddleYAxis();
-        ballDropY = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height + 200)).y;
-        float deltaY = paddleY - ballDropY;
-        print("(Confirmed Working) DISTANCE TO FALL: " + deltaY + "world units");
-        dropTime = calcDropTime(deltaY);
+        dropTime = calcDropTime();
 
         calcColumns();
     }
@@ -71,18 +69,14 @@ public class BallDropper : MonoBehaviour
             }
         }
 
-        // check if spawn time < current time
-
-        // spawn ball based on type
-
 	}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void spawnSimpleBall(int column){
-
+    public void spawnSimpleBall(int column)
+    {
         Vector3 spawnPos = new Vector3(ballCols[column-1], ballDropY, 0);
         spawnPos.z = 0;
 
@@ -95,14 +89,37 @@ public class BallDropper : MonoBehaviour
         ballCounter++;
     }
 
+    public void spawnTestBall()
+    {
+        Vector3 spawnPos = new Vector3((-screenBounds.x * 2), (-screenBounds.y * 2), 0);
+        GameObject simp = Instantiate(simpleBall, spawnPos, Quaternion.identity);
+        SimpleBall simpScript = simp.GetComponent<SimpleBall>();
+        ballRadius = simpScript.getBallSize() / 2;
+    }
+
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CALCULATIONS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private float calcDropTime(float deltaY)
+    private float calcDropTime()
     {
+        // Get Paddle Info
+        paddleY = paddle.getPaddleYAxis();
+        float paddleHeightHalf = paddle.getPaddleHeight() / 2;
+        
+        // Ball Info
+        ballDropY = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height + 200)).y;
+        
+        // Determine Delta Y
+        float deltaY = paddleY - ballDropY + ballRadius + paddleHeightHalf;
+        print("(Confirmed Working) DISTANCE TO FALL: " + deltaY + " world units");
+
+        // Calculate delta T
+        // using physics equation dy = v0t + 1/2at^2 solved for time in the form
+        // t = (-v0 +- sqrt(v0^2 + 2ady)) / a
         float determinant = (Mathf.Pow(dropSpeed, 2) + (2 * gravity * deltaY));
         float time = (-dropSpeed - Mathf.Sqrt(determinant)) / gravity;
+
         print("Expected Ball Drop Time: " + time + " sec.");
         return time;
     }
