@@ -24,11 +24,15 @@ public class Paddle : MonoBehaviour
         movePaddle();
     }
 
+    public float getPaddleYAxis(){
+        return paddleYAxis;
+    }
+
     private void movePaddle()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector2 paddlePos = new Vector2(mousePos.x, paddleYAxis); // set paddle pos
+        Vector3 paddlePos = new Vector3(mousePos.x, paddleYAxis, 2); // set paddle pos
 
         paddlePos.x = Mathf.Clamp(paddlePos.x, -screenBounds.x + paddleRadius, screenBounds.x - paddleRadius); // check x boundary
 

@@ -33,6 +33,9 @@ public class Song : MonoBehaviour
     private float songTime = 0.0f; // Time to change the song to on slider input
     private int currentBeat;
 
+    // State
+    public bool finishedNotes = false;
+
     void Awake()
     {
         //song = GetComponent<AudioSource>();
@@ -40,6 +43,7 @@ public class Song : MonoBehaviour
 
     void Start()
     {
+        currentBeat = 0;
         loadSong();
     }
 
@@ -52,11 +56,29 @@ public class Song : MonoBehaviour
         //songSlider.value = (song.time / song.clip.length);
     }
 
-    public void readNote(int index){
+    public string[] readNote(int index){
         string note = notes[index];
         string[] noteinfo = note.Split('\t');
-        foreach(string info in noteinfo){
-            print(info);
+        return noteinfo;
+    }
+
+    public float getNextHitTime(){
+        string[] note = readNote(currentBeat);
+        float spawnTime = float.Parse(note[1]);
+        return spawnTime;
+    }
+
+    public void nextNote()
+    {
+        currentBeat++;
+    }
+
+    public bool hasNextNote(){
+        if(currentBeat < notes.Count - 1){
+            return true;
+        } else {
+            finishedNotes = true;
+            return false;
         }
     }
 
