@@ -488,7 +488,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.36
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -589,6 +589,7 @@ MonoBehaviour:
   songBPM: 140
   display: {fileID: 55042608}
   songSlider: {fileID: 462886263}
+  finishedNotes: 0
 --- !u!4 &486707929
 Transform:
   m_ObjectHideFlags: 0
@@ -615,9 +616,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gt: {fileID: 0}
   song: {fileID: 0}
   simpleBall: {fileID: 0}
+  dropSpeed: -1
+  gravity: -3
+  ballDropY: 200
 --- !u!114 &486707931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,6 +636,8 @@ MonoBehaviour:
   songName: paradise
   bpm: 140
   ballBuilderUi: {fileID: 1571517564}
+  percentPadding: 0.1
+  numCols: 16
 --- !u!1 &792576517
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +971,55 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1484138348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1484138350}
+  - component: {fileID: 1484138349}
+  m_Layer: 8
+  m_Name: BallDropper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1484138349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484138348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  song: {fileID: 0}
+  simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
+    type: 3}
+  dropSpeed: -1
+  gravity: -3
+  ballDropY: 200
+--- !u!4 &1484138350
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484138348}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.2761421, y: 0.023819145, z: 0.08093785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571517564
 GameObject:
   m_ObjectHideFlags: 0
