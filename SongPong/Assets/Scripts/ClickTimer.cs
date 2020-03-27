@@ -12,9 +12,6 @@ public class ClickTimer : MonoBehaviour
     private int numNotes;
     private int numBalls;
 
-    // Interface
-    public GameObject ballBuilderUi;
-
     // Column Seettings
     public float percentPadding = .1f;
     public int numCols = 16; 
@@ -24,6 +21,9 @@ public class ClickTimer : MonoBehaviour
     private string ballsPath;
     string[] notes;
     string[] balls;
+
+    // Interface
+    public GameObject ballBuilderUi;
 
     /*********************************
     *       Custom Functions         *
@@ -68,7 +68,7 @@ public class ClickTimer : MonoBehaviour
         numBalls = balls.Length;
     }
 
-    void AddNote()
+    int AddNote()
     {// Adds a note to the song's datasheet
         int nextId;
         int colNum;
@@ -77,13 +77,37 @@ public class ClickTimer : MonoBehaviour
         nextId = GetNextId("notes");
         colNum = getNearestColumn(Input.mousePosition.x);
 
-        /*
         StreamWriter noteWriter = new StreamWriter(notesPath, true);
         noteWriter.WriteLine(nextId + ","); //TODO: implement time and position
         noteWriter.Close();
-        */
 
         numNotes++;
+
+        return nextId;
+    }
+
+    /*********************************
+    *       Ball Builders            *
+    **********************************/
+
+    void BuildBall(string type)
+    {
+        
+        string data = "";
+        switch (type)
+        {
+            case "basic":
+                data = numBalls + ",basic," + AddNote();
+                break;
+
+            case "bounce":
+                break;
+        }
+        //TODO: add note to sheet
+        using (StreamWriter sw = File.AppendText(ballsPath)) 
+        {
+            sw.WriteLine(data);
+        }
     }
 
     /*********************************

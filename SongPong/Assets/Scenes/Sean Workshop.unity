@@ -467,8 +467,8 @@ GameObject:
   - component: {fileID: 486707929}
   - component: {fileID: 486707928}
   - component: {fileID: 486707930}
-  - component: {fileID: 486707927}
   - component: {fileID: 486707931}
+  - component: {fileID: 486707927}
   m_Layer: 0
   m_Name: Song Controller
   m_TagString: Untagged
@@ -635,9 +635,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   songName: paradise
   bpm: 140
-  ballBuilderUi: {fileID: 1571517564}
   percentPadding: 0.1
   numCols: 16
+  ballBuilderUi: {fileID: 1571517564}
 --- !u!1 &792576517
 GameObject:
   m_ObjectHideFlags: 0

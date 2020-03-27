@@ -38,7 +38,7 @@ public class Song : MonoBehaviour
 
     void Awake()
     {
-        //song = GetComponent<AudioSource>();
+        song = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -50,10 +50,10 @@ public class Song : MonoBehaviour
     void Update()
     {
         // read out the beat number to thee screen
-        //currentBeat = (int)((song.time / 60.0f) * songBPM);
-        //display.text = "Beat: " + currentBeat.ToString();
-        // move slider with song
-        //songSlider.value = (song.time / song.clip.length);
+        currentBeat = (int)((song.time / 60.0f) * songBPM);
+        display.text = "Beat: " + currentBeat.ToString();
+        //move slider with song
+        songSlider.value = (song.time / song.clip.length);
     }
 
     public string[] readNote(int index){
