@@ -28,7 +28,7 @@ public class ClickTimer : MonoBehaviour
     public GameObject ballBuilderUi;
 
     /*********************************
-    *       Custom Functions         *
+    *       Helper Functions         *
     **********************************/
     
     int GetNextId(string list)
@@ -70,6 +70,10 @@ public class ClickTimer : MonoBehaviour
         numBalls = balls.Length;
     }
 
+    /*********************************
+    *       Ball Builders            *
+    **********************************/
+
     int AddNote()
     {// Adds a note to the song's datasheet
         int nextId;
@@ -87,10 +91,6 @@ public class ClickTimer : MonoBehaviour
 
         return nextId;
     }
-
-    /*********************************
-    *       Ball Builders            *
-    **********************************/
 
     void BuildBall(string type)
     {
