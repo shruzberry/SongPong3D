@@ -21,3 +21,12 @@
 -- Read ball info from .csv
 
 - Make file path to song simpler
+
+## Documentation
+
+### Data Files
+Notes.csv
+id, time, colNum
+
+Balls.csv
+id, type, note Ids

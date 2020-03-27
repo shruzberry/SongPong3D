@@ -11,6 +11,8 @@ public class ClickTimer : MonoBehaviour
     public float bpm;
     private int numNotes;
     private int numBalls;
+    private int currentBeat;
+    private AudioSource song;
 
     // Column Seettings
     public float percentPadding = .1f;
@@ -78,7 +80,7 @@ public class ClickTimer : MonoBehaviour
         colNum = getNearestColumn(Input.mousePosition.x);
 
         StreamWriter noteWriter = new StreamWriter(notesPath, true);
-        noteWriter.WriteLine(nextId + ","); //TODO: implement time and position
+        noteWriter.WriteLine(nextId + "," + currentBeat + "," + colNum); //TODO: implement time and position
         noteWriter.Close();
 
         numNotes++;
@@ -92,7 +94,6 @@ public class ClickTimer : MonoBehaviour
 
     void BuildBall(string type)
     {
-        
         string data = "";
         switch (type)
         {
@@ -102,12 +103,17 @@ public class ClickTimer : MonoBehaviour
 
             case "bounce":
                 break;
+            
+            default:
+                print("No Ball Type Selected");
+                break;
         }
         //TODO: add note to sheet
-        using (StreamWriter sw = File.AppendText(ballsPath)) 
-        {
-            sw.WriteLine(data);
-        }
+        StreamWriter noteWriter = new StreamWriter(ballsPath, true);
+        noteWriter.WriteLine(data);
+        noteWriter.Close();
+
+        numBalls++;
     }
 
     /*********************************
@@ -119,6 +125,8 @@ public class ClickTimer : MonoBehaviour
         // Connect Objects
         notesPath = "../SongPong/Assets/Resources/SongData/" + songName + "/" + songName + "_notes" + ".csv";
         ballsPath = "../SongPong/Assets/Resources/SongData/" + songName + "/" + songName + "_balls" + ".csv";
+        
+        song = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -128,9 +136,11 @@ public class ClickTimer : MonoBehaviour
 
     void Update()
     {
+        currentBeat = (int)((song.time / 60.0f) * bpm);
+
         if(Input.GetMouseButtonDown(0))
         {
-            AddNote();
+            BuildBall("basic");
         }
     }
 }
