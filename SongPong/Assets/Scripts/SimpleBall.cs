@@ -7,13 +7,16 @@ public class SimpleBall : MonoBehaviour
     // REFERENCES
 
     // ATTRIBUTES
-    private int ballNum;
+    private int id;
     private float size;
     private float radius;
 
     // COMPONENTS
     private Rigidbody2D rb;
     private Vector2 screenBounds;
+
+    // NOTES
+    private List<Note> notes;
 
     // VELOCITY
     private float velocityX;
@@ -28,6 +31,18 @@ public class SimpleBall : MonoBehaviour
     // STATE
     private bool isFalling;
 
+    public void initBallInfo(int id, List<Note> noteList)
+    {
+        this.id = id;
+        this.notes = noteList;
+    }
+
+    public void initBallPhysics(Vector3 pos, float velocity, float acceleration){
+        setPosition(pos);
+        this.velocityY = velocity;
+        gravity = acceleration;
+    }
+
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         size = GetComponent<Collider2D>().bounds.size.y;
@@ -39,23 +54,26 @@ public class SimpleBall : MonoBehaviour
     {
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         gameObject.layer = LayerMask.NameToLayer("Balls");
-        spawnTime = Time.time;
         velocityX = 0;
         isFalling = true;
     }
 
-    void Update()
+    public void UpdateBall()
     {
         if(transform.position.y < -screenBounds.y){
            handleMiss();
         }
     }
 
-    void FixedUpdate()
+    public void FixedUpdateBall()
     {
         velocityY += gravity * Time.fixedDeltaTime;
 
         moveBall();
+    }
+
+    public void dropBall(){
+        spawnTime = Time.time;
     }
 
     private void moveBall()
@@ -64,9 +82,9 @@ public class SimpleBall : MonoBehaviour
         rb.MovePosition((Vector2)transform.position + newPos);
     }
 
-    public float getBallSize(){return size;}
-    public void setBallDropSpeed(float speed){velocityY = speed;}
-    public void setBallAcceleration(float acc){gravity = acc;}
+    public float getSize(){return size;}
+    public void setDropSpeed(float speed){velocityY = speed;}
+    public void setAcceleration(float acc){gravity = acc;}
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -77,6 +95,15 @@ public class SimpleBall : MonoBehaviour
         }
     }
 
+    public float getHitTime(){
+       return notes[0].getHitTime();
+    }
+
+    public int getSpawnColumn(){return notes[0].getColumn();}
+
+    public void setPosition(Vector3 loc){
+        transform.position = loc;
+    }
 
     private void handleMiss(){
         print("Missed Ball");
