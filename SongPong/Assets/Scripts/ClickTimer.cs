@@ -6,6 +6,9 @@ using System.IO;
 
 public class ClickTimer : MonoBehaviour
 {
+    // Ball Building
+    private string ballType = "basic";
+    
     // Song Data
     public string songName;
     public float bpm;
@@ -102,6 +105,12 @@ public class ClickTimer : MonoBehaviour
                 break;
 
             case "bounce":
+                data = numBalls + ",bounce,";
+                while (!Input.GetMouseButtonDown(1))
+                {
+                    if (Input.GetMouseButtonDown(0))
+                        data += AddNote();
+                }
                 break;
             
             default:
@@ -138,9 +147,16 @@ public class ClickTimer : MonoBehaviour
     {
         currentBeat = (int)((song.time / 60.0f) * bpm);
 
+        // Click to start creating ball
         if(Input.GetMouseButtonDown(0))
         {
-            BuildBall("basic");
+            BuildBall(ballType);
         }
+
+        // Toggle ball types
+        if (Input.GetKeyDown("1"))
+            ballType = "basic";
+        /*if (Input.GetKeyDown("2"))
+            ballType = "bounce";*/
     }
 }
