@@ -87,7 +87,7 @@ public class ClickTimer : MonoBehaviour
         colNum = getNearestColumn(Input.mousePosition.x);
 
         StreamWriter noteWriter = new StreamWriter(notesPath, true);
-        noteWriter.WriteLine(nextId + "," + currentBeat + "," + colNum); //TODO: implement time and position
+        noteWriter.WriteLine(nextId + "," + currentBeat + "," + colNum);
         noteWriter.Close();
 
         numNotes++;
@@ -117,7 +117,6 @@ public class ClickTimer : MonoBehaviour
                 print("No Ball Type Selected");
                 break;
         }
-        //TODO: add note to sheet
         StreamWriter noteWriter = new StreamWriter(ballsPath, true);
         noteWriter.WriteLine(data);
         noteWriter.Close();
@@ -155,8 +154,18 @@ public class ClickTimer : MonoBehaviour
 
         // Toggle ball types
         if (Input.GetKeyDown("1"))
+        {
+            ballBuilderUi.SetActive(false);
+        }
+        if (Input.GetKeyDown("2"))
+        {
+            ballBuilderUi.SetActive(true);
             ballType = "basic";
-        /*if (Input.GetKeyDown("2"))
-            ballType = "bounce";*/
+        }
+        /*if (Input.GetKeyDown("3"))
+        {
+            ballBuilderUi.SetActive(true);
+            ballType = "bounce";
+        }*/
     }
 }
