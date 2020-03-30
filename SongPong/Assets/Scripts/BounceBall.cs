@@ -10,10 +10,9 @@ public class BounceBall : Ball
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void handleDrop()
     {
-        
+
     }
 
     protected override void handleCatch()
@@ -23,6 +22,6 @@ public class BounceBall : Ball
 
     protected override void handleMiss()
     {
-        
+
     }
 }

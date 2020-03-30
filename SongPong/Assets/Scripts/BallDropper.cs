@@ -10,13 +10,14 @@ public class BallDropper : MonoBehaviour
     public Song song;
     private Paddle paddle;
     public GameObject simpleBall;
+    public GameObject bounceBall;
     
     // Balls
-    private List<SimpleBall> balls = new List<SimpleBall>(); // all balls in this song
-    private List<SimpleBall> activeBallList = new List<SimpleBall>(); // all active balls
-    private List<SimpleBall> finishedBallList = new List<SimpleBall>();
+    private List<Ball> balls = new List<Ball>(); // all balls in this song
+    private List<Ball> activeBallList = new List<Ball>(); // all active balls
+    private List<Ball> finishedBallList = new List<Ball>();
     private int currentBallIndex;
-    private SimpleBall currentBall;
+    private Ball currentBall;
 
     // Reader
     public string ballsLocation = "Assets/Resources/Note Data/";
@@ -93,7 +94,7 @@ public class BallDropper : MonoBehaviour
     private void updateActiveBalls()
     {
         // Update all active balls
-        foreach(SimpleBall ball in activeBallList){
+        foreach(Ball ball in activeBallList){
             ball.UpdateBall();
 
             if(ball.checkIsFinished()) { 
@@ -107,7 +108,7 @@ public class BallDropper : MonoBehaviour
     private void removeFinishedBalls()
     {
         // Destroy any balls that are caught or missed
-		foreach(SimpleBall rmBall in finishedBallList) {
+		foreach(Ball rmBall in finishedBallList) {
 			activeBallList.Remove(rmBall);
             rmBall.DeleteBall();
 		}
@@ -116,17 +117,19 @@ public class BallDropper : MonoBehaviour
 
     private void FixedUpdate() 
     {
-        foreach(SimpleBall ball in activeBallList){
+        foreach(Ball ball in activeBallList){
             ball.FixedUpdateBall();
         }
     }
 
     public void checkDrop() 
     {
-        if(!isFinished && currentBall.getHitTime() < Time.time){
-            currentBall.handleDrop();
-            activeBallList.Add(currentBall);
-            nextBall();
+        if(!isFinished){
+            if((currentBall.getHitTime() - dropTime < Time.time)){
+                currentBall.handleDrop();
+                activeBallList.Add(currentBall);
+                nextBall();
+            }
         }
 	}
 
@@ -140,6 +143,24 @@ public class BallDropper : MonoBehaviour
         GameObject b = Instantiate(simpleBall);
         b.transform.parent = transform; // set BallDropper gameobject to parent
         SimpleBall ball = b.GetComponent<SimpleBall>();
+
+        // Pass data from the sheet to the ball
+        ball.initBallInfo(id, notes);
+
+        // Put the ball in right place
+        int column = ball.getSpawnColumn();
+        Vector3 spawnPos = new Vector3(ballCols[column-1], ballDropY, 0);
+        ball.initBallPhysics(spawnPos, dropSpeed, gravity);
+
+        balls.Add(ball);
+    }
+
+    public void spawnBounceBall(int id, List<Note> notes)
+    {
+         // Instantiate the ball
+        GameObject b = Instantiate(bounceBall);
+        b.transform.parent = transform; // set BallDropper gameobject to parent
+        BounceBall ball = b.GetComponent<BounceBall>();
 
         // Pass data from the sheet to the ball
         ball.initBallInfo(id, notes);
@@ -219,6 +240,9 @@ public class BallDropper : MonoBehaviour
             switch(type){
                 case "basic":
                     spawnSimpleBall(id,noteList);
+                    break;
+                case "bounce":
+                    spawnBounceBall(id,noteList);
                     break;
                 default:
                     break;

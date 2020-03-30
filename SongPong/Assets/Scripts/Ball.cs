@@ -63,10 +63,19 @@ public abstract class Ball : MonoBehaviour
  * UPDATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateBall()
     {
-        
+        if(transform.position.y < -screenBounds.y){
+           handleMiss();
+        }
+    }
+
+    public void FixedUpdateBall()
+    {
+        velocityY += gravity * Time.fixedDeltaTime;
+
+        Vector2 newPos = new Vector2(velocityX * Time.deltaTime, velocityY * Time.deltaTime);
+        rb.MovePosition((Vector2)transform.position + newPos);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -86,6 +95,17 @@ public abstract class Ball : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * GETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    public float getSize(){return size;}
+    public float getHitTime(){
+       return notes[0].getHitTime();
+    }
+    public int getSpawnColumn(){return notes[0].getColumn();}
+    public bool checkIsFinished(){return isFinished;}
+    public bool checkMissed(){return missed;}
+
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -94,9 +114,10 @@ public abstract class Ball : MonoBehaviour
     public void setAcceleration(float acc){gravity = acc;}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * ABSTRACT
+ * ABSTRACT EVENT HANDLERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    abstract public void handleDrop();
     abstract protected void handleCatch();
     abstract protected void handleMiss();
 }

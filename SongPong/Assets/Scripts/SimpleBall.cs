@@ -13,26 +13,12 @@ public class SimpleBall : Ball
  * UPDATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void UpdateBall()
-    {
-        if(transform.position.y < -screenBounds.y){
-           handleMiss();
-        }
-    }
-
-    public void FixedUpdateBall()
-    {
-        velocityY += gravity * Time.fixedDeltaTime;
-
-        Vector2 newPos = new Vector2(velocityX * Time.deltaTime, velocityY * Time.deltaTime);
-        rb.MovePosition((Vector2)transform.position + newPos);
-    }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * STATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void handleDrop()
+    public override void handleDrop()
     {
         spawnTime = Time.time;
     }
@@ -48,16 +34,5 @@ public class SimpleBall : Ball
         print("Collide");
         isFinished = true;
     }
-
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * GETTERS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    public float getSize(){return size;}
-    public float getHitTime(){
-       return notes[0].getHitTime();
-    }
-    public int getSpawnColumn(){return notes[0].getColumn();}
-    public bool checkIsFinished(){return isFinished;}
-    public bool checkMissed(){return missed;}
 
 }

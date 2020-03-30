@@ -152,6 +152,8 @@ MonoBehaviour:
   song: {fileID: 315321662}
   simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
     type: 3}
+  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
+    type: 3}
   ballsLocation: Assets/Resources/Note Data/
   ballMapName: paradise
   delimeter: 44
