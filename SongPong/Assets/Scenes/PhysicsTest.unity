@@ -152,6 +152,13 @@ MonoBehaviour:
   song: {fileID: 315321662}
   simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
     type: 3}
+  ballsLocation: Assets/Resources/Note Data/
+  ballMapName: paradise
+  delimeter: 44
+  noteDelimeter: 47
+  notesColumn: 2
+  typeColumn: 1
+  idColumn: 0
   dropSpeed: -1
   gravity: -3
   ballDropY: 200
@@ -233,9 +240,6 @@ MonoBehaviour:
   songSlider: {fileID: 0}
   delimeter: 44
   noteDelimeter: 47
-  notesColumn: 2
-  typeColumn: 1
-  idColumn: 0
   finishedNotes: 0
 --- !u!1 &1126717609
 GameObject:

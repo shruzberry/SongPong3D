@@ -13,8 +13,10 @@ public class BallDropper : MonoBehaviour
     
     // Balls
     private List<SimpleBall> balls = new List<SimpleBall>(); // all balls in this song
-    private List<SimpleBall> activeBalls = new List<SimpleBall>(); // all active balls
+    private List<SimpleBall> activeBallList = new List<SimpleBall>(); // all active balls
+    private List<SimpleBall> finishedBallList = new List<SimpleBall>();
     private int currentBallIndex;
+    private SimpleBall currentBall;
 
     // Reader
     public string ballsLocation = "Assets/Resources/Note Data/";
@@ -30,17 +32,14 @@ public class BallDropper : MonoBehaviour
     public float gravity = -3;
 
     // SPAWN
-    private int ballCounter = 0; // how many balls are in this song
-    private int dropIndex = 0; // keeps track of which ball to drop next
     private Vector2 screenBounds;
-
     public float ballDropY;
     private float ballRadius;
     private float paddleY;
-
-    // TIME
     private float dropTime;
 
+    // STATE
+    private bool isFinished = false;
 
     // COLUMNS
     private float[] ballCols; // x-positions of each column in world coordinates
@@ -62,12 +61,23 @@ public class BallDropper : MonoBehaviour
         dropTime = calcDropTime();
         loadBalls();
         currentBallIndex = 0;
+        currentBall = balls[currentBallIndex];
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * UPDATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    public void nextBall() {currentBallIndex++;}
+    public void nextBall() 
+    {
+        if(currentBallIndex < balls.Count - 1){
+            currentBallIndex++;
+        }
+        else{
+            isFinished = true;
+            print("Last ball reached.");
+        }
+        currentBall = balls[currentBallIndex];
+    }
 
     private void Update()
     {
@@ -75,25 +85,47 @@ public class BallDropper : MonoBehaviour
 
         checkDrop();
 
-        foreach(SimpleBall ball in activeBalls){
+        updateActiveBalls();
+
+        removeFinishedBalls();
+    }
+
+    private void updateActiveBalls()
+    {
+        // Update all active balls
+        foreach(SimpleBall ball in activeBallList){
             ball.UpdateBall();
+
+            if(ball.checkIsFinished()) { 
+				finishedBallList.Add(ball);
+			} else if(ball.checkMissed()) { 
+                finishedBallList.Add(ball);
+            }
         }
+    }
+
+    private void removeFinishedBalls()
+    {
+        // Destroy any balls that are caught or missed
+		foreach(SimpleBall rmBall in finishedBallList) {
+			activeBallList.Remove(rmBall);
+            rmBall.DeleteBall();
+		}
+        finishedBallList.Clear();
     }
 
     private void FixedUpdate() 
     {
-        foreach(SimpleBall ball in activeBalls){
+        foreach(SimpleBall ball in activeBallList){
             ball.FixedUpdateBall();
         }
     }
 
     public void checkDrop() 
     {
-        SimpleBall b = balls[currentBallIndex];
-        if(b.getHitTime() < Time.time){
-            print("DROP!");
-            b.dropBall();
-            activeBalls.Add(b);
+        if(!isFinished && currentBall.getHitTime() < Time.time){
+            currentBall.handleDrop();
+            activeBallList.Add(currentBall);
             nextBall();
         }
 	}
@@ -117,10 +149,7 @@ public class BallDropper : MonoBehaviour
         Vector3 spawnPos = new Vector3(ballCols[column-1], ballDropY, 0);
         ball.initBallPhysics(spawnPos, dropSpeed, gravity);
 
-        print("TEST: " + ball.getHitTime());
-
         balls.Add(ball);
-        ballCounter++;
     }
 
     public void spawnTestBall()
@@ -129,6 +158,7 @@ public class BallDropper : MonoBehaviour
         GameObject simp = Instantiate(simpleBall, spawnPos, Quaternion.identity);
         SimpleBall simpScript = simp.GetComponent<SimpleBall>();
         ballRadius = simpScript.getSize() / 2;
+        simpScript.DeleteBall();
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
