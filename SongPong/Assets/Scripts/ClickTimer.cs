@@ -156,6 +156,7 @@ public class ClickTimer : MonoBehaviour
         if (Input.GetKeyDown("1"))
         {
             ballBuilderUi.SetActive(false);
+            ballType = "null";
         }
         if (Input.GetKeyDown("2"))
         {
