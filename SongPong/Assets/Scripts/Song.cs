@@ -16,8 +16,9 @@ using System.IO;
 public class Song : MonoBehaviour
 {
     // Song Info
+    public string notesLocation = "Assets/Resources/Note Data/";
     public string songPath;
-    public string notemapPath;
+    public string notemapName;
     public float songBPM = 1;
     private AudioSource song; // The Song that will be located and changed
 
@@ -25,13 +26,15 @@ public class Song : MonoBehaviour
     public Text display;
     public Slider songSlider;
 
+    // Reader
+    public char delimeter = ',';
+    public char noteDelimeter = '/';
+
     // Notes
-    private List<string> notes = new List<string>();
-    private int noteIndex = 0;
+    private List<Note> notes = new List<Note>();
 
     // Time
     private float songTime = 0.0f; // Time to change the song to on slider input
-    private int currentBeat;
 
     // State
     public bool finishedNotes = false;
@@ -43,8 +46,6 @@ public class Song : MonoBehaviour
 
     void Start()
     {
-        currentBeat = 0;
-        loadSong();
     }
 
     void Update()
@@ -56,38 +57,40 @@ public class Song : MonoBehaviour
         songSlider.value = (song.time / song.clip.length);
     }
 
-    public string[] readNote(int index){
-        string note = notes[index];
-        string[] noteinfo = note.Split('\t');
-        return noteinfo;
-    }
-
-    public float getNextHitTime(){
-        string[] note = readNote(currentBeat);
-        float spawnTime = float.Parse(note[1]);
-        return spawnTime;
-    }
-
-    public void nextNote()
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * READER
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    public void loadSong()
     {
-        currentBeat++;
-    }
+        // Load the Ball Sheet and the Notes Sheet
+        string path = notesLocation + notemapName + "/";
+        string ballsPath = path + notemapName + "_balls.csv";
+        string notesPath = path + notemapName + "_notes.csv";
 
-    public bool hasNextNote(){
-        if(currentBeat < notes.Count - 1){
-            return true;
-        } else {
-            finishedNotes = true;
-            return false;
-        }
-    }
-
-    public void loadSong(){
-        StreamReader reader = new StreamReader(notemapPath);
+        StreamReader reader = new StreamReader(notesPath);
         string currLine = reader.ReadLine(); // this skips the labels row
+
         while((currLine = reader.ReadLine()) != null){
-            notes.Add(currLine);
+            string[] noteInfo = currLine.Split(delimeter);
+            int id = int.Parse(noteInfo[0]);
+            float time = float.Parse(noteInfo[1]);
+            int col = int.Parse(noteInfo[2]);
+
+            Note n = new Note(id,time,col);
+            notes.Add(n);
         }
+    }
+
+    public Note getNote(int index){
+        return notes[index];
+    }
+
+    public List<Note> getNotes(int[] indices){
+        List<Note> noteList = new List<Note>();
+        foreach(int i in indices){
+            noteList.Add(getNote(i));
+        }
+        return noteList;
     }
 
     // called automatically when slider is changed

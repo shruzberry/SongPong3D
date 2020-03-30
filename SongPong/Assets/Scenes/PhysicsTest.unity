@@ -152,6 +152,15 @@ MonoBehaviour:
   song: {fileID: 315321662}
   simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
     type: 3}
+  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
+    type: 3}
+  ballsLocation: Assets/Resources/Note Data/
+  ballMapName: paradise
+  delimeter: 44
+  noteDelimeter: 47
+  notesColumn: 2
+  typeColumn: 1
+  idColumn: 0
   dropSpeed: -1
   gravity: -3
   ballDropY: 200
@@ -225,11 +234,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a692f364ca76a4bb9a2cf1b9bb6ffac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notesLocation: Assets/Resources/Note Data/
   songPath: Assets/ColdplayParadise.wav
-  notemapPath: Assets/Notemap/test.tsv
+  notemapName: paradise
   songBPM: 1
   display: {fileID: 0}
   songSlider: {fileID: 0}
+  delimeter: 44
+  noteDelimeter: 47
   finishedNotes: 0
 --- !u!1 &1126717609
 GameObject:
