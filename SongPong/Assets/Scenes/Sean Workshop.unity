@@ -625,7 +625,6 @@ GameObject:
   m_Component:
   - component: {fileID: 486707929}
   - component: {fileID: 486707928}
-  - component: {fileID: 486707930}
   - component: {fileID: 486707931}
   - component: {fileID: 486707927}
   m_Layer: 0
@@ -743,11 +742,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a692f364ca76a4bb9a2cf1b9bb6ffac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  notesLocation: Assets/Resources/Note Data/
   songPath: Assets/Music/paradise.wav
-  notemapPath: Assets/Notemap/test.tsv
+  notemapName: paradise
   songBPM: 140
   display: {fileID: 55042608}
   songSlider: {fileID: 462886263}
+  delimeter: 44
+  noteDelimeter: 47
   finishedNotes: 0
 --- !u!4 &486707929
 Transform:
@@ -763,23 +765,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &486707930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 486707926}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  song: {fileID: 0}
-  simpleBall: {fileID: 0}
-  dropSpeed: -1
-  gravity: -3
-  ballDropY: 200
 --- !u!114 &486707931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1175,9 +1160,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  song: {fileID: 0}
+  song: {fileID: 486707928}
   simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
     type: 3}
+  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
+    type: 3}
+  ballsLocation: Assets/Resources/Note Data/
+  ballMapName: paradise
+  delimeter: 44
+  noteDelimeter: 47
+  notesColumn: 2
+  typeColumn: 1
+  idColumn: 0
   dropSpeed: -1
   gravity: -3
   ballDropY: 200
@@ -1335,8 +1329,8 @@ Canvas:
   m_GameObject: {fileID: 1727303827}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 862535124}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

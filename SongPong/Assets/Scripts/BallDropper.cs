@@ -216,11 +216,16 @@ public class BallDropper : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public void loadBalls()
     {
+        print("loading");
         song.loadSong(); // this should not be here
 
         // Load the Ball Sheet and the Notes Sheet
         string path = ballsLocation + ballMapName + "/";
+        print(path);
+        print(ballsLocation);
+        print(ballMapName);
         string ballsPath = path + ballMapName + "_balls.csv";
+        print(ballsPath);
 
         StreamReader reader = new StreamReader(ballsPath);
         string currLine = reader.ReadLine(); // this skips the labels row

@@ -21,6 +21,7 @@ public class Song : MonoBehaviour
     public string notemapName;
     public float songBPM = 1;
     private AudioSource song; // The Song that will be located and changed
+    private int currentBeat;
 
     // UI
     public Text display;
