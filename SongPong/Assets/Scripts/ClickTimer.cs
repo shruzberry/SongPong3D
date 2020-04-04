@@ -42,10 +42,10 @@ public class ClickTimer : MonoBehaviour
         switch (list) //TODO: optimize this later if needed
         {
             case "notes":
-                return numNotes + 1;
+                return numNotes;
                 break;
             case "balls":
-                return numBalls + 1;
+                return numBalls;
                 break;
             default:
                 return -1;

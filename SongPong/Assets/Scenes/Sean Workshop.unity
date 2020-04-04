@@ -1301,7 +1301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1571517565
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   ballDescriptions:
   - 
   - 'Left click: Add new ball'
-  - 'Left click: Startball/add bounce Right Click: Finish Ball'
+  - Add bouces with (right click) then finsh with a (left click)
 --- !u!1 &1606937354
 GameObject:
   m_ObjectHideFlags: 0
