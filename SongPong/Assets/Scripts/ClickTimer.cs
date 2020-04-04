@@ -7,6 +7,7 @@ using System.IO;
 public class ClickTimer : MonoBehaviour
 {
     // Ball Building
+    public int ballTypeID = 0;
     private string ballType = "basic";
     
     // Song Data
@@ -106,11 +107,6 @@ public class ClickTimer : MonoBehaviour
 
             case "bounce":
                 data = numBalls + ",bounce,";
-                while (!Input.GetMouseButtonDown(1))
-                {
-                    if (Input.GetMouseButtonDown(0))
-                        data += AddNote();
-                }
                 break;
             
             default:
@@ -157,16 +153,19 @@ public class ClickTimer : MonoBehaviour
         {
             ballBuilderUi.SetActive(false);
             ballType = "null";
+            ballTypeID = 0;
         }
         if (Input.GetKeyDown("2"))
         {
             ballBuilderUi.SetActive(true);
             ballType = "basic";
+            ballTypeID = 1;
         }
-        /*if (Input.GetKeyDown("3"))
+        if (Input.GetKeyDown("3"))
         {
             ballBuilderUi.SetActive(true);
             ballType = "bounce";
-        }*/
+            ballTypeID = 2;
+        }
     }
 }

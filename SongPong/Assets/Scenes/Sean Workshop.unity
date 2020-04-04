@@ -468,7 +468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 25
-  snapToPaddle: 1
+  snapToPaddle: 0
 --- !u!114 &349229702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,6 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d2683411af3441c9c238c49bb5e41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballTypeID: 0
   songName: paradise
   bpm: 140
   percentPadding: 0.1
@@ -871,7 +872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 0
-  snapToPaddle: 1
+  snapToPaddle: 0
 --- !u!1 &862535122
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,6 +1132,101 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1056061842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1056061843}
+  - component: {fileID: 1056061845}
+  - component: {fileID: 1056061844}
+  - component: {fileID: 1056061846}
+  m_Layer: 5
+  m_Name: Description
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1056061843
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056061842}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1571517565}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.0000066757, y: -57.52}
+  m_SizeDelta: {x: 100, y: 85.56}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1056061844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056061842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 12
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Left click: Add new ball'
+--- !u!222 &1056061845
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056061842}
+  m_CullTransparentMesh: 0
+--- !u!114 &1056061846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056061842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271a60e4364bddb449b0c0e668eb1794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: -70
+  snapToPaddle: 0
 --- !u!1 &1484138348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1571517565}
+  - component: {fileID: 1571517566}
   m_Layer: 5
   m_Name: BallBuilder_UI
   m_TagString: Untagged
@@ -1218,14 +1315,38 @@ RectTransform:
   m_Children:
   - {fileID: 349229700}
   - {fileID: 792576518}
+  - {fileID: 1056061843}
   m_Father: {fileID: 1727303831}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -16.04}
-  m_SizeDelta: {x: 100, y: 67.91}
+  m_AnchoredPosition: {x: 69.18, y: 66.9}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1571517566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571517564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4f72dcb16793474fae51fe770f8c474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeDisplay: {fileID: 349229699}
+  descriptionDisplay: {fileID: 1056061842}
+  songController: {fileID: 486707926}
+  ballTypes:
+  - 
+  - basic
+  - bounce
+  ballDescriptions:
+  - 
+  - 'Left click: Add new ball'
+  - 'Left click: Startball/add bounce Right Click: Finish Ball'
 --- !u!1 &1606937354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,7 +1450,7 @@ Canvas:
   m_GameObject: {fileID: 1727303827}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 862535124}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
