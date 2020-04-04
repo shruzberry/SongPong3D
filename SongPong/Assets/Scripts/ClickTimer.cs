@@ -9,6 +9,8 @@ public class ClickTimer : MonoBehaviour
     // Ball Building
     public int ballTypeID = 0;
     private string ballType = "basic";
+    private int[] bounces = new int[16]; //should be a better way to make scaleable
+    private int bounceIndex = 0;
     
     // Song Data
     public string songName;
@@ -107,12 +109,20 @@ public class ClickTimer : MonoBehaviour
 
             case "bounce":
                 data = numBalls + ",bounce,";
+                for (int i=0; i<=bounceIndex; i++)
+                {
+                    data += bounces[i];
+                    if (i < bounceIndex)
+                        data += "/";
+                }
                 break;
             
             default:
                 print("No Ball Type Selected");
                 break;
         }
+        bounceIndex = 0;
+        
         StreamWriter noteWriter = new StreamWriter(ballsPath, true);
         noteWriter.WriteLine(data);
         noteWriter.Close();
@@ -166,6 +176,11 @@ public class ClickTimer : MonoBehaviour
             ballBuilderUi.SetActive(true);
             ballType = "bounce";
             ballTypeID = 2;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            bounces[bounceIndex] = AddNote();
+            bounceIndex++;
         }
     }
 }
