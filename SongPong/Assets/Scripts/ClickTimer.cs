@@ -87,17 +87,22 @@ public class ClickTimer : MonoBehaviour
 
     void InitialRead()
     {
-        System.IO.StreamReader file = new System.IO.StreamReader(notesPath);
+        System.IO.StreamReader noteFile = new System.IO.StreamReader(notesPath);
+        System.IO.StreamReader ballFile = new System.IO.StreamReader(notesPath);
         string line;
-        while((line = file.ReadLine()) != null)
+
+        while((line = noteFile.ReadLine()) != null)
         {
             notes.Add(line);
         }
-        
-        string[] balls = System.IO.File.ReadAllLines(notesPath);
 
-        //numNotes = notes.Length;
-        numBalls = balls.Length;
+        while((line = ballFile.ReadLine()) != null)
+        {
+            balls.Add(line);
+        }
+
+        numNotes = notes.Count;
+        numBalls = balls.Count;
     }
 
     /*********************************
@@ -156,7 +161,7 @@ public class ClickTimer : MonoBehaviour
 
     void WriteToFile(string path, List<string> list)
     {
-        StreamWriter writer = new StreamWriter(path, true);
+        StreamWriter writer = new StreamWriter(path, false);
         foreach (string el in list)
         {
             writer.WriteLine(el);
