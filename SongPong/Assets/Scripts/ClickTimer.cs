@@ -154,9 +154,17 @@ public class ClickTimer : MonoBehaviour
         numBalls++;
     }
 
-    void DeleteBall()
+    void DeleteBallById(int id)
     {
+        List<int> noteIds = new List<int>();
+        string targetBall = balls[id];
 
+        int nextComma = targetBall.IndexOf(",") + 1;
+        string targetNotes = targetBall.Substring(nextComma, targetBall.Length - nextComma);
+        nextComma = targetNotes.IndexOf(",") + 1;
+        targetNotes = targetNotes.Substring(nextComma, targetNotes.Length - nextComma);
+
+        //TODO: read through targetNotes and tagetBall to delete them from the list and add them to the vacant list 
     }
 
     void WriteToFile(string path, List<string> list)
@@ -186,6 +194,7 @@ public class ClickTimer : MonoBehaviour
     void Start()
     {
         InitialRead();
+        DeleteBallById(0);
     }
 
     void Update()
@@ -227,7 +236,7 @@ public class ClickTimer : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        WriteToFile(ballsPath, balls);
         WriteToFile(notesPath, notes);
+        WriteToFile(ballsPath, balls);
     }
 }
