@@ -10,6 +10,8 @@ public class ClickTimer : MonoBehaviour
     public int ballTypeID = 0;
     private string ballType = "basic";
     private List<int> bounces = new List<int>();
+    private List<int> vacantBallIds = new List<int>();
+    private List<int> vacantNoteIds = new List<int>();
     
     // Song Data
     public string songName;
@@ -26,8 +28,8 @@ public class ClickTimer : MonoBehaviour
     // File Writing
     private string notesPath;
     private string ballsPath;
-    string[] notes;
-    string[] balls;
+    private List<string> notes = new List<string>();
+    private List<string> balls = new List<string>();
 
     // Interface
     public GameObject ballBuilderUi;
@@ -38,18 +40,35 @@ public class ClickTimer : MonoBehaviour
     
     int GetNextId(string list)
     {// Finds the next available ID in the tsv
+        int id = -1;
+
         switch (list) //TODO: optimize this later if needed
         {
             case "notes":
-                return numNotes;
+                if (vacantNoteIds.Count == 0)
+                    id = numNotes;
+                else
+                {
+                    vacantNoteIds.Sort();
+                    id = vacantNoteIds[0];
+                    vacantNoteIds.Remove(0);     
+                }
                 break;
             case "balls":
-                return numBalls;
+                if (vacantBallIds.Count == 0)
+                    id = numBalls;
+                else
+                {
+                    vacantBallIds.Sort();
+                    id = vacantBallIds[0];
+                    vacantBallIds.Remove(0);     
+                }
                 break;
             default:
-                return -1;
                 break;
         }
+
+        return id;
     }
 
     int getNearestColumn(float xPos)
@@ -68,10 +87,16 @@ public class ClickTimer : MonoBehaviour
 
     void InitialRead()
     {
-        string[] notes = System.IO.File.ReadAllLines(notesPath);
+        System.IO.StreamReader file = new System.IO.StreamReader(notesPath);
+        string line;
+        while((line = file.ReadLine()) != null)
+        {
+            notes.Add(line);
+        }
+        
         string[] balls = System.IO.File.ReadAllLines(notesPath);
 
-        numNotes = notes.Length;
+        //numNotes = notes.Length;
         numBalls = balls.Length;
     }
 
@@ -88,9 +113,7 @@ public class ClickTimer : MonoBehaviour
         nextId = GetNextId("notes");
         colNum = getNearestColumn(Input.mousePosition.x);
 
-        StreamWriter noteWriter = new StreamWriter(notesPath, true);
-        noteWriter.WriteLine(nextId + "," + currentBeat + "," + colNum);
-        noteWriter.Close();
+        notes.Add(nextId + "," + currentBeat + "," + colNum);
 
         numNotes++;
 
@@ -120,12 +143,26 @@ public class ClickTimer : MonoBehaviour
                 break;
         }
         bounces.Clear();
-        
-        StreamWriter noteWriter = new StreamWriter(ballsPath, true);
-        noteWriter.WriteLine(data);
-        noteWriter.Close();
+
+        balls.Add(data);
 
         numBalls++;
+    }
+
+    void DeleteBall()
+    {
+
+    }
+
+    void WriteToFile(string path, List<string> list)
+    {
+        StreamWriter writer = new StreamWriter(path, true);
+        foreach (string el in list)
+        {
+            writer.WriteLine(el);
+            print("yeet" + el);
+        }
+        writer.Close();
     }
 
     /*********************************
@@ -181,5 +218,11 @@ public class ClickTimer : MonoBehaviour
         {
             bounces.Add(AddNote());
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        WriteToFile(ballsPath, balls);
+        WriteToFile(notesPath, notes);
     }
 }
