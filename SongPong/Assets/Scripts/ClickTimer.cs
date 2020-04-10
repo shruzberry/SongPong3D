@@ -88,7 +88,7 @@ public class ClickTimer : MonoBehaviour
     void InitialRead()
     {
         System.IO.StreamReader noteFile = new System.IO.StreamReader(notesPath);
-        System.IO.StreamReader ballFile = new System.IO.StreamReader(notesPath);
+        System.IO.StreamReader ballFile = new System.IO.StreamReader(ballsPath);
         string line;
 
         while((line = noteFile.ReadLine()) != null)
@@ -154,17 +154,49 @@ public class ClickTimer : MonoBehaviour
         numBalls++;
     }
 
+    void DeleteNoteById(int id)
+    {
+        notes[id] = "-1,-1,-1";
+        vacantNoteIds.Add(id);
+        print(notes[id]);
+    }
+
     void DeleteBallById(int id)
     {
         List<int> noteIds = new List<int>();
         string targetBall = balls[id];
 
+        // pulls out the note id section from the ball string
         int nextComma = targetBall.IndexOf(",") + 1;
         string targetNotes = targetBall.Substring(nextComma, targetBall.Length - nextComma);
         nextComma = targetNotes.IndexOf(",") + 1;
         targetNotes = targetNotes.Substring(nextComma, targetNotes.Length - nextComma);
+       
+        // puts each not id into the noteIds array
+        int noteToAdd;
+        int slashPos; 
+        while (targetNotes.Contains("/"))
+        {
+            slashPos = targetNotes.IndexOf("/");
+            noteToAdd = int.Parse(targetNotes.Substring(0, slashPos));
+            noteIds.Add(noteToAdd);
+            targetNotes = targetNotes.Substring(slashPos + 1, targetNotes.Length - slashPos - 1);
+        }
+        slashPos = targetNotes.IndexOf("/");
+        noteToAdd = int.Parse(targetNotes.Substring(0, slashPos));  
+        noteIds.Add(noteToAdd);
 
-        //TODO: read through targetNotes and tagetBall to delete them from the list and add them to the vacant list 
+        print("num to delete: " + noteIds.Count);
+        // delete all notes
+        foreach (int el in noteIds)
+        {
+            DeleteBallById(el);
+        }
+
+        // delete ball iteself and add to vacant array
+        balls[id] = "-1,vacant,-1";
+        print("set to" + balls[id]);
+        vacantBallIds.Add(id);
     }
 
     void WriteToFile(string path, List<string> list)
