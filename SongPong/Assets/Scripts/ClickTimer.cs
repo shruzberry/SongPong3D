@@ -33,6 +33,8 @@ public class ClickTimer : MonoBehaviour
 
     // Interface
     public GameObject ballBuilderUi;
+    public Text ballListUI;
+    public Text noteListUI;
 
     /*********************************
     *       Helper Functions         *
@@ -103,6 +105,16 @@ public class ClickTimer : MonoBehaviour
 
         numNotes = notes.Count;
         numBalls = balls.Count;
+    }
+
+    void DisplayList(List<string> list, Text t, string title = "Title")
+    {
+        string str = title + ":\n";
+        foreach(string el in list)
+        {
+            str += el + "\n";
+        }
+        t.text = str;
     }
 
     /*********************************
@@ -264,6 +276,10 @@ public class ClickTimer : MonoBehaviour
         {
             bounces.Add(AddNote());
         }
+
+        // Update UIs
+        DisplayList(balls, ballListUI, "Balls");
+        DisplayList(notes, noteListUI, "Notes");
     }
 
     void OnApplicationQuit()
