@@ -105,6 +105,8 @@ public class ClickTimer : MonoBehaviour
 
         numNotes = notes.Count;
         numBalls = balls.Count;
+        noteFile.Close();
+        ballFile.Close();
     }
 
     void DisplayList(List<string> list, Text t, string title = "Title")
@@ -147,9 +149,11 @@ public class ClickTimer : MonoBehaviour
                 break;
 
             case "bounce":
+                print("starting bounce creation");
                 data = numBalls + ",bounce,";
                 foreach (var el in bounces)
                 {
+                    print("adding " + el);
                     data += el + "/";
                 }
                 data = data.Substring(0, data.Length - 1);
@@ -159,11 +163,9 @@ public class ClickTimer : MonoBehaviour
                 print("No Ball Type Selected");
                 break;
         }
-        bounces.Clear();
-
         balls.Add(data);
-
         numBalls++;
+        bounces.Clear();
     }
 
     void DeleteNoteById(int id)
@@ -194,20 +196,19 @@ public class ClickTimer : MonoBehaviour
             noteIds.Add(noteToAdd);
             targetNotes = targetNotes.Substring(slashPos + 1, targetNotes.Length - slashPos - 1);
         }
-        slashPos = targetNotes.IndexOf("/");
-        noteToAdd = int.Parse(targetNotes.Substring(0, slashPos));  
+        print("Last Note " + targetNotes);
+        noteToAdd = int.Parse(targetNotes);  
         noteIds.Add(noteToAdd);
 
         print("num to delete: " + noteIds.Count);
         // delete all notes
         foreach (int el in noteIds)
         {
-            DeleteBallById(el);
+            DeleteNoteById(el);
         }
 
         // delete ball iteself and add to vacant array
         balls[id] = "-1,vacant,-1";
-        print("set to" + balls[id]);
         vacantBallIds.Add(id);
     }
 
@@ -217,7 +218,6 @@ public class ClickTimer : MonoBehaviour
         foreach (string el in list)
         {
             writer.WriteLine(el);
-            print("yeet" + el);
         }
         writer.Close();
     }
@@ -238,7 +238,6 @@ public class ClickTimer : MonoBehaviour
     void Start()
     {
         InitialRead();
-        DeleteBallById(0);
     }
 
     void Update()
@@ -284,6 +283,7 @@ public class ClickTimer : MonoBehaviour
 
     void OnApplicationQuit()
     {
+        DeleteBallById(0);
         WriteToFile(notesPath, notes);
         WriteToFile(ballsPath, balls);
     }
