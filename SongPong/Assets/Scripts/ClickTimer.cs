@@ -7,7 +7,11 @@ using System.IO;
 public class ClickTimer : MonoBehaviour
 {
     // Ball Building
+    public int ballTypeID = 0;
     private string ballType = "basic";
+    private List<int> bounces = new List<int>();
+    private List<int> vacantBallIds = new List<int>();
+    private List<int> vacantNoteIds = new List<int>();
     
     // Song Data
     public string songName;
@@ -24,11 +28,13 @@ public class ClickTimer : MonoBehaviour
     // File Writing
     private string notesPath;
     private string ballsPath;
-    string[] notes;
-    string[] balls;
+    private List<string> notes = new List<string>();
+    private List<string> balls = new List<string>();
 
     // Interface
     public GameObject ballBuilderUi;
+    public Text ballListUI;
+    public Text noteListUI;
 
     /*********************************
     *       Helper Functions         *
@@ -36,18 +42,35 @@ public class ClickTimer : MonoBehaviour
     
     int GetNextId(string list)
     {// Finds the next available ID in the tsv
+        int id = -1;
+
         switch (list) //TODO: optimize this later if needed
         {
             case "notes":
-                return numNotes + 1;
+                if (vacantNoteIds.Count == 0)
+                    id = numNotes;
+                else
+                {
+                    vacantNoteIds.Sort();
+                    id = vacantNoteIds[0];
+                    vacantNoteIds.Remove(0);     
+                }
                 break;
             case "balls":
-                return numBalls + 1;
+                if (vacantBallIds.Count == 0)
+                    id = numBalls;
+                else
+                {
+                    vacantBallIds.Sort();
+                    id = vacantBallIds[0];
+                    vacantBallIds.Remove(0);     
+                }
                 break;
             default:
-                return -1;
                 break;
         }
+
+        return id;
     }
 
     int getNearestColumn(float xPos)
@@ -66,11 +89,34 @@ public class ClickTimer : MonoBehaviour
 
     void InitialRead()
     {
-        string[] notes = System.IO.File.ReadAllLines(notesPath);
-        string[] balls = System.IO.File.ReadAllLines(notesPath);
+        System.IO.StreamReader noteFile = new System.IO.StreamReader(notesPath);
+        System.IO.StreamReader ballFile = new System.IO.StreamReader(ballsPath);
+        string line;
 
-        numNotes = notes.Length;
-        numBalls = balls.Length;
+        while((line = noteFile.ReadLine()) != null)
+        {
+            notes.Add(line);
+        }
+
+        while((line = ballFile.ReadLine()) != null)
+        {
+            balls.Add(line);
+        }
+
+        numNotes = notes.Count;
+        numBalls = balls.Count;
+        noteFile.Close();
+        ballFile.Close();
+    }
+
+    void DisplayList(List<string> list, Text t, string title = "Title")
+    {
+        string str = title + ":\n";
+        foreach(string el in list)
+        {
+            str += el + "\n";
+        }
+        t.text = str;
     }
 
     /*********************************
@@ -86,9 +132,7 @@ public class ClickTimer : MonoBehaviour
         nextId = GetNextId("notes");
         colNum = getNearestColumn(Input.mousePosition.x);
 
-        StreamWriter noteWriter = new StreamWriter(notesPath, true);
-        noteWriter.WriteLine(nextId + "," + currentBeat + "," + colNum);
-        noteWriter.Close();
+        notes.Add(nextId + "," + currentBeat + "," + colNum);
 
         numNotes++;
 
@@ -105,23 +149,77 @@ public class ClickTimer : MonoBehaviour
                 break;
 
             case "bounce":
+                print("starting bounce creation");
                 data = numBalls + ",bounce,";
-                while (!Input.GetMouseButtonDown(1))
+                foreach (var el in bounces)
                 {
-                    if (Input.GetMouseButtonDown(0))
-                        data += AddNote();
+                    print("adding " + el);
+                    data += el + "/";
                 }
+                data = data.Substring(0, data.Length - 1);
                 break;
             
             default:
                 print("No Ball Type Selected");
                 break;
         }
-        StreamWriter noteWriter = new StreamWriter(ballsPath, true);
-        noteWriter.WriteLine(data);
-        noteWriter.Close();
-
+        balls.Add(data);
         numBalls++;
+        bounces.Clear();
+    }
+
+    void DeleteNoteById(int id)
+    {
+        notes[id] = "-1,-1,-1";
+        vacantNoteIds.Add(id);
+        print(notes[id]);
+    }
+
+    void DeleteBallById(int id)
+    {
+        List<int> noteIds = new List<int>();
+        string targetBall = balls[id];
+
+        // pulls out the note id section from the ball string
+        int nextComma = targetBall.IndexOf(",") + 1;
+        string targetNotes = targetBall.Substring(nextComma, targetBall.Length - nextComma);
+        nextComma = targetNotes.IndexOf(",") + 1;
+        targetNotes = targetNotes.Substring(nextComma, targetNotes.Length - nextComma);
+       
+        // puts each not id into the noteIds array
+        int noteToAdd;
+        int slashPos; 
+        while (targetNotes.Contains("/"))
+        {
+            slashPos = targetNotes.IndexOf("/");
+            noteToAdd = int.Parse(targetNotes.Substring(0, slashPos));
+            noteIds.Add(noteToAdd);
+            targetNotes = targetNotes.Substring(slashPos + 1, targetNotes.Length - slashPos - 1);
+        }
+        print("Last Note " + targetNotes);
+        noteToAdd = int.Parse(targetNotes);  
+        noteIds.Add(noteToAdd);
+
+        print("num to delete: " + noteIds.Count);
+        // delete all notes
+        foreach (int el in noteIds)
+        {
+            DeleteNoteById(el);
+        }
+
+        // delete ball iteself and add to vacant array
+        balls[id] = "-1,vacant,-1";
+        vacantBallIds.Add(id);
+    }
+
+    void WriteToFile(string path, List<string> list)
+    {
+        StreamWriter writer = new StreamWriter(path, false);
+        foreach (string el in list)
+        {
+            writer.WriteLine(el);
+        }
+        writer.Close();
     }
 
     /*********************************
@@ -157,16 +255,36 @@ public class ClickTimer : MonoBehaviour
         {
             ballBuilderUi.SetActive(false);
             ballType = "null";
+            ballTypeID = 0;
         }
         if (Input.GetKeyDown("2"))
         {
             ballBuilderUi.SetActive(true);
             ballType = "basic";
+            ballTypeID = 1;
         }
-        /*if (Input.GetKeyDown("3"))
+        if (Input.GetKeyDown("3"))
         {
             ballBuilderUi.SetActive(true);
             ballType = "bounce";
-        }*/
+            ballTypeID = 2;
+        }
+
+        // Confirm Ball
+        if (Input.GetMouseButtonDown(1))
+        {
+            bounces.Add(AddNote());
+        }
+
+        // Update UIs
+        DisplayList(balls, ballListUI, "Balls");
+        DisplayList(notes, noteListUI, "Notes");
+    }
+
+    void OnApplicationQuit()
+    {
+        DeleteBallById(0);
+        WriteToFile(notesPath, notes);
+        WriteToFile(ballsPath, balls);
     }
 }

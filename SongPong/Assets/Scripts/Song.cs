@@ -4,15 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-// TODO: create a function similar to the slider function to...
-// 1) Load song by name onto the audio player
-// 2) Locate the correct song data file for reading (.tsv)
-//    - songName_notes.tsv (for the notes)
-//    - songName_data.dat (for bpm, deelay, and style)
-//    - Put all in folder named songName
-// 3) Create Ball prefabs from file data
-// 4) Set slider back to start of song
-
 public class Song : MonoBehaviour
 {
     // Song Info
@@ -20,7 +11,7 @@ public class Song : MonoBehaviour
     public string songPath;
     public string notemapName;
     public float songBPM = 1;
-    private AudioSource song; // The Song that will be located and changed
+    private AudioSource song;
     private int currentBeat;
 
     // UI
@@ -35,7 +26,7 @@ public class Song : MonoBehaviour
     private List<Note> notes = new List<Note>();
 
     // Time
-    private float songTime = 0.0f; // Time to change the song to on slider input
+    private float songTime = 0.0f;
 
     // State
     public bool finishedNotes = false;
@@ -56,6 +47,13 @@ public class Song : MonoBehaviour
         display.text = "Beat: " + currentBeat.ToString();
         //move slider with song
         songSlider.value = (song.time / song.clip.length);
+        // Arrow controlls
+        if (Input.GetKeyDown("right"))
+            changeTime(5);
+        if (Input.GetKeyDown("left"))
+            changeTime(-5);
+
+
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -94,6 +92,16 @@ public class Song : MonoBehaviour
         return noteList;
     }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * Controls
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
+    public void changeTime(float amount)
+    {
+        song.time = song.time + amount;
+        song.Play();
+    }
+
     // called automatically when slider is changed
     public void setTime(float time)
     {
@@ -102,5 +110,14 @@ public class Song : MonoBehaviour
           song.time = (song.clip.length * time);
           song.Play();
         }
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * Accessor Functions
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public float GetSongTime()
+    {
+        return song.time;
     }
 }
