@@ -28,10 +28,23 @@ public class SongBuilderWindow : EditorWindow
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    //give each section a texture, rect, and maybe color
-    float navBarSectionSize = .1f;
-    float createSectionSize = .45f;
-    float editSectionSize = .45f;
+    
+    // actual control functionality
+    bool toggleNoteListener = false;
+    string noteColumn = "0";
+    string noteBeat = "0";
+    
+    // for navigation bar
+    int navButtonHeight = 20;
+    int navButtonWidth = 35;
+
+    int ballButtonHeight = 30;
+    int ballButtonWidth = 100;
+
+    // formatting
+    float navBarSectionSize = .15f;
+    float createSectionSize = .425f;
+    float editSectionSize = .375f;
     float activeBallsSectionWidth = .33f;
 
     Texture2D navBarSectionTexture;
@@ -48,8 +61,8 @@ public class SongBuilderWindow : EditorWindow
     Rect activeBallsSection;
     Rect addNoteSection;
     Rect addBallSection;
-    Rect editBallsSection;
-    Rect editNotesSection;
+    Rect editBallSection;
+    Rect editNoteSection;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * FUNCTIONS
@@ -58,7 +71,7 @@ public class SongBuilderWindow : EditorWindow
     static void OpenWindow()
     {
         SongBuilderWindow window = (SongBuilderWindow)GetWindow(typeof(SongBuilderWindow), false, "Song Builder");
-        window.minSize = new Vector2(250, 250);
+        window.minSize = new Vector2(600, 300);
         window.Show();
     }
 
@@ -105,12 +118,12 @@ public class SongBuilderWindow : EditorWindow
         navBarSection.height = Screen.height * navBarSectionSize;
 
         createSection.x = Screen.width * activeBallsSectionWidth;
-        createSection.y = Screen.height * (navBarSectionSize);
+        createSection.y = navBarSection.height;
         createSection.width = Screen.width - (Screen.width * activeBallsSectionWidth);
         createSection.height = Screen.height * createSectionSize;
 
         editSection.x = Screen.width * activeBallsSectionWidth;
-        editSection.y = Screen.height * (navBarSectionSize + createSectionSize);
+        editSection.y = createSection.y + createSection.height;
         editSection.width = Screen.width - (Screen.width * activeBallsSectionWidth);
         editSection.height = Screen.height * editSectionSize;
 
@@ -135,12 +148,57 @@ public class SongBuilderWindow : EditorWindow
         addBallSection.y = Screen.height * (navBarSectionSize);
         addBallSection.width = createSection.width / 2;
         addBallSection.height = createSection.height;
+
+        editBallSection.x = activeBallsSection.width;
+        editBallSection.y = addNoteSection.y + addNoteSection.height;
+        editBallSection.width = editSection.width / 2;
+        editBallSection.height = editSection.height;
+
+        editNoteSection.x = activeBallsSection.width + addNoteSection.width;
+        editNoteSection.y = addBallSection.y + addBallSection.height;
+        editNoteSection.width = editSection.width / 2;
+        editNoteSection.height = editSection.height;
     }
 
     void DrawNavSettings()
     {
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
+            EditorGUILayout.BeginHorizontal();
+                // Restart Song
+                if (GUILayout.Button("<<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                {
+                    
+                }
+
+                // Go Back 8 beats
+                if (GUILayout.Button("<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                {
+                    
+                }
+
+                // Pause/Play
+                if (GUILayout.Button("Play", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                {
+                    
+                }
+
+                // Go Forward 8 beats
+                if (GUILayout.Button(">", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                {
+                    
+                }
+
+                // Go to end of song
+                if (GUILayout.Button(">>", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                {
+                    
+                }
+
+                // Song Slider
+                EditorGUILayout.Slider(0, 0, 100);
+
+            EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
     
@@ -148,30 +206,84 @@ public class SongBuilderWindow : EditorWindow
     {
         GUILayout.BeginArea(activeBallsSection);
             GUILayout.Label("Active Balls");
+            if (GUILayout.Button("Delete Ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width)));
+            {
+                    
+            }
         GUILayout.EndArea();
     }
 
     void DrawAddNote()
     {
         GUILayout.BeginArea(addNoteSection);
-            GUILayout.Label("Add Note");
+            GUILayout.Label("Note Buffer:");
+            GUILayout.FlexibleSpace();
+            toggleNoteListener = GUILayout.Toggle(toggleNoteListener, "Listen for Notes");
         GUILayout.EndArea();
+        
     }
 
     void DrawAddBall()
     {
         GUILayout.BeginArea(addBallSection);
-            GUILayout.Label("Create Ball From Notes");
+            GUILayout.Label("Create Ball");
+
+            // Basic
+            if (GUILayout.Button("Basic", GUILayout.Height(ballButtonHeight), GUILayout.Width(addBallSection.width)));
+            {
+                    
+            }
+
+            // Bounce
+            if (GUILayout.Button("Bounce", GUILayout.Height(ballButtonHeight), GUILayout.Width(addBallSection.width)));
+            {
+                    
+            }
+
         GUILayout.EndArea();
     }
 
     void DrawEditBall()
     {
+        GUILayout.BeginArea(editBallSection);
+            GUILayout.Label("Edit Ball");
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.BeginHorizontal();
+                // Insert Note
+                if (GUILayout.Button("Add Note", GUILayout.Height(ballButtonHeight), GUILayout.Width(editBallSection.width/2)));
+                {
+                    
+                }
 
+                // Delete Note
+                if (GUILayout.Button("Delete Note", GUILayout.Height(ballButtonHeight), GUILayout.Width(editBallSection.width/2 - 10)));
+                {
+                    
+                }
+            EditorGUILayout.EndHorizontal();
+        GUILayout.EndArea();
     }
 
     void DrawEditNote()
     {
+        GUILayout.BeginArea(editNoteSection);
+            GUILayout.Label("Edit Note");
+            EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Column: ");
+                noteColumn = GUILayout.TextField(noteColumn, 6);
+            EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Beat: ");
+                noteBeat = GUILayout.TextField(noteBeat, 6);
+            EditorGUILayout.EndHorizontal();
+
+            // Update
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Update", GUILayout.Height(ballButtonHeight), GUILayout.Width(editNoteSection.width)));
+            {
+                    
+            }
+        GUILayout.EndArea();
     }
 }
