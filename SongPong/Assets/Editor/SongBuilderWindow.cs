@@ -30,6 +30,9 @@ public class SongBuilderWindow : EditorWindow
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     
     // actual control functionality
+    Vector2 addBallScrollPosition;
+    Vector2 activeBallsScrollPosition;
+    Vector2 editBallScrollPosition;
     bool toggleNoteListener = false;
     string noteColumn = "0";
     string noteBeat = "0";
@@ -44,7 +47,7 @@ public class SongBuilderWindow : EditorWindow
     // formatting
     float navBarSectionSize = .15f;
     float createSectionSize = .425f;
-    float editSectionSize = .375f;
+    float editSectionSize = .425f;
     float activeBallsSectionWidth = .33f;
 
     Texture2D navBarSectionTexture;
@@ -206,7 +209,12 @@ public class SongBuilderWindow : EditorWindow
     {
         GUILayout.BeginArea(activeBallsSection);
             GUILayout.Label("Active Balls");
-            if (GUILayout.Button("Delete Ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width)));
+            
+            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(activeBallsSection.width), GUILayout.Height(activeBallsSection.height - 75));
+                GUILayout.Label("Note");
+            GUILayout.EndScrollView();
+            
+            if (GUILayout.Button("Delete Ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width - 5)));
             {
                     
             }
@@ -217,7 +225,9 @@ public class SongBuilderWindow : EditorWindow
     {
         GUILayout.BeginArea(addNoteSection);
             GUILayout.Label("Note Buffer:");
-            GUILayout.FlexibleSpace();
+            addBallScrollPosition = GUILayout.BeginScrollView(addBallScrollPosition, GUILayout.Width(addNoteSection.width), GUILayout.Height(addNoteSection.height - 40));
+                GUILayout.Label("Note");
+            GUILayout.EndScrollView();
             toggleNoteListener = GUILayout.Toggle(toggleNoteListener, "Listen for Notes");
         GUILayout.EndArea();
         
@@ -247,7 +257,11 @@ public class SongBuilderWindow : EditorWindow
     {
         GUILayout.BeginArea(editBallSection);
             GUILayout.Label("Edit Ball");
-            GUILayout.FlexibleSpace();
+
+            editBallScrollPosition = GUILayout.BeginScrollView(editBallScrollPosition, GUILayout.Width(addNoteSection.width), GUILayout.Height(addNoteSection.height - 75));
+                GUILayout.Label("Note");
+            GUILayout.EndScrollView();
+
             EditorGUILayout.BeginHorizontal();
                 // Insert Note
                 if (GUILayout.Button("Add Note", GUILayout.Height(ballButtonHeight), GUILayout.Width(editBallSection.width/2)));
@@ -279,7 +293,7 @@ public class SongBuilderWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
 
             // Update
-            GUILayout.FlexibleSpace();
+            GUILayout.Space(editNoteSection.height - 112);
             if (GUILayout.Button("Update", GUILayout.Height(ballButtonHeight), GUILayout.Width(editNoteSection.width)));
             {
                     
