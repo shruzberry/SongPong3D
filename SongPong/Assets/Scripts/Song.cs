@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.IO;
 
 public class Song : MonoBehaviour
@@ -11,12 +10,12 @@ public class Song : MonoBehaviour
     public string songPath;
     public string notemapName;
     public float songBPM = 1;
-    private AudioSource song;
+    //private AudioSource song;
     private int currentBeat;
 
     // UI
-    public Text display;
-    public Slider songSlider;
+    //public Text display;
+    //public Slider songSlider;
 
     // Reader
     public char delimeter = ',';
@@ -33,7 +32,7 @@ public class Song : MonoBehaviour
 
     void Awake()
     {
-        song = GetComponent<AudioSource>();
+        //song = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -43,10 +42,10 @@ public class Song : MonoBehaviour
     void Update()
     {
         // read out the beat number to thee screen
-        currentBeat = (int)((song.time / 60.0f) * songBPM);
-        display.text = "Beat: " + currentBeat.ToString();
+        //currentBeat = (int)((song.time / 60.0f) * songBPM);
+        //display.text = "Beat: " + currentBeat.ToString();
         //move slider with song
-        songSlider.value = (song.time / song.clip.length);
+        //songSlider.value = (song.time / song.clip.length);
         // Arrow controlls
         if (Input.GetKeyDown("right"))
             changeTime(5);
@@ -98,8 +97,8 @@ public class Song : MonoBehaviour
     
     public void changeTime(float amount)
     {
-        song.time = song.time + amount;
-        song.Play();
+        //song.time = song.time + amount;
+        //song.Play();
     }
 
     // called automatically when slider is changed
@@ -107,8 +106,8 @@ public class Song : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {// This avoids the audio from crackling as the song and the slider are both updating each other
-          song.time = (song.clip.length * time);
-          song.Play();
+          //song.time = (song.clip.length * time);
+          //song.Play();
         }
     }
 
@@ -116,8 +115,8 @@ public class Song : MonoBehaviour
  * Accessor Functions
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public float GetSongTime()
-    {
-        return song.time;
-    }
+    //public float GetSongTime()
+    //{
+        //return song.time;
+    //}
 }

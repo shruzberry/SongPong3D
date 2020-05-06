@@ -10,18 +10,41 @@ public class BounceBall : Ball
         
     }
 
-    public override void handleDrop()
+    protected override void HandleCatch()
     {
 
     }
 
-    protected override void handleCatch()
+    protected override void HandleIdle()
     {
 
     }
 
-    protected override void handleMiss()
+    protected override void HandleActivate()
     {
 
+    }
+
+    protected override void HandleMove()
+    {
+
+    }
+
+    protected override void CheckMiss()
+    {
+
+    }
+
+    protected override void HandleMiss()
+    {
+
+    }
+
+    protected override void CheckCatch()
+    {
+    }
+
+    public override void InitializeBall(Vector3 pos)
+    {
     }
 }

@@ -1,62 +1,107 @@
-﻿using System.Collections;
+﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+________ DEFENITION ________
+Class Name: Ball
+Purpose: This abstract class defines attributes and behaviors that all balls in Song Pong have, including state info,
+        notes, sprite, animations, etc.
+Associations: All child ball types
+__________ USAGE ___________
+* To create a new type of ball, have it extend this class. You must implement ALL methods required.
+________ ATTRIBUTES ________
++ id: the unique ball ID the player uses
++ status: the current state of the ball
+* notes: a list of all notes this ball is associated with
+* velocity: the velocity in 2D of this ball
+________ FUNCTIONS _________
+TODO
+ +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class Ball : MonoBehaviour
 {
     // ATTRIBUTES
-    protected int id;
+    public int id;
     protected float size;
-    protected float radius;
+
+    // STATE
+    public enum State
+    {
+        Idle, // ball is waiting to drop
+        Activated, // ball has just been spawned, or activated
+        Moving, // ball is actively moving
+        Missed, // ball is missed
+        Caught, // ball caught by paddle
+        Exit // ball is finished
+    }
+
+    public State status;
 
     // COMPONENTS
-    protected Rigidbody2D rb;
     protected Vector2 screenBounds;
 
     // NOTES
     protected List<Note> notes;
 
     // VELOCITY
-    protected float velocityX;
-    protected float velocityY;
-    protected float gravity;
+    protected Vector2 velocity;
     protected float spawnTime;
     protected float catchTime;
 
-    // BOUNCE
-    protected int numBouncesLeft;
-
-    // STATE
-    protected bool isFalling = false;
-    protected bool isFinished = false;
+    // BOOLEANS
+    protected bool caught = false;
     protected bool missed = false;
+    protected bool exit = false;
+
+    // BOUNCE
+    protected int timesCaught = 0;
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * STATE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public StateEvent onStateChange;
+    public class StateEvent : UnityEvent<State> { }
+    
+    // Given a state, if not equal to the current state
+    // sets current state to the new state and
+    // invokes the StateEvent
+    public void ChangeState(State s)
+    {
+        if (status == s) return;
+        status = s;
+        if (onStateChange != null)
+            onStateChange.Invoke(status);
+    }
+
+    public void AddToStatusChange(UnityAction<State> action)
+    {
+        if(onStateChange == null)
+            onStateChange = new StateEvent();
+
+        onStateChange.AddListener(action);
+    }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    public void initBallInfo(int id, List<Note> noteList)
-    {
-        this.id = id;
-        this.notes = noteList;
-    }
 
-    public void initBallPhysics(Vector3 pos, float velocity, float acceleration){
-        setPosition(pos);
-        this.velocityY = velocity;
-        gravity = acceleration;
-    }
-    protected void Awake() {
-        rb = GetComponent<Rigidbody2D>();
-        size = GetComponent<Collider2D>().bounds.size.y;
-
-        radius = size / 2;
-    }
     void Start()
     {
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         gameObject.layer = LayerMask.NameToLayer("Balls");
-        velocityX = 0;
-        isFalling = true;
+
+        ChangeState(State.Idle);
+    }
+
+    public abstract void InitializeBall(Vector3 pos);
+
+    public void initBallInfo(int id, List<Note> noteList)
+    {
+        this.id = id;
+        this.notes = noteList;
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -65,59 +110,112 @@ public abstract class Ball : MonoBehaviour
 
     public void UpdateBall()
     {
-        if(transform.position.y < -screenBounds.y){
-           handleMiss();
+        if((int)status > 0) //If we are activated
+        {
+            CheckMiss();
+            CheckCatch();
+            //Add new check to change status right here
         }
     }
 
     public void FixedUpdateBall()
     {
-        velocityY += gravity * Time.fixedDeltaTime;
-
-        Vector2 newPos = new Vector2(velocityX * Time.deltaTime, velocityY * Time.deltaTime);
-        rb.MovePosition((Vector2)transform.position + newPos);
-    }
-
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * COLLIDE
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if(other.gameObject.name == "Paddle"){
-            velocityY = -velocityY;
-            catchTime = Time.time;
-            print("Time to catch: " + (catchTime - spawnTime));
-            handleCatch();
+        print(status);
+        switch(status)
+        {
+            case State.Idle:
+                HandleIdle();
+                break;
+            case State.Activated:
+                HandleActivate();
+                Activate();
+                break;
+            case State.Moving:
+                HandleMove();
+                break;
+            case State.Caught:
+                HandleCatch();
+                break;
+            case State.Missed:
+                HandleMiss();
+                Miss();
+                break;
+            case State.Exit:
+                Exit();
+                break;
+            default:
+                Debug.Log("Error, state not handled in Ball");
+                break;
         }
     }
 
-    public void DeleteBall(){
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
+    protected abstract void HandleIdle();
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * ACTIVATE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
+    public void TriggerActivation(){ChangeState(State.Activated);}
+
+    protected abstract void HandleActivate();
+
+    private void Activate()
+    {
+        ChangeState(State.Moving);
+    }
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * MOVING
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    abstract protected void HandleMove();
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * CATCH
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    abstract protected void CheckCatch();
+    abstract protected void HandleCatch();
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * MISS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    abstract protected void CheckMiss();
+    abstract protected void HandleMiss();
+    private void Miss()
+    {
+        ChangeState(State.Exit);
+    }
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * EXIT
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void Exit()
+    {
+        // HANDLE ANIMATION HERE
+        exit = true;
+    }
+
+    public void DeleteBall()
+    {
         Destroy(this.gameObject);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     public float getSize(){return size;}
-    public float getHitTime(){
-       return notes[0].getHitTime();
-    }
+
+    public float getHitTime(){return notes[0].getHitTime();}
+
     public int getSpawnColumn(){return notes[0].getColumn();}
-    public bool checkIsFinished(){return isFinished;}
-    public bool checkMissed(){return missed;}
 
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * SETTERS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    public void setPosition(Vector3 loc){transform.position = loc;}
-    public void setDropSpeed(float speed){velocityY = speed;}
-    public void setAcceleration(float acc){gravity = acc;}
-
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * ABSTRACT EVENT HANDLERS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    abstract public void handleDrop();
-    abstract protected void handleCatch();
-    abstract protected void handleMiss();
+    public bool checkIfFinished(){return exit;}
 }

@@ -7,6 +7,7 @@ ________ USAGE ________
 * Description of how to appropriatly use
 ________ ATTRIBUTES ________
 + public: brief description of usage
+* protected: brief description of usage
 - private: brief description of usage
 ________ FUNCTIONS ________
 + publicFunction(): description of usage

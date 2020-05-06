@@ -70,12 +70,12 @@ public class BallDropper : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public void nextBall() 
     {
-        if(currentBallIndex < balls.Count - 1){
+        if(currentBallIndex < balls.Count - 2){
             currentBallIndex++;
         }
         else{
             isFinished = true;
-            print("Last ball reached.");
+print("Last ball reached.");
         }
         currentBall = balls[currentBallIndex];
     }
@@ -97,11 +97,9 @@ public class BallDropper : MonoBehaviour
         foreach(Ball ball in activeBallList){
             ball.UpdateBall();
 
-            if(ball.checkIsFinished()) { 
+            if(ball.checkIfFinished()) { 
 				finishedBallList.Add(ball);
-			} else if(ball.checkMissed()) { 
-                finishedBallList.Add(ball);
-            }
+			}
         }
     }
 
@@ -124,12 +122,11 @@ public class BallDropper : MonoBehaviour
 
     public void checkDrop() 
     {
-        if(!isFinished){
-            if((currentBall.getHitTime() - dropTime < Time.time)){
-                currentBall.handleDrop();
-                activeBallList.Add(currentBall);
-                nextBall();
-            }
+        if(!isFinished && currentBall.getHitTime() - dropTime < Time.time)
+        {
+            currentBall.TriggerActivation();
+            activeBallList.Add(currentBall);
+            nextBall();
         }
 	}
 
@@ -150,7 +147,7 @@ public class BallDropper : MonoBehaviour
         // Put the ball in right place
         int column = ball.getSpawnColumn();
         Vector3 spawnPos = new Vector3(ballCols[column-1], ballDropY, 0);
-        ball.initBallPhysics(spawnPos, dropSpeed, gravity);
+        ball.InitializeBall(spawnPos);
 
         balls.Add(ball);
     }
@@ -168,7 +165,7 @@ public class BallDropper : MonoBehaviour
         // Put the ball in right place
         int column = ball.getSpawnColumn();
         Vector3 spawnPos = new Vector3(ballCols[column-1], ballDropY, 0);
-        ball.initBallPhysics(spawnPos, dropSpeed, gravity);
+        ball.InitializeBall(spawnPos);
 
         balls.Add(ball);
     }
@@ -195,7 +192,7 @@ public class BallDropper : MonoBehaviour
         
         // Ball Info
         ballDropY = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height + 200)).y;
-        //print("BALL RADIUS: " + ballRadius);
+        print("BALL RADIUS: " + ballRadius);
         
         // Determine Delta Y
         float deltaY = paddleY - ballDropY + ballRadius + paddleHeightHalf;
@@ -207,7 +204,7 @@ public class BallDropper : MonoBehaviour
         float determinant = (Mathf.Pow(dropSpeed, 2) + (2 * gravity * deltaY));
         float time = (-dropSpeed - Mathf.Sqrt(determinant)) / gravity;
 
-        print("Expected Ball Drop Time: " + time + " sec.");
+print("Expected Ball Drop Time: " + time + " sec.");
         return time;
     }
 
@@ -216,16 +213,16 @@ public class BallDropper : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public void loadBalls()
     {
-        print("loading");
+        //print("loading");
         song.loadSong(); // this should not be here
 
         // Load the Ball Sheet and the Notes Sheet
         string path = ballsLocation + ballMapName + "/";
-        print(path);
-        print(ballsLocation);
-        print(ballMapName);
+        //print(path);
+        //print(ballsLocation);
+        //print(ballMapName);
         string ballsPath = path + ballMapName + "_balls.csv";
-        print(ballsPath);
+        //print(ballsPath);
 
         StreamReader reader = new StreamReader(ballsPath);
         string currLine = reader.ReadLine(); // this skips the labels row
