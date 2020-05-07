@@ -29,6 +29,9 @@ public class SongBuilderWindow : EditorWindow
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     
+    // Values for functionality
+    public SongData songData;
+
     // actual control functionality
     Vector2 addBallScrollPosition;
     Vector2 activeBallsScrollPosition;
@@ -82,6 +85,7 @@ public class SongBuilderWindow : EditorWindow
     //The Awake Function
     void OnEnable()
     {
+        //songController = GameObject.Find("SongController").GetComponent(typeof(SongController)) as SongController;
         InitTextures();
     }
 
@@ -107,6 +111,7 @@ public class SongBuilderWindow : EditorWindow
     // Update function called every time we interact with window
     void OnGUI()
     {
+        InitTextures();
         DrawRowLayouts();
         DrawColumLayouts();
         DrawNavSettings();
@@ -173,6 +178,9 @@ public class SongBuilderWindow : EditorWindow
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             EditorGUILayout.BeginHorizontal();
+                // Drag in Song
+                songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(200));
+
                 // Restart Song
                 if (GUILayout.Button("<<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
                 {
@@ -204,8 +212,7 @@ public class SongBuilderWindow : EditorWindow
                 }
 
                 // Song Slider
-                EditorGUILayout.Slider(0, 0, 100);
-
+                songData.currentTime = EditorGUILayout.Slider(songData.currentTime, songData.startTime, songData.endTime);
             EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
@@ -341,6 +348,20 @@ public class SongBuilderWindow : EditorWindow
     }
 
     void UpdateNote(int col, int beat)
+    {
+
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* RUNTIME FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    void Awake()
+    {
+
+    }
+
+    void Update()
     {
 
     }

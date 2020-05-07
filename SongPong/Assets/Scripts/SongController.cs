@@ -18,6 +18,7 @@ ________ FUNCTIONS ________
 + LoadSong(SongData)
 + JumpToStart()
 + JumpToBeat(int)
++ JumpToTime(float)
 + JumpToEnd()
 
 +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -51,7 +52,7 @@ public class SongController : MonoBehaviour
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    void LoadSong(SongData newSongData)
+    public void LoadSong(SongData newSongData)
     {
         songData = newSongData;
         source.clip = songData.song;
@@ -59,16 +60,26 @@ public class SongController : MonoBehaviour
         numBeats = (int)((songLength / 60.0f) * songData.bpm);
     }
 
-    void JumpToStart()
+    public void UpdateSongTime()
+    {
+        goToTime(songData.currentTime);
+    }
+
+    public void JumpToStart()
     {
         goToTime(songData.startTime);
     }
 
-    void JumpToBeat(int beat)
+    public void JumpToBeat(int beat)
     {
         goToTime(
             ((float)(beat * 60)) / songData.bpm
         );
+    }
+
+    public void JumpToTime(float time)
+    {
+        goToTime(time);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
