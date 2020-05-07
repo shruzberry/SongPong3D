@@ -33,6 +33,7 @@ public class SongBuilderWindow : EditorWindow
     Vector2 addBallScrollPosition;
     Vector2 activeBallsScrollPosition;
     Vector2 editBallScrollPosition;
+
     bool toggleNoteListener = false;
     string noteColumn = "0";
     string noteBeat = "0";
@@ -98,6 +99,10 @@ public class SongBuilderWindow : EditorWindow
         editSectionTexture.SetPixel(0, 0, editSectionColor);
         editSectionTexture.Apply();
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* ON GUI DRAW FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     // Update function called every time we interact with window
     void OnGUI()
@@ -211,12 +216,18 @@ public class SongBuilderWindow : EditorWindow
             GUILayout.Label("Active Balls");
             
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(activeBallsSection.width), GUILayout.Height(activeBallsSection.height - 75));
-                GUILayout.Label("Note");
+                for(int i = 0; i < 30; i++)
+                {
+                    if (GUILayout.Button("example ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width - 20)));
+                    {
+                        
+                    }
+                }
             GUILayout.EndScrollView();
             
             if (GUILayout.Button("Delete Ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width - 5)));
             {
-                    
+                DeleteBall();
             }
         GUILayout.EndArea();
     }
@@ -225,8 +236,11 @@ public class SongBuilderWindow : EditorWindow
     {
         GUILayout.BeginArea(addNoteSection);
             GUILayout.Label("Note Buffer:");
-            addBallScrollPosition = GUILayout.BeginScrollView(addBallScrollPosition, GUILayout.Width(addNoteSection.width), GUILayout.Height(addNoteSection.height - 40));
-                GUILayout.Label("Note");
+            addBallScrollPosition = GUILayout.BeginScrollView(addBallScrollPosition, GUILayout.Width(addNoteSection.width - 10), GUILayout.Height(addNoteSection.height - 40));
+                for(int i = 0; i < 30; i++)
+                {
+                    GUILayout.Label("(Col: 5, Beat: 126)");
+                }
             GUILayout.EndScrollView();
             toggleNoteListener = GUILayout.Toggle(toggleNoteListener, "Listen for Notes");
         GUILayout.EndArea();
@@ -241,7 +255,7 @@ public class SongBuilderWindow : EditorWindow
             // Basic
             if (GUILayout.Button("Basic", GUILayout.Height(ballButtonHeight), GUILayout.Width(addBallSection.width)));
             {
-                    
+                
             }
 
             // Bounce
@@ -259,20 +273,26 @@ public class SongBuilderWindow : EditorWindow
             GUILayout.Label("Edit Ball");
 
             editBallScrollPosition = GUILayout.BeginScrollView(editBallScrollPosition, GUILayout.Width(addNoteSection.width), GUILayout.Height(addNoteSection.height - 75));
-                GUILayout.Label("Note");
+                for(int i = 0; i < 30; i++)
+                {
+                    if (GUILayout.Button("(Col: 5, Beat: 126)", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width - 20)));
+                    {
+                        
+                    }
+                }        
             GUILayout.EndScrollView();
 
             EditorGUILayout.BeginHorizontal();
                 // Insert Note
                 if (GUILayout.Button("Add Note", GUILayout.Height(ballButtonHeight), GUILayout.Width(editBallSection.width/2)));
                 {
-                    
+                    AddNote();
                 }
 
                 // Delete Note
                 if (GUILayout.Button("Delete Note", GUILayout.Height(ballButtonHeight), GUILayout.Width(editBallSection.width/2 - 10)));
                 {
-                    
+                    DeleteNote();
                 }
             EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
@@ -296,8 +316,32 @@ public class SongBuilderWindow : EditorWindow
             GUILayout.Space(editNoteSection.height - 112);
             if (GUILayout.Button("Update", GUILayout.Height(ballButtonHeight), GUILayout.Width(editNoteSection.width)));
             {
-                    
+                UpdateNote(System.Convert.ToInt32(noteColumn), System.Convert.ToInt32(noteBeat));
             }
         GUILayout.EndArea();
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* TRIGGERED FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    void DeleteBall()
+    {
+
+    }
+
+    void AddNote()
+    {
+
+    }
+
+    void DeleteNote()
+    {
+
+    }
+
+    void UpdateNote(int col, int beat)
+    {
+
     }
 }
