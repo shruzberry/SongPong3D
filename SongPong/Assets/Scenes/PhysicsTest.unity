@@ -121,64 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &211735053
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 211735055}
-  - component: {fileID: 211735054}
-  m_Layer: 8
-  m_Name: BallDropper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &211735054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211735053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  song: {fileID: 315321662}
-  simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
-    type: 3}
-  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
-    type: 3}
-  ballsLocation: Assets/Resources/Note Data/
-  ballMapName: paradise
-  delimeter: 44
-  noteDelimeter: 47
-  notesColumn: 2
-  typeColumn: 1
-  idColumn: 0
-  dropSpeed: -1
-  gravity: -3
-  ballDropY: 200
---- !u!4 &211735055
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211735053}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.2761421, y: 0.023819145, z: 0.08093785}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &315321658
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,6 +184,61 @@ MonoBehaviour:
   delimeter: 44
   noteDelimeter: 47
   finishedNotes: 0
+--- !u!1 &805299495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805299497}
+  - component: {fileID: 805299496}
+  m_Layer: 0
+  m_Name: BallDropper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &805299496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805299495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  song: {fileID: 315321662}
+  simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
+    type: 3}
+  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
+    type: 3}
+  ballsLocation: Assets/Resources/Note Data/
+  ballMapName: paradise
+  delimeter: 44
+  noteDelimeter: 47
+  notesColumn: 2
+  typeColumn: 1
+  idColumn: 0
+--- !u!4 &805299497
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805299495}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7296688, y: 0.10560325, z: -668.4812}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1126717609
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +317,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126717609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.64, y: -3.6, z: 2}
+  m_LocalPosition: {x: -5.11, y: -3.69, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -338,8 +335,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8421bd8ab2ed34e1d8154f2706d87946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {x: 0, y: 0}
+  spawner: {fileID: 0}
+  paddleAxis: 1
   screenBounds: {x: 0, y: 0}
+  movement: {x: 0, y: 0}
+  paddleNum: 0
 --- !u!61 &1126717613
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -469,4 +469,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1815133878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1815133880}
+  - component: {fileID: 1815133879}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1815133879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815133878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60819b1ae1824402bb3aa38666f9615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameAxis: 1
+  paddingXAxis: 0.1
+  paddingYAxis: 0.1
+  NUM_COL: 16
+  ballHeightMod: 0
+  showColumns: 1
+--- !u!4 &1815133880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815133878}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.057294495, y: -0.5029789, z: -655.61615}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

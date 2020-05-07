@@ -4,48 +4,79 @@ using UnityEngine;
 
 public class SimpleBall : Ball
 {
-    //________COMPONENTS____________
-    protected Rigidbody2D rb;
-
     //________ATTRIBUTES____________
     protected float radius;
-    protected float acceleration;
-    protected float startSpeed = -1;
+    public float dropSpeed = 1.0f;
+
+    //________MOVEMENT______________
+    public float acceleration;
+    private float deltaH;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBall(Vector3 pos)
+    public override void InitializeBallSpecific()
     {
-        transform.position = pos;
-        velocity = new Vector2(0, startSpeed);
+        // SET MOVEMENT VARIABLES
         acceleration = -3;
+
+        // ATTRIBUTES
         size = GetComponent<Collider2D>().bounds.size.y;
         radius = size / 2;
+
+        if(ballAxis == Axis.y){InitializeBallYAxis();}
+        else if(ballAxis == Axis.x){InitializeBallXAxis();}
     }
 
-    private void Awake() {
-        rb = GetComponent<Rigidbody2D>();
+    private void InitializeBallYAxis()
+    {
+        velocity = new Vector2(0, dropSpeed);
+    }
+
+    private void InitializeBallXAxis()
+    {
+        velocity = new Vector2(dropSpeed, 0);
+    }
+
+    public override float GetSpawnTimeOffset()
+    {
+        // Get Paddle Info
+        float paddleAxis = paddle.getPaddleAxis();
+        float paddleHeightHalf = paddle.getPaddleHeight() / 2;
+        
+        // Determine Delta H (Height)
+        if(ballAxis == Axis.y)
+        {
+            deltaH = paddleAxis - spawnLoc.y + radius + paddleHeightHalf;
+        }
+        else if(ballAxis == Axis.x)
+        {
+            deltaH = paddleAxis - spawnLoc.x + radius + paddleHeightHalf;
+        }
+
+        // Calculate delta T
+        // using physics equation dy = v0t + 1/2at^2 solved for time in the form
+        // t = (-v0 +- sqrt(v0^2 + 2ady)) / a
+        float determinant = (Mathf.Pow(dropSpeed, 2) + (2 * acceleration * deltaH));
+        float time = (-dropSpeed - Mathf.Sqrt(Mathf.Abs(determinant))) / acceleration;
+
+        DebugDropTime(time, deltaH, paddleHeightHalf);
+
+        return time;
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * IDLE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    protected override void HandleIdle()
-    {
-
-    }
+    protected override void HandleIdle(){}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * ACTIVATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    protected override void HandleActivate()
-    {
-        spawnTime = Time.time;
-    }
+    protected override void HandleActivate(){}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVE
@@ -53,10 +84,15 @@ public class SimpleBall : Ball
 
     protected override void HandleMove()
     {
-        velocity.y += acceleration * Time.fixedDeltaTime;
-
-        print("DT: " + Time.fixedDeltaTime);
-        Vector3 newPos = new Vector3(velocity.x * Time.fixedDeltaTime, velocity.y * Time.fixedDeltaTime, 0.0f);
+        if(ballAxis == Axis.y)
+        {
+            velocity.y += acceleration * Time.deltaTime;
+        }
+        else if(ballAxis == Axis.x)
+        {
+            velocity.x += acceleration * Time.deltaTime;
+        }
+        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
         rb.MovePosition(transform.position + newPos);
     }
 
@@ -72,11 +108,7 @@ public class SimpleBall : Ball
         }
     }
 
-    protected override void HandleMiss()
-    {
-//print("MISS");
-        // DO POINT STUFF HERE
-    }
+    protected override void HandleMiss(){}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
@@ -94,6 +126,8 @@ public class SimpleBall : Ball
         if(caught)
         {
             ChangeState(State.Caught);
+            catchTime = Time.time;
+            DebugCatchTime();
         }
         caught = false;
     }
@@ -103,10 +137,6 @@ public class SimpleBall : Ball
         timesCaught++;
 
         velocity.y = -velocity.y;
-        catchTime = Time.time;
-
-print("Catch #" + timesCaught);
-print("Time to catch: " + (catchTime - spawnTime));
 
         if(timesCaught < 1)
         {
@@ -115,6 +145,47 @@ print("Time to catch: " + (catchTime - spawnTime));
         else
         {
             ChangeState(State.Exit);
+        }
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * EXIT
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    protected override void HandleExit()
+    {
+        StartCoroutine(WaitThenDestroy());
+    }
+
+    IEnumerator WaitThenDestroy()
+    {
+        yield return new WaitForSeconds(3.0f);
+        exit = true;
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * DEBUG
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void DebugDropTime(float time, float deltaY, float paddleHeightHalf)
+    {
+        print("Expected Ball Drop Time: " + time + " sec.");
+        print("DISTANCE TO FALL (PaddleY - BallDropY + BallRadius + paddleHeightHalf): " + deltaY);
+        print("PADDLE HEIGHT: " + paddleHeightHalf);
+        print("BALL RADIUS: " + radius);
+    }
+
+    private void DebugCatchTime()
+    {
+        print("Time to catch: " + (catchTime - spawnTime));
+    }
+
+    void OnDrawGizmos() 
+    {
+        if(spawnLoc != null){
+            Gizmos.color = Color.green;
+            Vector2 targetLoc = new Vector2(spawnLoc.x, spawnLoc.y + deltaH);
+            Gizmos.DrawLine(spawnLoc, targetLoc);
         }
     }
 }

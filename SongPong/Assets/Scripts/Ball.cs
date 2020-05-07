@@ -22,11 +22,18 @@ using UnityEngine.Events;
 
 public abstract class Ball : MonoBehaviour
 {
-    // ATTRIBUTES
+    //___________ATTRIBUTES_____________
     public int id;
+    protected Vector2 spawnLoc;
     protected float size;
 
-    // STATE
+    protected Axis ballAxis;
+
+    //___________REFERENCES_____________
+    private SpawnInfo spawner;
+    protected Paddle paddle;
+
+    //___________STATE__________________
     public enum State
     {
         Idle, // ball is waiting to drop
@@ -36,24 +43,24 @@ public abstract class Ball : MonoBehaviour
         Caught, // ball caught by paddle
         Exit // ball is finished
     }
-
     public State status;
 
-    // COMPONENTS
-    protected Vector2 screenBounds;
-
-    // NOTES
-    protected List<Note> notes;
-
-    // VELOCITY
-    protected Vector2 velocity;
-    protected float spawnTime;
-    protected float catchTime;
-
-    // BOOLEANS
     protected bool caught = false;
     protected bool missed = false;
     protected bool exit = false;
+
+    //___________COMPONENTS_____________
+    protected Rigidbody2D rb;
+    protected Vector2 screenBounds;
+
+    //___________NOTES__________________
+    protected List<Note> notes;
+
+    //___________MOVEMENT_______________
+    protected Vector2 velocity;
+    protected float spawnTime;
+    protected float catchTime;
+    protected float direction;
 
     // BOUNCE
     protected int timesCaught = 0;
@@ -74,6 +81,7 @@ public abstract class Ball : MonoBehaviour
         status = s;
         if (onStateChange != null)
             onStateChange.Invoke(status);
+
     }
 
     public void AddToStatusChange(UnityAction<State> action)
@@ -88,21 +96,38 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    void Start()
+    public void InitializeBall(int id, List<Note> noteList)
     {
+        // INITIALIZE ID AND NOTES
+        this.id = id;
+        this.notes = noteList;
+
+        // COMPONENTS
+        rb = GetComponent<Rigidbody2D>();
+
+        // REFERENCES
+        spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
+        paddle = GameObject.Find("Paddle").GetComponent<Paddle>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+
+        // APPEARANCE
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
+        // GO TO SPAWN LOCATION
+        ballAxis = spawner.gameAxis; // set the ball's axis
+        int spawnNumber = noteList[0].getColumn(); // the first note's spawn location
+        spawnLoc = spawner.GetSpawnLocation(spawnNumber);
+        transform.position = spawnLoc;
+        //direction = noteList[0].getDirection();
+
+        // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
+        InitializeBallSpecific();
+
+        // START IN IDLE STATE
         ChangeState(State.Idle);
     }
 
-    public abstract void InitializeBall(Vector3 pos);
-
-    public void initBallInfo(int id, List<Note> noteList)
-    {
-        this.id = id;
-        this.notes = noteList;
-    }
+    public abstract void InitializeBallSpecific();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * UPDATE
@@ -116,11 +141,7 @@ public abstract class Ball : MonoBehaviour
             CheckCatch();
             //Add new check to change status right here
         }
-    }
 
-    public void FixedUpdateBall()
-    {
-        print(status);
         switch(status)
         {
             case State.Idle:
@@ -130,9 +151,6 @@ public abstract class Ball : MonoBehaviour
                 HandleActivate();
                 Activate();
                 break;
-            case State.Moving:
-                HandleMove();
-                break;
             case State.Caught:
                 HandleCatch();
                 break;
@@ -141,11 +159,18 @@ public abstract class Ball : MonoBehaviour
                 Miss();
                 break;
             case State.Exit:
-                Exit();
+                HandleExit();
                 break;
             default:
-                Debug.Log("Error, state not handled in Ball");
                 break;
+        }
+    }
+
+    public void FixedUpdateBall()
+    {
+        if(status == State.Moving)
+        {
+            HandleMove();
         }
     }
 
@@ -165,6 +190,7 @@ public abstract class Ball : MonoBehaviour
 
     private void Activate()
     {
+        spawnTime = Time.time;
         ChangeState(State.Moving);
     }
 
@@ -172,7 +198,8 @@ public abstract class Ball : MonoBehaviour
  * MOVING
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract protected void HandleMove();
+    protected abstract void HandleMove();
+    public abstract float GetSpawnTimeOffset();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
@@ -187,6 +214,7 @@ public abstract class Ball : MonoBehaviour
 
     abstract protected void CheckMiss();
     abstract protected void HandleMiss();
+
     private void Miss()
     {
         ChangeState(State.Exit);
@@ -196,11 +224,7 @@ public abstract class Ball : MonoBehaviour
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void Exit()
-    {
-        // HANDLE ANIMATION HERE
-        exit = true;
-    }
+    abstract protected void HandleExit();
 
     public void DeleteBall()
     {
@@ -218,4 +242,9 @@ public abstract class Ball : MonoBehaviour
     public int getSpawnColumn(){return notes[0].getColumn();}
 
     public bool checkIfFinished(){return exit;}
+
+    private void DebugStatus()
+    {
+        Debug.Log(status);
+    }
 }

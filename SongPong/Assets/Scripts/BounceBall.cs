@@ -44,7 +44,18 @@ public class BounceBall : Ball
     {
     }
 
-    public override void InitializeBall(Vector3 pos)
+    protected override void HandleExit()
     {
+
+    }
+
+    public override float GetSpawnTimeOffset()
+    {
+        return 0.0f;
+    }
+
+    public override void InitializeBallSpecific()
+    {
+       
     }
 }
