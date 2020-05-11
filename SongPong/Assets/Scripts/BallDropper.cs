@@ -1,7 +1,7 @@
 ﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 ________ DEFENITION ________
 Class Name: BallDropper
-Purpose: Spawn and Drop balls at the correct time
+Purpose: Takes a list of balls spawns and drops them at the correct time
 Associations: Song
 ________ USAGE ________
 * Description of how to appropriatly use
@@ -24,33 +24,30 @@ public class BallDropper : MonoBehaviour
 {
     //___________References______________
     public Song song;
-    private Paddle paddle;
     public GameObject simpleBall;
     public GameObject bounceBall;
     
-    // Balls
+    //___________Balls___________________
     private List<Ball> balls = new List<Ball>(); // all balls in this song
     private List<Ball> activeBallList = new List<Ball>(); // all active balls
     private List<Ball> finishedBallList = new List<Ball>();
     private int currentBallIndex;
     private Ball currentBall;
 
-    // Reader
+    //___________Reader__________________
     public string ballsLocation = "Assets/Resources/Note Data/";
     public string ballMapName;
     public char delimeter = ',';
     public char noteDelimeter = '/';
+    public int directionColumn = 3;
     public int notesColumn = 2;
     public int typeColumn = 1;
     public int idColumn = 0;
 
-    // SPAWN
-    private float ballRadius;
-    private float paddleY;
+    //___________Spawn___________________
     private float dropTime;
-    private float deltaY;
 
-    // STATE
+    //___________State___________________
     private bool isFinished = false;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -72,9 +69,9 @@ public class BallDropper : MonoBehaviour
     {
         CheckDrop();
 
-        updateActiveBalls();
+        UpdateActiveBalls();
 
-        removeFinishedBalls();
+        RemoveFinishedBalls();
     }
 
     private void FixedUpdate() 
@@ -84,7 +81,7 @@ public class BallDropper : MonoBehaviour
         }
     }
 
-    private void updateActiveBalls()
+    private void UpdateActiveBalls()
     {
         // Update all active balls
         foreach(Ball ball in activeBallList){
@@ -94,16 +91,6 @@ public class BallDropper : MonoBehaviour
 				finishedBallList.Add(ball);
 			}
         }
-    }
-
-    private void removeFinishedBalls()
-    {
-        // Destroy any balls that are caught or missed
-		foreach(Ball rmBall in finishedBallList) {
-			activeBallList.Remove(rmBall);
-            rmBall.DeleteBall();
-		}
-        finishedBallList.Clear();
     }
 
     public void CheckDrop() 
@@ -159,6 +146,20 @@ public class BallDropper : MonoBehaviour
 
         // Add to list of balls
         balls.Add(ball);
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * REMOVE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void RemoveFinishedBalls()
+    {
+        // Destroy any balls that are caught or missed
+		foreach(Ball rmBall in finishedBallList) {
+			activeBallList.Remove(rmBall);
+            rmBall.DeleteBall();
+		}
+        finishedBallList.Clear();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

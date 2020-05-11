@@ -18,9 +18,6 @@ public class SimpleBall : Ball
 
     public override void InitializeBallSpecific()
     {
-        // SET MOVEMENT VARIABLES
-        acceleration = -3;
-
         // ATTRIBUTES
         size = GetComponent<Collider2D>().bounds.size.y;
         radius = size / 2;
@@ -32,11 +29,13 @@ public class SimpleBall : Ball
     private void InitializeBallYAxis()
     {
         velocity = new Vector2(0, dropSpeed);
+        acceleration = -3;
     }
 
     private void InitializeBallXAxis()
     {
         velocity = new Vector2(dropSpeed, 0);
+        acceleration = -3;
     }
 
     public override float GetSpawnTimeOffset()
@@ -59,7 +58,7 @@ public class SimpleBall : Ball
         // using physics equation dy = v0t + 1/2at^2 solved for time in the form
         // t = (-v0 +- sqrt(v0^2 + 2ady)) / a
         float determinant = (Mathf.Pow(dropSpeed, 2) + (2 * acceleration * deltaH));
-        float time = (-dropSpeed - Mathf.Sqrt(Mathf.Abs(determinant))) / acceleration;
+        float time = (-dropSpeed - Mathf.Sqrt(determinant)) / acceleration;
 
         DebugDropTime(time, deltaH, paddleHeightHalf);
 
@@ -102,9 +101,21 @@ public class SimpleBall : Ball
 
     protected override void CheckMiss()
     {
-        if(transform.position.y < -screenBounds.y && !missed){
-            ChangeState(State.Missed);
-            missed = true;
+        if(ballAxis == Axis.y)
+        {
+            if(transform.position.y < -screenBounds.y && !missed)
+            {
+                ChangeState(State.Missed);
+                missed = true;
+            }
+        }
+        else if(ballAxis == Axis.x)
+        {
+            if((transform.position.x < -screenBounds.x || transform.position.x > screenBounds.x) && !missed)
+            {
+                ChangeState(State.Missed);
+                missed = true;
+            }
         }
     }
 

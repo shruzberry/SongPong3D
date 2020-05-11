@@ -59,6 +59,7 @@ public abstract class Ball : MonoBehaviour
     //___________MOVEMENT_______________
     protected Vector2 velocity;
     protected float spawnTime;
+    public float dropTime;
     protected float catchTime;
     protected float direction;
 
@@ -141,6 +142,8 @@ public abstract class Ball : MonoBehaviour
             CheckCatch();
             //Add new check to change status right here
         }
+        
+        //DebugStatus();
 
         switch(status)
         {

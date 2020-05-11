@@ -5,8 +5,8 @@ using UnityEngine;
 public class Note
 {
     private int id;
-    private float hitTime;
-    private int column;
+    private float hitTime; // hit 
+    private int column; // which spawn to start at
 
     public Note(int id, float hitTime, int column){
         this.id = id;

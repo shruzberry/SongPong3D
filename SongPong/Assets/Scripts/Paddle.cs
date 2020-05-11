@@ -12,8 +12,8 @@ public class Paddle : MonoBehaviour
 
     //____________MOVEMENT_________________
     public Vector2 movement;
-    private float paddleYAxis = 4;
-    private float paddleXAxis = 8;
+    private float paddleYAxis;
+    private float paddleXAxis;
 
     //____________ATTRIBUTES_______________
     public enum Paddles{P1,P2}; // which paddle is this (P1 is left-side in x-axis mode)
@@ -32,6 +32,10 @@ public class Paddle : MonoBehaviour
         paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
+
+    print(screenBounds.y);
+        paddleYAxis = screenBounds.y - (screenBounds.y * 0.15f);
+        paddleXAxis = screenBounds.x - (screenBounds.x * 0.1f);
 
         if(paddleAxis == Axis.y){InitializePaddleYAxis();}
         else if(paddleAxis == Axis.x){InitializePaddleXAxis();}

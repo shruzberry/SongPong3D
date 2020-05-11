@@ -118,7 +118,7 @@ public class SpawnInfo : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos() 
+    private void OnDrawGizmos()
     {
         if(ballCols != null && showColumns)
         {

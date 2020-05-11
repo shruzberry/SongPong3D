@@ -174,7 +174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 315321658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a692f364ca76a4bb9a2cf1b9bb6ffac4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b178778567b148ac8c2e25d4c105417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   notesLocation: Assets/Resources/Note Data/
@@ -222,6 +222,7 @@ MonoBehaviour:
   ballMapName: paradise
   delimeter: 44
   noteDelimeter: 47
+  directionColumn: 3
   notesColumn: 2
   typeColumn: 1
   idColumn: 0
@@ -318,7 +319,7 @@ Transform:
   m_GameObject: {fileID: 1126717609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.11, y: -3.69, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -496,7 +497,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815133878}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a60819b1ae1824402bb3aa38666f9615, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ef2b9996b85540b3b323b66ca1731cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameAxis: 1
