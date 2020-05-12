@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3e293e262d3d1f4c8ce01b9950277b2, type: 3}
-  m_Name: paradise
+  m_Name: paradiseData
   m_EditorClassIdentifier: 
+  currentTime: 60.675373
   bpm: 140
   name: Paradise
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
-  startTime: 0
+  startTime: 4
+  endTime: 275
