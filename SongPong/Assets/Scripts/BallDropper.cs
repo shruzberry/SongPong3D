@@ -21,34 +21,22 @@ using System;
 using System.IO;
 
 public class BallDropper : MonoBehaviour
-{
-    //___________References______________
-    public Song song;
-    public GameObject simpleBall;
-    public GameObject bounceBall;
-    
+{   
     //___________Balls___________________
-    private List<Ball> balls = new List<Ball>(); // all balls in this song
-    private List<Ball> activeBallList = new List<Ball>(); // all active balls
-    private List<Ball> finishedBallList = new List<Ball>();
-    private int currentBallIndex;
+    private BallData[] ballData; // stores ball data
+
+    private List<Ball> balls = new List<Ball>();
+    private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
+    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited
+    private int currentBallIndex; // which ball to drop
     private Ball currentBall;
 
-    //___________Reader__________________
-    public string ballsLocation = "Assets/Resources/Note Data/";
-    public string ballMapName;
-    public char delimeter = ',';
-    public char noteDelimeter = '/';
-    public int directionColumn = 3;
-    public int notesColumn = 2;
-    public int typeColumn = 1;
-    public int idColumn = 0;
-
-    //___________Spawn___________________
-    private float dropTime;
+    //___________Loader__________________
+    public string dataLocation = "SongData/data/";
+    public string ballMapName; // name of the current song
 
     //___________State___________________
-    private bool isFinished = false;
+    private bool isFinished = false; // any balls left to update
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
@@ -93,8 +81,13 @@ public class BallDropper : MonoBehaviour
         }
     }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * DROP
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     public void CheckDrop() 
     {
+        float dropTime = currentBall.dropTime; // this should probably just be set once
         if(!isFinished && currentBall.getHitTime() - dropTime < Time.time)
         {
             currentBall.TriggerActivation();
@@ -105,7 +98,7 @@ public class BallDropper : MonoBehaviour
 
     public void nextBall() 
     {
-        if(currentBallIndex < balls.Count - 2){ // TEMPORARILY 2 REVERT TO 1
+        if(currentBallIndex < balls.Count - 1){
             currentBallIndex++;
         }
         else{
@@ -119,30 +112,19 @@ public class BallDropper : MonoBehaviour
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void spawnSimpleBall(int id, List<Note> notes)
+    public void spawnBall(BallData data, NoteData[] notes)
     {
-        // Instantiate the ball
-        SimpleBall ball = Instantiate(simpleBall).GetComponent<SimpleBall>();
+        if(notes.Length == 0)
+        {
+            Debug.LogError("No notes have been assigned to this ball.");
+            return;
+        }
+
+        Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
         ball.transform.parent = transform; // set BallDropper gameobject to parent
 
         // Initialize the ball with id and notes
-        ball.InitializeBall(id, notes);
-
-        // Get Spawn Time info
-        dropTime = ball.GetSpawnTimeOffset();
-
-        // Add to list of balls
-        balls.Add(ball);
-    }
-
-    public void spawnBounceBall(int id, List<Note> notes)
-    {
-         // Instantiate the ball
-        BounceBall ball = Instantiate(bounceBall).GetComponent<BounceBall>();
-        ball.transform.parent = transform; // set BallDropper gameobject to parent
-
-        // Initialize ball with id and notes
-        ball.InitializeBall(id, notes);
+        ball.InitializeBall(data.id, notes);
 
         // Add to list of balls
         balls.Add(ball);
@@ -155,7 +137,8 @@ public class BallDropper : MonoBehaviour
     private void RemoveFinishedBalls()
     {
         // Destroy any balls that are caught or missed
-		foreach(Ball rmBall in finishedBallList) {
+		foreach(Ball rmBall in finishedBallList) 
+        {
 			activeBallList.Remove(rmBall);
             rmBall.DeleteBall();
 		}
@@ -163,45 +146,27 @@ public class BallDropper : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * READER
+ * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public List<Ball> getActiveBalls(){return activeBallList;}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * LOADER
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     public void loadBalls()
     {
-        //print("loading");
-        song.loadSong(); // this should not be here
+        string path = dataLocation + ballMapName + "/Balls/";
+        ballData = Resources.LoadAll<BallData>(path);
 
-        // Load the Ball Sheet and the Notes Sheet
-        string path = ballsLocation + ballMapName + "/";
-        //print(path);
-        //print(ballsLocation);
-        //print(ballMapName);
-        string ballsPath = path + ballMapName + "_balls.csv";
-        //print(ballsPath);
-
-        StreamReader reader = new StreamReader(ballsPath);
-        string currLine = reader.ReadLine(); // this skips the labels row
-
-        while((currLine = reader.ReadLine()) != null){
-            // Get info from sheet
-            string[] ballInfo = currLine.Split(delimeter);
-            int id = int.Parse(ballInfo[idColumn]);
-            string type = ballInfo[typeColumn].ToLower();
-
-            // Get the balls' notes from Song
-            string[] noteString = ballInfo[notesColumn].Split(noteDelimeter);
-            int[] notes = Array.ConvertAll<string, int>(noteString, int.Parse);
-            List<Note> noteList = song.getNotes(notes);
-
-            // Spawn the Ball depending on the type
-            switch(type){
-                case "basic":
-                    spawnSimpleBall(id,noteList);
-                    break;
-                case "bounce":
-                    spawnBounceBall(id,noteList);
-                    break;
-                default:
-                    break;
+        if(balls != null)
+        {
+            foreach(BallData data in ballData)
+            {
+                NoteData[] notes = data.notes;
+                
+                spawnBall(data, notes);
             }
         }
     }

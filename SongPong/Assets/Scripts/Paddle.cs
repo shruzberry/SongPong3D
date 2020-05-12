@@ -33,7 +33,6 @@ public class Paddle : MonoBehaviour
         paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
 
-    print(screenBounds.y);
         paddleYAxis = screenBounds.y - (screenBounds.y * 0.15f);
         paddleXAxis = screenBounds.x - (screenBounds.x * 0.1f);
 

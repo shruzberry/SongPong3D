@@ -6,6 +6,11 @@ namespace Types
 {
     public enum Direction
     {
-        left, right, up, down
+        positive, negative
+    }
+
+    public enum BallTypes
+    {
+        simple
     }
 }

@@ -54,7 +54,7 @@ public abstract class Ball : MonoBehaviour
     protected Vector2 screenBounds;
 
     //___________NOTES__________________
-    protected List<Note> notes;
+    private NoteData[] notes;
 
     //___________MOVEMENT_______________
     protected Vector2 velocity;
@@ -97,11 +97,11 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(int id, List<Note> noteList)
+    public void InitializeBall(int id, NoteData[] notes)
     {
         // INITIALIZE ID AND NOTES
         this.id = id;
-        this.notes = noteList;
+        this.notes = notes;
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
@@ -116,13 +116,14 @@ public abstract class Ball : MonoBehaviour
 
         // GO TO SPAWN LOCATION
         ballAxis = spawner.gameAxis; // set the ball's axis
-        int spawnNumber = noteList[0].getColumn(); // the first note's spawn location
+        int spawnNumber = notes[0].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
         transform.position = spawnLoc;
         //direction = noteList[0].getDirection();
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
+        dropTime = GetSpawnTimeOffset();
 
         // START IN IDLE STATE
         ChangeState(State.Idle);
@@ -240,9 +241,9 @@ public abstract class Ball : MonoBehaviour
 
     public float getSize(){return size;}
 
-    public float getHitTime(){return notes[0].getHitTime();}
+    public float getHitTime(){return notes[0].hitTime;}
 
-    public int getSpawnColumn(){return notes[0].getColumn();}
+    //public int getSpawnColumn(){return notes[0].getColumn();}
 
     public bool checkIfFinished(){return exit;}
 
