@@ -15,6 +15,7 @@ ________ ATTRIBUTES ________
 + float songLength
 
 ________ FUNCTIONS ________
++ UpdateSongTime()
 + LoadSong(SongData)
 + JumpToStart()
 + JumpToBeat(int)
@@ -82,6 +83,12 @@ public class SongController : MonoBehaviour
         goToTime(time);
     }
 
+    public void JumpToEnd()
+    {
+        goToTime(songData.endTime);
+    }
+
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -89,6 +96,7 @@ public class SongController : MonoBehaviour
     private void goToTime(float time)
     {
         source.time = time;
+        songTime = source.time;
         source.Play();
     }
 

@@ -31,6 +31,8 @@ public class SongBuilderWindow : EditorWindow
     
     // Values for functionality
     public SongData songData;
+    SongController songController;
+    float jumpToTime;
 
     // actual control functionality
     Vector2 addBallScrollPosition;
@@ -85,7 +87,7 @@ public class SongBuilderWindow : EditorWindow
     //The Awake Function
     void OnEnable()
     {
-        //songController = GameObject.Find("SongController").GetComponent(typeof(SongController)) as SongController;
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
         InitTextures();
     }
 
@@ -175,6 +177,8 @@ public class SongBuilderWindow : EditorWindow
 
     void DrawNavSettings()
     {
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
+
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             EditorGUILayout.BeginHorizontal();
@@ -182,37 +186,38 @@ public class SongBuilderWindow : EditorWindow
                 songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(200));
 
                 // Restart Song
-                if (GUILayout.Button("<<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                if (GUILayout.Button("<<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    
+                    songController.JumpToStart();
                 }
 
                 // Go Back 8 beats
-                if (GUILayout.Button("<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                if (GUILayout.Button("<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    
+                    songController.JumpToBeat(songController.currentBeat - 8);
                 }
 
                 // Pause/Play
-                if (GUILayout.Button("Play", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                if (GUILayout.Button("Play", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    
+                    songController.JumpToTime(jumpToTime);
                 }
 
                 // Go Forward 8 beats
-                if (GUILayout.Button(">", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                if (GUILayout.Button(">", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    
+                    songController.JumpToBeat(songController.currentBeat + 8);
                 }
 
                 // Go to end of song
-                if (GUILayout.Button(">>", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)));
+                if (GUILayout.Button(">>", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    
+                    songController.JumpToEnd();
                 }
 
                 // Song Slider
-                songData.currentTime = EditorGUILayout.Slider(songData.currentTime, songData.startTime, songData.endTime);
+
+                jumpToTime = EditorGUILayout.Slider(jumpToTime, songData.startTime, songData.endTime);
             EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
@@ -356,9 +361,9 @@ public class SongBuilderWindow : EditorWindow
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    void Awake()
+    void Start()
     {
-
+        
     }
 
     void Update()
