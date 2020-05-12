@@ -22,6 +22,7 @@ ________ FUNCTIONS ________
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
 public class NoteListener : MonoBehaviour
 {
@@ -63,7 +64,7 @@ public class NoteListener : MonoBehaviour
             
             nd.hitPosition = si.GetNearestColumn(Input.mousePosition);
             nd.hitTime = sc.currentBeat;
-            nd.noteDirection = positive;
+            nd.noteDirection = Direction.positive;
 
             data.Add(nd);
         }

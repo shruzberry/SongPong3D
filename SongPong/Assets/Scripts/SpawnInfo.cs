@@ -34,7 +34,7 @@ public class SpawnInfo : MonoBehaviour
     public bool showColumns = true; // if true, show columns
 
     // COLUMNS
-    private float[] ballCols; // x-positions of each column in world coordinates
+    private float[] ballCols; // x- or y-positions of each column in world coordinates
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INIT
@@ -153,6 +153,31 @@ public class SpawnInfo : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int GetNearestColumn(Vector2 screenPos, bool debug = false)
+    {
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+        int nearestColumn = 0;
+        float minDist = float.MaxValue;
+
+        float compare;
+        if(gameAxis == Axis.y){compare = worldPos.x;}
+        else if(gameAxis == Axis.x){compare = worldPos.y;}
+        else{return 0;}
+
+        for(int f = 0; f < ballCols.Length; f++)
+        {
+            float delta = Mathf.Abs(ballCols[f] - compare);
+            if(delta < minDist)
+            {
+                minDist = delta;
+                nearestColumn = f;
+            }
+        }
+        if(debug){print("NEAREST COLUMN: " + nearestColumn);}
+
+        return nearestColumn;
     }
 
     public Vector2 GetSpawnLocation(int spawnNum)
