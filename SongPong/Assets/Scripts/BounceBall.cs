@@ -20,11 +20,6 @@ public class BounceBall : Ball
 
     }
 
-    protected override void HandleActivate()
-    {
-
-    }
-
     protected override void HandleMove()
     {
 

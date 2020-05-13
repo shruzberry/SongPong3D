@@ -65,18 +65,6 @@ public class SimpleBall : Ball
         return time;
     }
 
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * IDLE
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    protected override void HandleIdle(){}
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * ACTIVATE
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    protected override void HandleActivate(){}
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -105,7 +93,7 @@ public class SimpleBall : Ball
         {
             if(transform.position.y < -screenBounds.y && !missed)
             {
-                ChangeState(State.Missed);
+                //ChangeState(State.Missed);
                 missed = true;
             }
         }
@@ -113,7 +101,7 @@ public class SimpleBall : Ball
         {
             if((transform.position.x < -screenBounds.x || transform.position.x > screenBounds.x) && !missed)
             {
-                ChangeState(State.Missed);
+                //ChangeState(State.Missed);
                 missed = true;
             }
         }
@@ -136,7 +124,7 @@ public class SimpleBall : Ball
     {
         if(caught)
         {
-            ChangeState(State.Caught);
+            //ChangeState(State.Caught);
             catchTime = Time.time;
             //DebugCatchTime();
         }
@@ -151,11 +139,11 @@ public class SimpleBall : Ball
 
         if(timesCaught < 1)
         {
-            ChangeState(State.Moving);
+            //ChangeState(State.Moving);
         }
         else
         {
-            ChangeState(State.Exit);
+            //ChangeState(State.Exit);
         }
     }
 

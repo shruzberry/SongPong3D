@@ -90,7 +90,6 @@ public class BallDropper : MonoBehaviour
         float dropTime = currentBall.dropTime; // this should probably just be set once
         if(!isFinished && currentBall.getHitTime() - dropTime < Time.time)
         {
-            currentBall.TriggerActivation();
             activeBallList.Add(currentBall);
             nextBall();
         }

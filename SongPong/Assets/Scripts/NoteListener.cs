@@ -63,7 +63,10 @@ public class NoteListener : MonoBehaviour
             NoteData nd = new NoteData();
             
             nd.hitPosition = si.GetNearestColumn(Input.mousePosition);
-            nd.hitTime = sc.currentBeat;
+            if(sc != null)
+            {
+                nd.hitTime = sc.currentBeat;
+            }
             nd.noteDirection = Direction.positive;
 
             data.Add(nd);
