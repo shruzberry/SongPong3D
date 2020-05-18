@@ -15,10 +15,8 @@ ________ FUNCTIONS _________
 TODO
  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using Types;
 
 public abstract class Ball : MonoBehaviour
 {
@@ -29,33 +27,21 @@ public abstract class Ball : MonoBehaviour
     protected Vector2 spawnLoc;
     protected float size;
 
-    protected Axis ballAxis;
+    public Axis axis;
+    public Vector2 dirVector;
 
     //___________REFERENCES_____________
-    private SpawnInfo spawner;
     protected Paddle paddle;
 
     //___________STATE__________________
-
     protected BallState currentState;
-    /*
-    public enum State
-    {
-        Idle, // ball is waiting to drop
-        Activated, // ball has just been spawned, or activated
-        Moving, // ball is actively moving
-        Missed, // ball is missed
-        Caught, // ball caught by paddle
-        Exit // ball is finished
-    }
-    public State status;
-    */
-    protected bool caught = false;
+
+    public bool ready = false;
+    public bool caught = false;
     protected bool missed = false;
-    protected bool exit = false;
+    public bool exit = false;
 
     //___________COMPONENTS_____________
-    protected Rigidbody2D rb;
     protected Vector2 screenBounds;
 
     //___________NOTES__________________
@@ -63,13 +49,16 @@ public abstract class Ball : MonoBehaviour
 
     //___________MOVEMENT_______________
     protected Vector2 velocity;
-    protected float spawnTime;
-    public float dropTime;
-    protected float catchTime;
-    protected float direction;
+    protected Vector2 acceleration;
+    protected Direction direction;
 
-    // BOUNCE
-    protected int timesCaught = 0;
+    //___________TIME___________________
+    public float spawnTime;
+    public float dropTime; // time it takes from spawn to target
+    public float catchTime;
+
+    //___________CATCHES________________
+    public int catchesLeft;
 
     #endregion Variables
 
@@ -94,35 +83,59 @@ public abstract class Ball : MonoBehaviour
 
     public void InitializeBall(int id, NoteData[] notes)
     {
-        // START IN IDLE STATE
-        SetState(new IdleState());
-
         // INITIALIZE ID AND NOTES
         this.id = id;
         this.notes = notes;
 
-        // COMPONENTS
-        rb = GetComponent<Rigidbody2D>();
-
         // REFERENCES
-        spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
         paddle = GameObject.Find("Paddle").GetComponent<Paddle>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // APPEARANCE
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
-        // GO TO SPAWN LOCATION
-        ballAxis = spawner.gameAxis; // set the ball's axis
+        // SET SPAWN LOCATION
+        SpawnInfo spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
+        axis = spawner.gameAxis; // set the ball's axis
         int spawnNumber = notes[0].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
-        transform.position = spawnLoc;
-        //direction = noteList[0].getDirection();
+
+        // DIRECTION
+        direction = notes[0].noteDirection;
+
+        if(axis == Axis.y)
+        {
+            if(direction == Direction.positive)
+            {
+                dirVector = new Vector2(0,1);
+            }
+            else
+            {
+                dirVector = new Vector2(0,-1);
+            }
+        }
+        else
+        {
+            if(direction == Direction.positive)
+            {
+                dirVector = new Vector2(1,0);
+            }
+            else
+            {
+                dirVector = new Vector2(-1,0);
+            }
+        }
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
-        dropTime = GetSpawnTimeOffset();
 
+        SetState(new IdleState(this));
+    }
+
+    public void GoToSpawnLoc()
+    {
+        transform.position = spawnLoc;
+        catchesLeft = notes.Length;
     }
 
     public abstract void InitializeBallSpecific();
@@ -134,8 +147,6 @@ public abstract class Ball : MonoBehaviour
     public void UpdateBall()
     {
         CheckMiss();
-        CheckCatch();
-        
         currentState.Tick();
     }
 
@@ -148,33 +159,27 @@ public abstract class Ball : MonoBehaviour
  * MOVING
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    protected abstract void HandleMove();
-    public abstract float GetSpawnTimeOffset();
+    public abstract void MoveActions();
+    public abstract float CalcDropTime();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract protected void CheckCatch();
-    abstract protected void HandleCatch();
+    abstract public void CatchActions();
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MISS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract protected void CheckMiss();
-    abstract protected void HandleMiss();
-
-    private void Miss()
-    {
-        
-    }
+    abstract public bool CheckMiss();
+    abstract public void MissActions();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract protected void HandleExit();
+    abstract public void ExitActions();
 
     public void DeleteBall()
     {
@@ -188,8 +193,6 @@ public abstract class Ball : MonoBehaviour
     public float getSize(){return size;}
 
     public float getHitTime(){return notes[0].hitTime;}
-
-    //public int getSpawnColumn(){return notes[0].getColumn();}
 
     public bool checkIfFinished(){return exit;}
 }

@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef2b9996b85540b3b323b66ca1731cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameAxis: 1
+  gameAxis: 0
   paddingXAxis: 0.1
   paddingYAxis: 0.1
   NUM_COL: 16
