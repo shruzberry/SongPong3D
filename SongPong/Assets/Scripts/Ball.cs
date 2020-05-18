@@ -20,7 +20,7 @@ using Types;
 
 public abstract class Ball : MonoBehaviour
 {
-    #region Variables
+    public BallData ballData;
 
     //___________ATTRIBUTES_____________
     public int id;
@@ -60,21 +60,31 @@ public abstract class Ball : MonoBehaviour
     //___________CATCHES________________
     public int catchesLeft;
 
-    #endregion Variables
-
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * STATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void SetState(BallState state)
+    public StateEvent onStateChange;
+    public class StateEvent : UnityEvent<State> { }
+
+    // Given a state, if not equal to the current state
+    // sets current state to the new state and
+    // invokes the StateEvent
+    public void ChangeState(State s)
     {
-        if(currentState != null)
-            currentState.OnStateExit();
+        if (status == s) return;
+        status = s;
+        if (onStateChange != null)
+            onStateChange.Invoke(status);
 
-        currentState = state;
+    }
 
-        if(currentState != null)
-            currentState.OnStateEnter();
+    public void AddToStatusChange(UnityAction<State> action)
+    {
+        if(onStateChange == null)
+            onStateChange = new StateEvent();
+
+        onStateChange.AddListener(action);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -152,7 +162,30 @@ public abstract class Ball : MonoBehaviour
 
     public void FixedUpdateBall()
     {
-        currentState.FixedTick();
+        if(status == State.Moving)
+        {
+            HandleMove();
+        }
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    protected abstract void HandleIdle();
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * ACTIVATE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void TriggerActivation(){ChangeState(State.Activated);}
+
+    protected abstract void HandleActivate();
+
+    private void Activate()
+    {
+        spawnTime = Time.time;
+        ChangeState(State.Moving);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -195,4 +228,9 @@ public abstract class Ball : MonoBehaviour
     public float getHitTime(){return notes[0].hitTime;}
 
     public bool checkIfFinished(){return exit;}
+
+    private void DebugStatus()
+    {
+        Debug.Log(status);
+    }
 }
