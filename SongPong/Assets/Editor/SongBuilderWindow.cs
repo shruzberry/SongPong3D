@@ -32,8 +32,6 @@ public class SongBuilderWindow : EditorWindow
     // Values for functionality
     public SongData songData;
     SongController songController;
-    NoteListener noteListener;
-    BallBuilder ballBuilder;
     float jumpToTime;
 
     // actual control functionality
@@ -90,8 +88,6 @@ public class SongBuilderWindow : EditorWindow
     void OnEnable()
     {
         songController = GameObject.Find("SongController").GetComponent<SongController>();
-        //Debug.Log(songController.currentBeat);
-        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();
         InitTextures();
     }
 
@@ -228,16 +224,16 @@ public class SongBuilderWindow : EditorWindow
     
     void DrawActiveBalls()
     {
-        BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        List<Ball> activeBalls =  dropper.getActiveBalls();
-        
         GUILayout.BeginArea(activeBallsSection);
             GUILayout.Label("Active Balls");
             
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(activeBallsSection.width), GUILayout.Height(activeBallsSection.height - 75));
-                foreach(Ball ball in activeBalls)
+                for(int i = 0; i < 30; i++)
                 {
-                    //EditorGUILayout.ObjectField(ballData, typeof(Object), true);
+                    if (GUILayout.Button("example ball", GUILayout.Height(ballButtonHeight), GUILayout.Width(activeBallsSection.width - 20)));
+                    {
+                        
+                    }
                 }
             GUILayout.EndScrollView();
             
@@ -250,35 +246,28 @@ public class SongBuilderWindow : EditorWindow
 
     void DrawAddNote()
     {
-        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();
         GUILayout.BeginArea(addNoteSection);
             GUILayout.Label("Note Buffer:");
             addBallScrollPosition = GUILayout.BeginScrollView(addBallScrollPosition, GUILayout.Width(addNoteSection.width - 10), GUILayout.Height(addNoteSection.height - 40));
-                GUILayout.Label(noteListener.ToString());
+                for(int i = 0; i < 30; i++)
+                {
+                    GUILayout.Label("(Col: 5, Beat: 126)");
+                }
             GUILayout.EndScrollView();
             toggleNoteListener = GUILayout.Toggle(toggleNoteListener, "Listen for Notes");
-            
-            if(toggleNoteListener)
-                noteListener.Enable();
-            else
-                noteListener.Disable();
-        
         GUILayout.EndArea();
         
     }
 
     void DrawAddBall()
     {
-        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();
-        //ballBuilder = GameObject.Find("BallBuilder").GetComponent<BallBuilder>();
-
         GUILayout.BeginArea(addBallSection);
             GUILayout.Label("Create Ball");
 
             // Basic
-            if (GUILayout.Button("Simple", GUILayout.Height(ballButtonHeight), GUILayout.Width(addBallSection.width)));
+            if (GUILayout.Button("Basic", GUILayout.Height(ballButtonHeight), GUILayout.Width(addBallSection.width)));
             {
-                ballBuilder.CreateBall("Simple", noteListener.data);
+                
             }
 
             // Bounce

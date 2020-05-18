@@ -350,11 +350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8421bd8ab2ed34e1d8154f2706d87946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
-  paddleAxis: 0
-  screenBounds: {x: 0, y: 0}
   movement: {x: 0, y: 0}
-  paddleNum: 0
+  screenBounds: {x: 0, y: 0}
 --- !u!212 &55386345
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -469,6 +466,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271a60e4364bddb449b0c0e668eb1794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 25
+  snapToPaddle: 0
 --- !u!114 &349229702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,55 +611,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &571405525
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 571405527}
-  - component: {fileID: 571405526}
-  m_Layer: 0
-  m_Name: Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &571405526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 571405525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ef2b9996b85540b3b323b66ca1731cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameAxis: 1
-  paddingXAxis: 0.1
-  paddingYAxis: 0.1
-  NUM_COL: 16
-  ballHeightMod: 0
-  showColumns: 1
---- !u!4 &571405527
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 571405525}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.057294495, y: -0.5029789, z: -655.61615}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &792576517
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +697,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271a60e4364bddb449b0c0e668eb1794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 0
+  snapToPaddle: 0
 --- !u!1 &862535122
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,6 +1048,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271a60e4364bddb449b0c0e668eb1794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: -70
+  snapToPaddle: 0
 --- !u!1 &1171604940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1484138349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1200,8 +1157,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataLocation: SongData/data/
+  song: {fileID: 0}
+  simpleBall: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5,
+    type: 3}
+  bounceBall: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8,
+    type: 3}
+  ballsLocation: Assets/Resources/Note Data/
   ballMapName: paradise
+  delimeter: 44
+  noteDelimeter: 47
+  notesColumn: 2
+  typeColumn: 1
+  idColumn: 0
+  dropSpeed: -1
+  gravity: -3
+  ballDropY: 200
 --- !u!4 &1484138350
 Transform:
   m_ObjectHideFlags: 0
@@ -1216,49 +1186,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1505970608
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1505970609}
-  - component: {fileID: 1505970610}
-  m_Layer: 0
-  m_Name: BallBuilder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1505970609
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1505970608}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.613495, y: -1.4573478, z: -0.6598396}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1505970610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1505970608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: decfc747592d0451fbedf5e63f814783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1571517564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,6 +1237,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f72dcb16793474fae51fe770f8c474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeDisplay: {fileID: 349229699}
+  descriptionDisplay: {fileID: 1056061842}
+  songController: {fileID: 0}
+  ballTypes:
+  - 
+  - basic
+  - bounce
+  ballDescriptions:
+  - 
+  - 'Left click: Add new ball'
+  - Add bouces with (right click) then finsh with a (left click)
 --- !u!1 &1606937354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,75 +1537,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989279863}
   m_CullTransparentMesh: 0
---- !u!1001 &2720237986049737764
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3804009361574045768, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6280165370638749529, guid: 5f55f85d25a5c46528bd0a5a4fb5b389,
-        type: 3}
-      propertyPath: m_Name
-      value: NoteListener
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5f55f85d25a5c46528bd0a5a4fb5b389, type: 3}
 --- !u!1001 &2801249903922705042
 PrefabInstance:
   m_ObjectHideFlags: 0

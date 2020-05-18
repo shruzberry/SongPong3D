@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4100339267235431657}
-  - component: {fileID: 2340725175468661431}
   - component: {fileID: 4100339267235431662}
   - component: {fileID: 4100339267235431663}
+  - component: {fileID: 2340725175468661431}
   - component: {fileID: -4914575063395382804}
   m_Layer: 0
   m_Name: SimpleBall
@@ -34,23 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2340725175468661431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4100339267235431660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c80383bd76b9b4b58b7b7973a507a3d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  status: 0
-  dropTime: 0
-  dropSpeed: -1
-  acceleration: 0
 --- !u!212 &4100339267235431662
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -117,6 +100,23 @@ CircleCollider2D:
   m_Offset: {x: 0.000933981, y: 0}
   serializedVersion: 2
   m_Radius: 0.05797279
+--- !u!114 &2340725175468661431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4100339267235431660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80383bd76b9b4b58b7b7973a507a3d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  status: 0
+  dropTime: 0
+  dropSpeed: -1
+  acceleration: 0
 --- !u!50 &-4914575063395382804
 Rigidbody2D:
   serializedVersion: 4

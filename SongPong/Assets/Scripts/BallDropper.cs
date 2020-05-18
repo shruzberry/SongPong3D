@@ -121,7 +121,6 @@ public class BallDropper : MonoBehaviour
 
         Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
         ball.transform.parent = transform; // set BallDropper gameobject to parent
-        ball.ballData = data;
 
         // Initialize the ball with id and notes
         ball.InitializeBall(data.id, notes);
