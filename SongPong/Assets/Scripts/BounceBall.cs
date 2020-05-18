@@ -15,11 +15,6 @@ public class BounceBall : Ball
 
     }
 
-    protected override void HandleIdle()
-    {
-
-    }
-
     protected override void HandleMove()
     {
 

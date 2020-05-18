@@ -22,12 +22,16 @@ using System.IO;
 
 public class BallDropper : MonoBehaviour
 {   
+    //___________References______________
+    private SpawnInfo spawner;
+    private Paddle paddle;
+    
     //___________Balls___________________
     private BallData[] ballData; // stores ball data
 
     private List<Ball> balls = new List<Ball>();
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
-    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited
+    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
     private int currentBallIndex; // which ball to drop
     private Ball currentBall;
 
@@ -41,6 +45,12 @@ public class BallDropper : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void Awake() 
+    {
+        spawner = FindObjectOfType<SpawnInfo>();
+        paddle = FindObjectOfType<Paddle>();
+    }
 
     void Start()
     {
@@ -111,9 +121,9 @@ public class BallDropper : MonoBehaviour
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void spawnBall(BallData data, NoteData[] notes)
+    public void spawnBall(BallData data)
     {
-        if(notes.Length == 0)
+        if(data.notes.Length == 0)
         {
             Debug.LogError("No notes have been assigned to this ball.");
             return;
@@ -123,7 +133,7 @@ public class BallDropper : MonoBehaviour
         ball.transform.parent = transform; // set BallDropper gameobject to parent
 
         // Initialize the ball with id and notes
-        ball.InitializeBall(data.id, notes);
+        ball.InitializeBall(data, spawner, paddle);
 
         // Add to list of balls
         balls.Add(ball);
@@ -162,10 +172,8 @@ public class BallDropper : MonoBehaviour
         if(balls != null)
         {
             foreach(BallData data in ballData)
-            {
-                NoteData[] notes = data.notes;
-                
-                spawnBall(data, notes);
+            {                
+                spawnBall(data);
             }
         }
     }

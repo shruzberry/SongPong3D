@@ -60,7 +60,7 @@ public class SimpleBall : Ball
         float determinant = (Mathf.Pow(dropSpeed, 2) + (2 * acceleration * deltaH));
         float time = (-dropSpeed - Mathf.Sqrt(determinant)) / acceleration;
 
-        //DebugDropTime(time, deltaH, paddleHeightHalf);
+        DebugDropTime(time, deltaH, paddleHeightHalf);
 
         return time;
     }

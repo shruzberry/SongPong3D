@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Types;
 
 public abstract class Ball : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public abstract class Ball : MonoBehaviour
 
     //___________ATTRIBUTES_____________
     public int id;
+    private BallTypes type;
     protected Vector2 spawnLoc;
     protected float size;
 
@@ -36,20 +38,8 @@ public abstract class Ball : MonoBehaviour
     protected Paddle paddle;
 
     //___________STATE__________________
-
     protected BallState currentState;
-    /*
-    public enum State
-    {
-        Idle, // ball is waiting to drop
-        Activated, // ball has just been spawned, or activated
-        Moving, // ball is actively moving
-        Missed, // ball is missed
-        Caught, // ball caught by paddle
-        Exit // ball is finished
-    }
-    public State status;
-    */
+
     protected bool caught = false;
     protected bool missed = false;
     protected bool exit = false;
@@ -58,8 +48,9 @@ public abstract class Ball : MonoBehaviour
     protected Rigidbody2D rb;
     protected Vector2 screenBounds;
 
-    //___________NOTES__________________
+    //___________DATA___________________
     private NoteData[] notes;
+    public BallData ballData;
 
     //___________MOVEMENT_______________
     protected Vector2 velocity;
@@ -92,22 +83,22 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(int id, NoteData[] notes)
+    public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
     {
         // START IN IDLE STATE
         SetState(new IdleState());
 
         // INITIALIZE ID AND NOTES
-        this.id = id;
-        this.notes = notes;
+        this.id = data.id;
+        this.notes = data.notes;
+        this.type = data.type;
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
 
         // REFERENCES
-        spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
-        paddle = GameObject.Find("Paddle").GetComponent<Paddle>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        this.paddle = paddle;
 
         // APPEARANCE
         gameObject.layer = LayerMask.NameToLayer("Balls");
