@@ -10,36 +10,32 @@ public class BounceBall : Ball
         
     }
 
-    protected override void HandleCatch()
+    public override void CatchActions()
     {
 
     }
 
-    protected override void HandleMove()
+    public override void MoveActions()
     {
 
     }
 
-    protected override void CheckMiss()
+    public override bool CheckMiss()
+    {
+        return false;
+    }
+
+    public override void MissActions()
     {
 
     }
 
-    protected override void HandleMiss()
+    public override void ExitActions()
     {
 
     }
 
-    protected override void CheckCatch()
-    {
-    }
-
-    protected override void HandleExit()
-    {
-
-    }
-
-    public override float GetSpawnTimeOffset()
+    public override float CalcDropTime()
     {
         return 0.0f;
     }
