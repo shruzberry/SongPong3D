@@ -85,11 +85,9 @@ public abstract class Ball : MonoBehaviour
 
     public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
     {
-        // START IN IDLE STATE
-        SetState(new IdleState());
-
         // INITIALIZE ID AND NOTES
         this.id = data.id;
+        Debug.Log(id);
         this.notes = data.notes;
         this.type = data.type;
 
@@ -101,7 +99,6 @@ public abstract class Ball : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // SET SPAWN LOCATION
-        SpawnInfo spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
         axis = spawner.gameAxis; // set the ball's axis
         int spawnNumber = notes[0].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
@@ -135,6 +132,7 @@ public abstract class Ball : MonoBehaviour
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
+        // START IN IDLE STATE
         SetState(new IdleState(this));
     }
 
