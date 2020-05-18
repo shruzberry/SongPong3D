@@ -152,7 +152,7 @@ public class BallFinder : EditorWindow
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(viewSection.width), GUILayout.Height(viewSection.height - 75));
                 foreach(Ball ball in activeBalls)
                 {
-                    EditorGUILayout.ObjectField(ball, typeof(Object), true);
+                    EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
                 }
             GUILayout.EndScrollView();
         GUILayout.EndArea();

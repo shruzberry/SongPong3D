@@ -22,6 +22,8 @@ using UnityEngine.Events;
 
 public abstract class Ball : MonoBehaviour
 {
+    public BallData ballData;
+
     //___________ATTRIBUTES_____________
     public int id;
     protected Vector2 spawnLoc;
