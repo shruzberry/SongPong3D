@@ -31,6 +31,9 @@ public class BallDropper : MonoBehaviour
     private int currentBallIndex; // which ball to drop
     private Ball currentBall;
 
+    //___________Dependencies___________________
+    SongController songController;
+
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
     public string ballMapName; // name of the current song
@@ -41,6 +44,10 @@ public class BallDropper : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    void awake()
+    {
+        print(songController.songTime);
+    }
 
     void Start()
     {
@@ -87,8 +94,10 @@ public class BallDropper : MonoBehaviour
 
     public void CheckDrop() 
     {
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
+
         float dropTime = currentBall.dropTime; // this should probably just be set once
-        if(!isFinished && currentBall.getHitTime() - dropTime < Time.time)
+        if(!isFinished && currentBall.getHitTime() - dropTime < songController.songTime)
         {
             currentBall.TriggerActivation();
             activeBallList.Add(currentBall);
