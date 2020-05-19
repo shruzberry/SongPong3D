@@ -6,7 +6,7 @@ public class SimpleBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
-    public float speed = 1.0f;
+    public float speed = 0.0f;
     public float gravity = 3.0f;
 
     //________COMPONENTS____________
@@ -34,7 +34,6 @@ public class SimpleBall : Ball
 
         // CALC DROP TIME
         moveTime = CalcMoveTime();
-        //DebugDropTime();
     }
 
     public void SetDirectionSettings()
@@ -85,19 +84,15 @@ public class SimpleBall : Ball
 
     public override void MoveActions()
     {
-        if(currentNote < numNotes)
-        {
-            // UPDATE VELOCITY
-            Vector2 velocityStep = acceleration * Time.deltaTime;
+        // UPDATE VELOCITY
+        Vector2 velocityStep = acceleration * Time.deltaTime;
 
-            velocity += velocityStep;
+        velocity += velocityStep;
 
-            // UPDATE POSITION
+        // UPDATE POSITION
+        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
 
-            Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
-
-            rb.MovePosition(transform.position + newPos);
-        }
+        rb.MovePosition(transform.position + newPos);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -134,14 +129,14 @@ public class SimpleBall : Ball
     {
         if(other.gameObject.name == "Paddle"){
             caught = true;
-            catchTime = Time.time;
+            catchTimes[currentNote] = Time.time;
         }
     }
 
     public override void CatchActions()
     {
+        base.CatchActions();
         velocity = -velocity;
-        //DebugCatchTime();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

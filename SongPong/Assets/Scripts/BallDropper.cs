@@ -25,6 +25,10 @@ public class BallDropper : MonoBehaviour
     //___________References______________
     private SpawnInfo spawner;
     private Paddle paddle;
+
+    //___________Events__________________
+    public delegate void OnBallSpawned(Ball ball);
+    public event OnBallSpawned onBallSpawned;
     
     //___________Balls___________________
     private List<Ball> balls = new List<Ball>(); // every ball in this song
@@ -131,12 +135,16 @@ public class BallDropper : MonoBehaviour
         Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
         ball.transform.parent = transform; // set BallDropper gameobject to parent
 
+        // SUBSCRIBE ACTIONS TO THIS BALL
+        // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
+        if(onBallSpawned != null) onBallSpawned(ball);
+
         // Initialize the ball with id and notes
         ball.InitializeBall(data, spawner, paddle);
 
         // Add to list of balls
         balls.Add(ball);
-    }
+    }  
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * REMOVE

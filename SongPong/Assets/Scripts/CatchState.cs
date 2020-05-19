@@ -10,8 +10,6 @@ public class CatchState : BallState
     {
         ball.CatchActions();
 
-        ball.currentNote++;
-
         if(ball.currentNote < ball.numNotes)
         {
             ball.SetState(new MoveState(ball));

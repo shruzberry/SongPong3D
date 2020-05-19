@@ -24,7 +24,7 @@ public abstract class Ball : MonoBehaviour
 
     //___________ATTRIBUTES_____________
     public int id;
-    protected BallTypes type;
+    public BallTypes type;
     protected Vector2 spawnLoc;
     protected float size;
 
@@ -42,6 +42,13 @@ public abstract class Ball : MonoBehaviour
     public bool missed = false;
     public bool exit = false;
 
+    //___________EVENTS_________________
+    public delegate void BallReady(Ball ball);
+    public event BallReady onBallReady;
+
+    public delegate void BallCaught(Ball ball);
+    public event BallCaught onBallCaught;
+
     //___________DATA___________________
     protected NoteData[] notes;
     [HideInInspector]
@@ -56,7 +63,7 @@ public abstract class Ball : MonoBehaviour
     //___________TIME___________________
     public float spawnTime;
     public float moveTime; // time it takes from spawn to target
-    public float catchTime;
+    public float[] catchTimes;
 
     //___________INDEXING________________
     public int numNotes;
@@ -94,6 +101,7 @@ public abstract class Ball : MonoBehaviour
         // INDEXING
         currentNote = 0;
         numNotes = notes.Length;
+        catchTimes = new float[numNotes];
 
         // REFERENCES
         this.paddle = paddle;
@@ -117,7 +125,9 @@ public abstract class Ball : MonoBehaviour
         SetState(new IdleState(this));
     }
 
-    public abstract void InitializeBallSpecific();
+    public virtual void InitializeBallSpecific(){}
+
+    public virtual void ReadyActions(){if(onBallReady != null) onBallReady(this);}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * UPDATE
@@ -144,7 +154,12 @@ public abstract class Ball : MonoBehaviour
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract public void CatchActions();
+    virtual public void CatchActions()
+    {
+        if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
+
+        currentNote++;
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MISS
@@ -173,21 +188,4 @@ public abstract class Ball : MonoBehaviour
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DEBUG
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    protected void DebugDropTime()
-    {
-        print("Expected Ball Drop Time: " + moveTime + " sec.");
-    }
-
-    protected void DebugCatchTime()
-    {
-        //print("CatchTime: " + catchTime);
-        //print("SpawnTime: " + spawnTime);
-        //print("Time to catch: " + (catchTime - spawnTime));
-        Debug.Log("Caught Ball " + id + " at time " + Time.time);
-    }
 }
