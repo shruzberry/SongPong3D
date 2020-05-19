@@ -63,6 +63,9 @@ public class SongController : MonoBehaviour
         startTime = newSongData.startBeat;
     }
 
+    public void Play(){source.Play();}
+    public void Pause(){source.Pause();}
+    
     public int ToBeat(float time)
     {
         return (int)(time / 60) * songData.bpm;

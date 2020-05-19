@@ -45,7 +45,9 @@ public class BallFinder : EditorWindow
     int ballButtonWidth = 100;
 
     int jumpToTime;
+    bool songPlaying;
 
+    Rect fullWindow;
     Rect navBarSection;
     Rect viewSection;
 
@@ -77,10 +79,15 @@ public class BallFinder : EditorWindow
         DrawRowLayouts();
         DrawNavSettings();
         DrawActiveBalls();
+
+        if(Application.isPlaying)
+            CheckMouseHover();
     }
 
     void DrawRowLayouts()
     {
+        fullWindow = new Rect(0, 0, Screen.width, Screen.height);
+
         navBarSection.x = 0;
         navBarSection.y = 0;
         navBarSection.width = Screen.width;
@@ -102,7 +109,6 @@ public class BallFinder : EditorWindow
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
-                // Drag in Song
 
                 // Restart Song
                 if (GUILayout.Button("<<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
@@ -160,6 +166,25 @@ public class BallFinder : EditorWindow
                 }
             GUILayout.EndScrollView();
         GUILayout.EndArea();
+    }
+
+    void CheckMouseHover()
+    {
+        if(songPlaying && fullWindow.Contains(Event.current.mousePosition))
+        {
+            songController.Pause();
+            songPlaying = false;
+            Debug.Log("paused");
+            Time.timeScale = 0.0f;
+        }
+        if(!songPlaying && !fullWindow.Contains(Event.current.mousePosition))
+        {
+            songController.Play();
+            songPlaying = true;
+            Debug.Log("Playing");
+            Time.timeScale = 1.0f;
+        }
+        
     }
 
     public void Update()
