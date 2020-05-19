@@ -8,14 +8,13 @@ public class MoveState : BallState
 
     public override void OnStateEnter()
     {
-
+        
     }
 
     public override void Tick()
     {
         if(ball.caught)
         {
-            ball.catchTime = Time.time;
             ball.SetState(new CatchState(ball));
         }
 
@@ -27,7 +26,6 @@ public class MoveState : BallState
 
     public override void FixedTick()
     {
-        Debug.Log("MOVE");
         ball.MoveActions();
     }
 

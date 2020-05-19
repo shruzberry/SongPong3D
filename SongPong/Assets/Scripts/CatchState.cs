@@ -8,13 +8,11 @@ public class CatchState : BallState
 
     public override void OnStateEnter()
     {
-        ball.CatchActions();
-    }
-
-    public override void Tick()
-    {
-        Debug.Log("CATCH");
         ball.catchesLeft--;
+
+        ball.CatchActions();
+
+        ball.caught = false;
 
         if(ball.catchesLeft > 0)
         {

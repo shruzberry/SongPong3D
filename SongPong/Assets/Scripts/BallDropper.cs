@@ -27,13 +27,10 @@ public class BallDropper : MonoBehaviour
     private Paddle paddle;
     
     //___________Balls___________________
-    private BallData[] ballData; // stores ball data
-
-    private List<Ball> balls = new List<Ball>();
+    private List<Ball> balls = new List<Ball>(); // every ball in this song
+    private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
     private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
-    private int currentBallIndex; // which ball to drop
-    private Ball currentBall;
 
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
@@ -54,9 +51,7 @@ public class BallDropper : MonoBehaviour
 
     void Start()
     {
-        loadBalls();
-        currentBallIndex = 0;
-        currentBall = balls[currentBallIndex];
+        LoadBalls();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -97,25 +92,29 @@ public class BallDropper : MonoBehaviour
 
     public void CheckDrop() 
     {
-        float dropTime = currentBall.dropTime; // this should probably just be set once
-        if(!isFinished && currentBall.getHitTime() - dropTime < Time.time)
+        if(waitingBallList.Count != 0)
         {
-            activeBallList.Add(currentBall);
-            nextBall();
+            List<Ball> droppedBalls = new List<Ball>();
+
+            // check each ball that hasn't been dropped yet to see if it should be dropped.
+            // this method is very brute force and could be improved by sorting the balls first
+            foreach(Ball ball in waitingBallList)
+            {
+                if(!isFinished && ball.NextHitTime() - ball.dropTime < Time.time)
+                {
+                    droppedBalls.Add(ball);
+                    activeBallList.Add(ball);
+                }
+            }
+
+            // remove any balls that dropped from the waiting pool
+            // (this action must occur outside of the foreach loop)
+            foreach(Ball ball in droppedBalls)
+            {
+                waitingBallList.Remove(ball);
+            }
         }
 	}
-
-    public void nextBall() 
-    {
-        if(currentBallIndex < balls.Count - 1){
-            currentBallIndex++;
-        }
-        else{
-            isFinished = true;
-            print("Last ball reached.");
-        }
-        currentBall = balls[currentBallIndex];
-    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SPAWN
@@ -164,10 +163,10 @@ public class BallDropper : MonoBehaviour
  * LOADER
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void loadBalls()
+    public void LoadBalls()
     {
         string path = dataLocation + ballMapName + "/Balls/";
-        ballData = Resources.LoadAll<BallData>(path);
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
 
         if(balls != null)
         {
@@ -176,5 +175,6 @@ public class BallDropper : MonoBehaviour
                 spawnBall(data);
             }
         }
+        waitingBallList = balls;
     }
 }

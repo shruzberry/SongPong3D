@@ -8,26 +8,25 @@ public class IdleState : BallState
 
     public override void OnStateEnter()
     {
-        ball.GoToSpawnLoc();
         ball.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     public override void Tick()
     {
-        Debug.Log("IDLE");
-
         ball.ready = true; // in our case, immediately make the ball ready
 
         if(ball.ready)
         {
             ball.SetState(new MoveState(ball));
-            ball.spawnTime = Time.time;
         }
     }
 
     public override void OnStateExit()
     {
         ball.GetComponent<SpriteRenderer>().enabled = true;
+
+        //one fixed time step is added because the first move hasn't been called yet
+        ball.spawnTime = Time.time + Time.fixedDeltaTime;
     }
 
 }

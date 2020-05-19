@@ -266,7 +266,7 @@ MonoBehaviour:
   paddleAxis: 1
   screenBounds: {x: 0, y: 0}
   movement: {x: 0, y: 0}
-  paddleNum: 0
+  paddleNum: 1
 --- !u!61 &1126717613
 BoxCollider2D:
   m_ObjectHideFlags: 0

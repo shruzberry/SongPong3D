@@ -13,8 +13,6 @@ public class ExitState : BallState
 
     public override void Tick()
     {
-        Debug.Log("EXIT");
-
         if(ball.exit)
         {
             ball.SetState(new IdleState(ball));

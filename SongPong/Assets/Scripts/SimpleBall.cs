@@ -10,6 +10,7 @@ public class SimpleBall : Ball
     public float gravity = 3.0f;
 
     //________COMPONENTS____________
+    Vector3 screenBounds;
     public Rigidbody2D rb;
 
     //________MOVEMENT______________
@@ -27,15 +28,22 @@ public class SimpleBall : Ball
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
+        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         SetDirectionSettings();
 
         // CALC DROP TIME
         dropTime = CalcDropTime();
+        DebugDropTime();
     }
 
     public void SetDirectionSettings()
     {
+        if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
+        else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
+        else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
+        else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
+
         velocity = speed * dirVector;
         acceleration = gravity * dirVector;
 
@@ -67,7 +75,6 @@ public class SimpleBall : Ball
         float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
         float time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
 
-        DebugDropTime(time, deltaH, paddleHeightHalf);
         if(float.IsNaN(time)){Debug.LogError("Drop time is NaN.");}
         return time;
     }
@@ -127,12 +134,13 @@ public class SimpleBall : Ball
     {
         if(other.gameObject.name == "Paddle"){
             caught = true;
+            catchTime = Time.time;
         }
     }
 
     public override void CatchActions()
     {
-        velocity.y = -velocity.y;
+        velocity = -velocity;
         DebugCatchTime();
     }
 
@@ -154,21 +162,6 @@ public class SimpleBall : Ball
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * DEBUG
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    private void DebugDropTime(float time, float deltaY, float paddleHeightHalf)
-    {
-        print("Expected Ball Drop Time: " + time + " sec.");
-        print("DISTANCE TO FALL (PaddleY - BallDropY + BallRadius + paddleHeightHalf): " + deltaY);
-        print("PADDLE HEIGHT: " + paddleHeightHalf);
-        print("BALL RADIUS: " + radius);
-    }
-
-    private void DebugCatchTime()
-    {
-        //print("CatchTime: " + catchTime);
-        //print("SpawnTime: " + spawnTime);
-        print("Time to catch: " + (catchTime - spawnTime));
-    }
 
     void OnDrawGizmos() 
     {

@@ -24,12 +24,12 @@ public abstract class Ball : MonoBehaviour
 
     //___________ATTRIBUTES_____________
     public int id;
-    private BallTypes type;
+    protected BallTypes type;
     protected Vector2 spawnLoc;
     protected float size;
 
-    public Axis axis;
-    public Vector2 dirVector;
+    protected Axis axis;
+    protected Vector2 dirVector;
 
     //___________REFERENCES_____________
     protected Paddle paddle;
@@ -39,17 +39,16 @@ public abstract class Ball : MonoBehaviour
 
     public bool ready = false;
     public bool caught = false;
-    protected bool missed = false;
+    public bool missed = false;
     public bool exit = false;
-
-    //___________COMPONENTS_____________
-    protected Vector2 screenBounds;
 
     //___________DATA___________________
     private NoteData[] notes;
+    [HideInInspector]
     public BallData ballData;
 
     //___________MOVEMENT_______________
+    [SerializeField]
     protected Vector2 velocity;
     protected Vector2 acceleration;
     protected Direction direction;
@@ -59,8 +58,9 @@ public abstract class Ball : MonoBehaviour
     public float dropTime; // time it takes from spawn to target
     public float catchTime;
 
-    //___________CATCHES________________
+    //___________INDEXING________________
     public int catchesLeft;
+    public int currentNote;
 
     #endregion Variables
 
@@ -87,12 +87,15 @@ public abstract class Ball : MonoBehaviour
     {
         // INITIALIZE ID AND NOTES
         this.id = data.id;
-        Debug.Log(id);
+        this.ballData = data;
         this.notes = data.notes;
         this.type = data.type;
 
+        // INDEXING
+        currentNote = 0;
+        catchesLeft = notes.Length;
+
         // REFERENCES
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         this.paddle = paddle;
 
         // APPEARANCE
@@ -100,46 +103,18 @@ public abstract class Ball : MonoBehaviour
 
         // SET SPAWN LOCATION
         axis = spawner.gameAxis; // set the ball's axis
-        int spawnNumber = notes[0].hitPosition; // the first note's spawn location
+        int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
+        transform.position = spawnLoc;
 
         // DIRECTION
-        direction = notes[0].noteDirection;
-
-        if(axis == Axis.y)
-        {
-            if(direction == Direction.positive)
-            {
-                dirVector = new Vector2(0,1);
-            }
-            else
-            {
-                dirVector = new Vector2(0,-1);
-            }
-        }
-        else
-        {
-            if(direction == Direction.positive)
-            {
-                dirVector = new Vector2(1,0);
-            }
-            else
-            {
-                dirVector = new Vector2(-1,0);
-            }
-        }
+        direction = notes[currentNote].noteDirection;
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
-    }
-
-    public void GoToSpawnLoc()
-    {
-        transform.position = spawnLoc;
-        catchesLeft = notes.Length;
     }
 
     public abstract void InitializeBallSpecific();
@@ -150,7 +125,6 @@ public abstract class Ball : MonoBehaviour
 
     public void UpdateBall()
     {
-        CheckMiss();
         currentState.Tick();
     }
 
@@ -196,7 +170,23 @@ public abstract class Ball : MonoBehaviour
 
     public float getSize(){return size;}
 
-    public float getHitTime(){return notes[0].hitTime;}
+    public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * DEBUG
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    protected void DebugDropTime()
+    {
+        print("Expected Ball Drop Time: " + dropTime + " sec.");
+    }
+
+    protected void DebugCatchTime()
+    {
+        //print("CatchTime: " + catchTime);
+        //print("SpawnTime: " + spawnTime);
+        print("Time to catch: " + (catchTime - spawnTime));
+    }
 }
