@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   type: 0
-  notes: []
-  prefab: {fileID: 0}
+  notes:
+  - {fileID: 0}
+  prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}
