@@ -7,6 +7,7 @@ using Types;
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Song Data/Ball")]
 public class BallData : ScriptableObject
 {
+    [HideInInspector]
     public int id;
     public BallTypes type;
     public NoteData[] notes;
@@ -27,4 +28,11 @@ public class BallData : ScriptableObject
     }
 }
 
+<<<<<<< Updated upstream
 
+=======
+void OnEnable()
+{
+    prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
+}
+>>>>>>> Stashed changes
