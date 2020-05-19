@@ -48,6 +48,7 @@ public class SongController : MonoBehaviour
     public float songLength;
 
     private AudioSource source;
+    private int startTime;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -59,6 +60,7 @@ public class SongController : MonoBehaviour
         source.clip = songData.song;
         songLength = source.clip.length;
         numBeats = (int)((songLength / 60.0f) * songData.bpm);
+        startTime = newSongData.startBeat;
     }
 
     public void UpdateSongTime()
@@ -68,7 +70,7 @@ public class SongController : MonoBehaviour
 
     public void JumpToStart()
     {
-        goToTime(songData.startTime);
+        goToTime(songData.startBeat);
     }
 
     public void JumpToBeat(int beat)
@@ -85,7 +87,7 @@ public class SongController : MonoBehaviour
 
     public void JumpToEnd()
     {
-        goToTime(songData.endTime);
+        goToTime(songData.endBeat);
     }
 
 
@@ -114,7 +116,7 @@ public class SongController : MonoBehaviour
 
     void Start()
     {
-        source.Play();
+        JumpToBeat(startTime);
     }
 
     void Update()

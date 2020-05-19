@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Types;
 
-[CreateAssetMenuAttribute(fileName="Ball", menuName="Song Data/Ball")]
+[CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
 public class BallData : ScriptableObject
 {
     [HideInInspector]
@@ -17,7 +17,6 @@ public class BallData : ScriptableObject
     {
         prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
         type = BallTypes.simple;
-        notes = new NoteData[1];
-        notes[0] = ScriptableObject.CreateInstance<NoteData>();
+        //notes = new NoteData[1];
     }
 }

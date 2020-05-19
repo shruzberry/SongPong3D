@@ -44,7 +44,7 @@ public class BallFinder : EditorWindow
     int ballButtonHeight = 30;
     int ballButtonWidth = 100;
 
-    float jumpToTime;
+    int jumpToTime;
 
     Rect navBarSection;
     Rect viewSection;
@@ -119,7 +119,7 @@ public class BallFinder : EditorWindow
                 // Pause/Play
                 if (GUILayout.Button("Play", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    songController.JumpToTime(jumpToTime);
+                    songController.JumpToBeat(jumpToTime);
                 }
 
                 // Go Forward 8 beats
@@ -133,9 +133,13 @@ public class BallFinder : EditorWindow
                 {
                     songController.JumpToEnd();
                 }
+                
+                // Current Beat
+                GUILayout.Label("Beat: " + songController.currentBeat, GUILayout.Width(60));
 
                 // Song Slider
-                jumpToTime = EditorGUILayout.Slider(jumpToTime, songData.startTime, songData.endTime);
+                jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
+
             EditorGUILayout.EndHorizontal();
             }
         GUILayout.EndArea();
@@ -157,4 +161,11 @@ public class BallFinder : EditorWindow
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
+
+    public void Update()
+    {
+        // This is necessary to make the framerate normal for the editor window.
+        Repaint();
+    }
 }
+

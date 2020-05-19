@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenuAttribute(fileName="Song", menuName="Song Data/Song")]
+[CreateAssetMenuAttribute(fileName="Song", menuName="Song")]
 public class SongData : ScriptableObject
 {
     public float currentTime;
     public int bpm;
     public string name;
     public AudioClip song;
-    public float startTime = 0.0f;
-    public float endTime = 100.0f;
+    public int startBeat = 0;
+    public int endBeat = 0;
 }
