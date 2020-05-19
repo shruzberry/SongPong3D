@@ -11,6 +11,6 @@ namespace Types
 
     public enum BallTypes
     {
-        simple, bounce
+        simple
     }
 }

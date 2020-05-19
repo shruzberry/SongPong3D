@@ -111,9 +111,9 @@ public class Paddle : MonoBehaviour
     public float getPaddleAxis()
     {
         if(paddleAxis == Axis.y)
-            return Mathf.Abs(paddleYAxis);
+            return paddleYAxis;
         else if(paddleAxis == Axis.x)
-            return Mathf.Abs(paddleXAxis);
+            return paddleXAxis;
         else{
             Debug.LogError("INVALID PADDLE AXIS DETECTED.");
             return 0;
