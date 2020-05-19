@@ -63,6 +63,11 @@ public class SongController : MonoBehaviour
         startTime = newSongData.startBeat;
     }
 
+    public int ToBeat(float time)
+    {
+        return (int)(time / 60) * songData.bpm;
+    }
+
     public void UpdateSongTime()
     {
         goToTime(songData.currentTime);
