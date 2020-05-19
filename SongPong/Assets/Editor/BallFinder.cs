@@ -174,22 +174,24 @@ public class BallFinder : EditorWindow
         {
             songController.Pause();
             songPlaying = false;
-            Debug.Log("paused");
             Time.timeScale = 0.0f;
         }
         if(!songPlaying && !fullWindow.Contains(Event.current.mousePosition))
         {
             songController.Play();
             songPlaying = true;
-            Debug.Log("Playing");
             Time.timeScale = 1.0f;
         }
         
     }
 
+    bool isMouseOverGame()
+    {
+        return (Input.mousePosition.x == 0 || Input.mousePosition.y == 0 || Input.mousePosition.x == Screen.width - 1 || Input.mousePosition.y == Screen.height - 1);
+    }
+
     public void Update()
     {
-        // This is necessary to make the framerate normal for the editor window.
         Repaint();
     }
 }
