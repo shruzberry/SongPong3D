@@ -18,21 +18,6 @@ public class BallData : ScriptableObject
         prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
         type = BallTypes.simple;
         notes = new NoteData[1];
-        notes[0] = (NoteData) ScriptableObject.CreateInstance(typeof(NoteData));
-    }
-
-    void SaveData()
-    {
-        var note = Editor.CreateInstance<NoteData>();
-        AssetDatabase.CreateAsset(note, "Assets/Resources/SongData/paradise/Notes/");
+        notes[0] = ScriptableObject.CreateInstance<NoteData>();
     }
 }
-
-<<<<<<< Updated upstream
-
-=======
-void OnEnable()
-{
-    prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
-}
->>>>>>> Stashed changes
