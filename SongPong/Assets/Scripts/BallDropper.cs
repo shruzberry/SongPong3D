@@ -100,7 +100,7 @@ public class BallDropper : MonoBehaviour
             // this method is very brute force and could be improved by sorting the balls first
             foreach(Ball ball in waitingBallList)
             {
-                if(!isFinished && ball.NextHitTime() - ball.dropTime < Time.time)
+                if(!isFinished && ball.NextHitTime() - ball.moveTime < Time.time)
                 {
                     droppedBalls.Add(ball);
                     activeBallList.Add(ball);

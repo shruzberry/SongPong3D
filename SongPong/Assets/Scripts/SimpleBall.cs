@@ -33,8 +33,8 @@ public class SimpleBall : Ball
         SetDirectionSettings();
 
         // CALC DROP TIME
-        dropTime = CalcDropTime();
-        DebugDropTime();
+        moveTime = CalcMoveTime();
+        //DebugDropTime();
     }
 
     public void SetDirectionSettings()
@@ -44,18 +44,18 @@ public class SimpleBall : Ball
         else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
         else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
 
-        velocity = speed * dirVector;
-        acceleration = gravity * dirVector;
-
         speed = (direction == Direction.negative) ? -speed : speed;
         gravity = (direction == Direction.negative) ? -gravity : gravity;
+
+        velocity = speed * dirVector;
+        acceleration = gravity * dirVector;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * DROP TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float CalcDropTime()
+    public override float CalcMoveTime()
     {
         // Check if ball is negative or positive
         float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
@@ -85,7 +85,7 @@ public class SimpleBall : Ball
 
     public override void MoveActions()
     {
-        if(catchesLeft > 0)
+        if(currentNote < numNotes)
         {
             // UPDATE VELOCITY
             Vector2 velocityStep = acceleration * Time.deltaTime;
@@ -141,7 +141,7 @@ public class SimpleBall : Ball
     public override void CatchActions()
     {
         velocity = -velocity;
-        DebugCatchTime();
+        //DebugCatchTime();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

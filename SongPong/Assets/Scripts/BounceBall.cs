@@ -7,7 +7,7 @@ public class BounceBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
-    public float speed = 1.0f;
+    public float speed = 0.0f;
     public float gravity = 3.0f;
 
     //________COMPONENTS____________
@@ -34,7 +34,7 @@ public class BounceBall : Ball
         SetDirectionSettings();
 
         // CALC DROP TIME
-        dropTime = CalcDropTime();
+        moveTime = CalcMoveTime();
     }
 
     public void SetDirectionSettings()
@@ -55,7 +55,18 @@ public class BounceBall : Ball
  * DROP TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float CalcDropTime()
+    public override float CalcMoveTime()
+    {
+        if(currentNote == 0)
+            return CalcDropTime();
+        else
+            return CalcBounceTime();
+    }
+
+    /**
+     * Calculates the DropTime for the BounceBall when it first falls from spawn
+     */
+    private float CalcDropTime()
     {
         // Check if ball is negative or positive
         float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
@@ -79,13 +90,31 @@ public class BounceBall : Ball
         return time;
     }
 
+    /**
+     * Calculates the velocity needed to hit on the next notes' time.
+     */
+    private float CalcBounceTime()
+    {
+        float deltaT = notes[currentNote].hitTime - Time.time;
+        deltaT = deltaT / 2; // we calculate only time to reach the peak
+
+        // Check if notes are out of order
+        if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
+
+        // Calculate the velocity needed to hit at given deltaT.
+        // Comes from the kinematic equation v = v0 + at solved for v0
+        // v0 = -at
+        velocity = -acceleration * deltaT;
+        return deltaT;
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public override void MoveActions()
     {
-        if(catchesLeft > 0)
+        if(currentNote < numNotes)
         {
             // UPDATE VELOCITY
             Vector2 velocityStep = acceleration * Time.deltaTime;

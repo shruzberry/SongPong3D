@@ -43,7 +43,7 @@ public abstract class Ball : MonoBehaviour
     public bool exit = false;
 
     //___________DATA___________________
-    private NoteData[] notes;
+    protected NoteData[] notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -55,11 +55,11 @@ public abstract class Ball : MonoBehaviour
 
     //___________TIME___________________
     public float spawnTime;
-    public float dropTime; // time it takes from spawn to target
+    public float moveTime; // time it takes from spawn to target
     public float catchTime;
 
     //___________INDEXING________________
-    public int catchesLeft;
+    public int numNotes;
     public int currentNote;
 
     #endregion Variables
@@ -93,7 +93,7 @@ public abstract class Ball : MonoBehaviour
 
         // INDEXING
         currentNote = 0;
-        catchesLeft = notes.Length;
+        numNotes = notes.Length;
 
         // REFERENCES
         this.paddle = paddle;
@@ -138,7 +138,7 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
-    public abstract float CalcDropTime();
+    public abstract float CalcMoveTime();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
@@ -180,13 +180,14 @@ public abstract class Ball : MonoBehaviour
 
     protected void DebugDropTime()
     {
-        print("Expected Ball Drop Time: " + dropTime + " sec.");
+        print("Expected Ball Drop Time: " + moveTime + " sec.");
     }
 
     protected void DebugCatchTime()
     {
         //print("CatchTime: " + catchTime);
         //print("SpawnTime: " + spawnTime);
-        print("Time to catch: " + (catchTime - spawnTime));
+        //print("Time to catch: " + (catchTime - spawnTime));
+        Debug.Log("Caught Ball " + id + " at time " + Time.time);
     }
 }

@@ -8,7 +8,7 @@ public class MoveState : BallState
 
     public override void OnStateEnter()
     {
-        
+        ball.moveTime = ball.CalcMoveTime();        
     }
 
     public override void Tick()

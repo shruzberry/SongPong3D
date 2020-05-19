@@ -8,13 +8,11 @@ public class CatchState : BallState
 
     public override void OnStateEnter()
     {
-        ball.catchesLeft--;
-
         ball.CatchActions();
 
-        ball.caught = false;
+        ball.currentNote++;
 
-        if(ball.catchesLeft > 0)
+        if(ball.currentNote < ball.numNotes)
         {
             ball.SetState(new MoveState(ball));
         }
@@ -26,6 +24,7 @@ public class CatchState : BallState
 
     public override void OnStateExit()
     {   
+        ball.caught = false;
     }
 
 }
