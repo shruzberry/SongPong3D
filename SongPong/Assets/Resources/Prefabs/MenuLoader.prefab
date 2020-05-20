@@ -1,10 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
-<<<<<<< HEAD
---- !u!1 &7460096824321275558
-=======
---- !u!1 &5979281408239882593
->>>>>>> master
+--- !u!1 &4057819011714874779
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,13 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD
-  - component: {fileID: 294431778789196793}
-  - component: {fileID: 4453187732291070415}
-=======
-  - component: {fileID: 3132819221998975805}
-  - component: {fileID: 8059339259977622936}
->>>>>>> master
+  - component: {fileID: 4057819011714874777}
+  - component: {fileID: 4057819011714874776}
   m_Layer: 0
   m_Name: MenuLoader
   m_TagString: Untagged
@@ -26,59 +17,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< HEAD
---- !u!4 &294431778789196793
-=======
---- !u!4 &3132819221998975805
->>>>>>> master
+--- !u!4 &4057819011714874777
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
-  m_GameObject: {fileID: 7460096824321275558}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-=======
-  m_GameObject: {fileID: 5979281408239882593}
+  m_GameObject: {fileID: 4057819011714874779}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 24.22669, y: 49.11746, z: -19.705769}
->>>>>>> master
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
---- !u!114 &4453187732291070415
-=======
---- !u!114 &8059339259977622936
->>>>>>> master
+--- !u!114 &4057819011714874776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
-  m_GameObject: {fileID: 7460096824321275558}
-=======
-  m_GameObject: {fileID: 5979281408239882593}
->>>>>>> master
+  m_GameObject: {fileID: 4057819011714874779}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74017b1556c014ccc992bb22c019e772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   songs:
-<<<<<<< HEAD
-  - {fileID: 11400000, guid: 5b92316fd9dea42929d9afdc302f7e2c, type: 2}
-  - {fileID: 11400000, guid: 9a00d712b3a1545139188635361a79af, type: 2}
-  buttonPrefab: {fileID: 3477132718625194033, guid: 41dd60b05d9884555b6f18758b0b7a1c,
-=======
   - {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
+  - {fileID: 11400000, guid: 9a00d712b3a1545139188635361a79af, type: 2}
   buttonPrefab: {fileID: 5410112315717356530, guid: 4b5b6f0423710426a8fdd0e7e8477051,
->>>>>>> master
     type: 3}
   verticalOffset: 75
   spacing: 50
