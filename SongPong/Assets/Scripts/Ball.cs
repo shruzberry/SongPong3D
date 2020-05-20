@@ -92,6 +92,7 @@ public abstract class Ball : MonoBehaviour
 
     public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
     {
+        Debug.Log("SPAWN");
         // INITIALIZE ID AND NOTES
         this.id = data.id;
         this.ballData = data;

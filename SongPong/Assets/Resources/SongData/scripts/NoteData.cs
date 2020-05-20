@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
-[CreateAssetMenuAttribute(fileName="note", menuName="Song Data/Note")]
+[CreateAssetMenuAttribute(fileName="note", menuName="Note")]
 public class NoteData : ScriptableObject
 {
     public int hitPosition;
