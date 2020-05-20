@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
@@ -96,7 +95,6 @@ public class BounceBall : Ball
     private float CalcBounceTime()
     {
         float deltaT = notes[currentNote].hitTime - Time.time;
-        deltaT = deltaT / 2; // we calculate only time to reach the peak
 
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
@@ -104,7 +102,8 @@ public class BounceBall : Ball
         // Calculate the velocity needed to hit at given deltaT.
         // Comes from the kinematic equation v = v0 + at solved for v0
         // v0 = -at
-        velocity = -acceleration * deltaT;
+        // we calculate only time to reach the peak, so (t/2)
+        velocity = -acceleration * (deltaT / 2);
         return deltaT;
     }
 
@@ -114,18 +113,15 @@ public class BounceBall : Ball
 
     public override void MoveActions()
     {
-        if(currentNote < numNotes)
-        {
-            // UPDATE VELOCITY
-            Vector2 velocityStep = acceleration * Time.deltaTime;
+        // UPDATE VELOCITY
+        Vector2 velocityStep = acceleration * Time.deltaTime;
 
-            velocity += velocityStep;
+        velocity += velocityStep;
 
-            // UPDATE POSITION
-            Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
+        // UPDATE POSITION
+        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
 
-            rb.MovePosition(transform.position + newPos);
-        }
+        rb.MovePosition(transform.position + newPos);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -162,19 +158,14 @@ public class BounceBall : Ball
     {
         if(other.gameObject.name == "Paddle"){
             caught = true;
-            catchTime = Time.time;
+            catchTimes[currentNote] = Time.time;
         }
-    }
-
-    private void OnCollisionStay2D(Collision2D other) 
-    {
-        
     }
 
     public override void CatchActions()
     {
+        base.CatchActions();
         velocity = -velocity;
-        DebugCatchTime();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -188,7 +179,7 @@ public class BounceBall : Ball
 
     IEnumerator WaitThenDestroy()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
         exit = true;
     }
 

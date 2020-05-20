@@ -17,6 +17,7 @@ public class IdleState : BallState
 
         if(ball.ready)
         {
+            ball.ReadyActions();
             ball.SetState(new MoveState(ball));
         }
     }
