@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
-  m_Name: note
+  m_Script: {fileID: 11500000, guid: b3e293e262d3d1f4c8ce01b9950277b2, type: 3}
+  m_Name: Paradise
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  hitPosition: 6
-  hitTime: 25
-=======
-  hitPosition: 1
-  hitTime: 4
->>>>>>> parent of 1647c60... Revert "Merge branch 'master' into sean"
-  noteDirection: 0
+  currentTime: 0
+  bpm: 140
+  name: paradise
+  song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
+  startBeat: 12
+  endBeat: 650
