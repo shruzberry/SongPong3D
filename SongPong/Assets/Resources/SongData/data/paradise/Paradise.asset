@@ -10,16 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3e293e262d3d1f4c8ce01b9950277b2, type: 3}
-  m_Name: paradiseData
+  m_Name: Paradise
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 140
-  name: Paradise
+  name: paradise
+  dataPath: Assets/Resources/SongData/data/paradise
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
-<<<<<<< HEAD
   startBeat: 12
   endBeat: 650
-=======
-  startTime: 0
-  endTime: 100
->>>>>>> parent of 1647c60... Revert "Merge branch 'master' into sean"
+  myPath: Assets/Resources/SongData/data/paradise/Paradise.asset

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
   m_Name: note
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
   hitPosition: 6
   hitTime: 25
@@ -19,4 +20,8 @@ MonoBehaviour:
   hitPosition: 1
   hitTime: 4
 >>>>>>> parent of 1647c60... Revert "Merge branch 'master' into sean"
+=======
+  hitPosition: 7
+  hitTime: 16
+>>>>>>> Stashed changes
   noteDirection: 0
