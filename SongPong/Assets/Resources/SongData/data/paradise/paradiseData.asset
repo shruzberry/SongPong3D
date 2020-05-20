@@ -16,5 +16,10 @@ MonoBehaviour:
   bpm: 140
   name: Paradise
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
+<<<<<<< HEAD
   startBeat: 12
   endBeat: 650
+=======
+  startTime: 0
+  endTime: 100
+>>>>>>> parent of 1647c60... Revert "Merge branch 'master' into sean"

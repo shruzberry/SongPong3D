@@ -14,7 +14,6 @@ ________ ATTRIBUTES ________
 + NoteData data
 
 ________ FUNCTIONS ________
-+ ToString()
 + Enable()
 + Disable()
 + Clear()
@@ -31,23 +30,12 @@ public class NoteListener : MonoBehaviour
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public List<Note> data;
+    public List<NoteData> data;
 
-    public bool enabled;
+    private bool enabled;
     private SongController sc;
     private SpawnInfo si;
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* Constructor
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     
-    public NoteListener()
-    {
-        //Note n = new Note(0, 0.0f, 0);
-        data = new List<Note>();
-        //data.Add(n);
-    }
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -58,22 +46,6 @@ public class NoteListener : MonoBehaviour
 
     public void Clear(){data.Clear();}
 
-    public string ToString()
-    {
-        string str = "";
-
-        foreach (Note n in data)
-        {
-            str += "(col: " + n.column + ", beat: " + n.hitTime + ")";
-            str += "\n";
-        }
-
-        if (str == "")
-            str = "No Notes Loaded";
-
-        return str;
-    }
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -82,19 +54,22 @@ public class NoteListener : MonoBehaviour
     {
         sc = GameObject.Find("SongController").GetComponent<SongController>();
         si = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
-
-        data = new List<Note>();
     }
     
     void Update()
     {
-        if(Input.GetKeyDown("space") && enabled)
+        if(Input.GetMouseButtonDown(0))
         {
-            int col = si.GetNearestColumn(Input.mousePosition, true);
-            float time = sc.currentBeat;
+            NoteData nd = new NoteData();
+            
+            nd.hitPosition = si.GetNearestColumn(Input.mousePosition);
+            if(sc != null)
+            {
+                nd.hitTime = sc.currentBeat;
+            }
+            nd.noteDirection = Direction.positive;
 
-            data.Add(new Note(99, time, col)); //id
-            print("adding ball: " + col + ", " + time);
+            data.Add(nd);
         }
     }
 }
