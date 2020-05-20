@@ -23,7 +23,6 @@ using System.IO;
 public class BallDropper : MonoBehaviour
 {   
     //___________References______________
-    private AxisManager axisManager;
     private SpawnInfo spawner;
     private Paddle paddle;
 
@@ -50,7 +49,6 @@ public class BallDropper : MonoBehaviour
 
     private void Awake() 
     {
-        axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
     }
@@ -142,7 +140,7 @@ public class BallDropper : MonoBehaviour
         if(onBallSpawned != null) onBallSpawned(ball);
 
         // Initialize the ball with id and notes
-        ball.InitializeBall(data, axisManager, spawner, paddle);
+        ball.InitializeBall(data, spawner, paddle);
 
         // Add to list of balls
         balls.Add(ball);

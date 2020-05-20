@@ -6,7 +6,7 @@ using UnityEngine;
 public class Paddle : MonoBehaviour
 {
     //____________REFERENCES_______________
-    public AxisManager axisManager;
+    public SpawnInfo spawner;
     public Axis paddleAxis;
     public Vector2 screenBounds;
 
@@ -26,8 +26,8 @@ public class Paddle : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     void Awake(){
-        axisManager = FindObjectOfType<AxisManager>();
-        paddleAxis = axisManager.GameAxis;
+        spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
+        paddleAxis = spawner.gameAxis;
 
         paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;
