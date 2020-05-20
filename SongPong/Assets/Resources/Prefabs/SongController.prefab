@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d083eabc9188eb347b7bcc4ca8497035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songData: {fileID: 11400000, guid: 5b92316fd9dea42929d9afdc302f7e2c, type: 2}
+  songData: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
   currentBeat: 0
   songTime: 0
   numBeats: 0

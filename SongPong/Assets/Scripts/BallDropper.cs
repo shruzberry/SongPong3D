@@ -22,17 +22,20 @@ using System.IO;
 
 public class BallDropper : MonoBehaviour
 {   
+    //___________References______________
+    private AxisManager axisManager;
+    private SpawnInfo spawner;
+    private Paddle paddle;
+
+    //___________Events__________________
+    public delegate void OnBallSpawned(Ball ball);
+    public event OnBallSpawned onBallSpawned;
+    
     //___________Balls___________________
-    private BallData[] ballData; // stores ball data
-
-    private List<Ball> balls = new List<Ball>();
+    private List<Ball> balls = new List<Ball>(); // every ball in this song
+    private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
-    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited
-    private int currentBallIndex; // which ball to drop
-    private Ball currentBall;
-
-    //___________Dependencies___________________
-    SongController songController;
+    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
 
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
@@ -44,16 +47,17 @@ public class BallDropper : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    void awake()
+
+    private void Awake() 
     {
-        print(songController.songTime);
+        axisManager = FindObjectOfType<AxisManager>();
+        spawner = FindObjectOfType<SpawnInfo>();
+        paddle = FindObjectOfType<Paddle>();
     }
 
     void Start()
     {
-        loadBalls();
-        currentBallIndex = 0;
-        currentBall = balls[currentBallIndex];
+        LoadBalls();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -94,36 +98,37 @@ public class BallDropper : MonoBehaviour
 
     public void CheckDrop() 
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
-
-        float dropTime = currentBall.dropTime; // this should probably just be set once
-        if(!isFinished && currentBall.getHitTime() - dropTime < songController.songTime)
+        if(waitingBallList.Count != 0)
         {
-            currentBall.TriggerActivation();
-            activeBallList.Add(currentBall);
-            nextBall();
+            List<Ball> droppedBalls = new List<Ball>();
+
+            // check each ball that hasn't been dropped yet to see if it should be dropped.
+            // this method is very brute force and could be improved by sorting the balls first
+            foreach(Ball ball in waitingBallList)
+            {
+                if(!isFinished && ball.NextHitTime() - ball.moveTime < Time.time)
+                {
+                    droppedBalls.Add(ball);
+                    activeBallList.Add(ball);
+                }
+            }
+
+            // remove any balls that dropped from the waiting pool
+            // (this action must occur outside of the foreach loop)
+            foreach(Ball ball in droppedBalls)
+            {
+                waitingBallList.Remove(ball);
+            }
         }
 	}
-
-    public void nextBall() 
-    {
-        if(currentBallIndex < balls.Count - 1){
-            currentBallIndex++;
-        }
-        else{
-            isFinished = true;
-            print("Last ball reached.");
-        }
-        currentBall = balls[currentBallIndex];
-    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void spawnBall(BallData data, NoteData[] notes)
+    public void spawnBall(BallData data)
     {
-        if(notes.Length == 0)
+        if(data.notes.Length == 0)
         {
             Debug.LogError("No notes have been assigned to this ball.");
             return;
@@ -131,14 +136,17 @@ public class BallDropper : MonoBehaviour
 
         Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
         ball.transform.parent = transform; // set BallDropper gameobject to parent
-        ball.ballData = data;
+
+        // SUBSCRIBE ACTIONS TO THIS BALL
+        // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
+        if(onBallSpawned != null) onBallSpawned(ball);
 
         // Initialize the ball with id and notes
-        ball.InitializeBall(data.id, notes);
+        ball.InitializeBall(data, axisManager, spawner, paddle);
 
         // Add to list of balls
         balls.Add(ball);
-    }
+    }  
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * REMOVE
@@ -165,19 +173,18 @@ public class BallDropper : MonoBehaviour
  * LOADER
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void loadBalls()
+    public void LoadBalls()
     {
         string path = dataLocation + ballMapName + "/Balls/";
-        ballData = Resources.LoadAll<BallData>(path);
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
 
         if(balls != null)
         {
             foreach(BallData data in ballData)
-            {
-                NoteData[] notes = data.notes;
-                
-                spawnBall(data, notes);
+            {                
+                spawnBall(data);
             }
         }
+        waitingBallList = balls;
     }
 }

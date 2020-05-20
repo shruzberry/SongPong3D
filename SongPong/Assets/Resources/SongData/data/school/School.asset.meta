@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:SongPong/Assets/Resources/SongData/data/school/School.asset.meta
 guid: 9a00d712b3a1545139188635361a79af
+=======
+guid: fe5ce9294673e4525b609be514a3007a
+>>>>>>> master:SongPong/Assets/Resources/SongData/data/paradise/Paradise.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0

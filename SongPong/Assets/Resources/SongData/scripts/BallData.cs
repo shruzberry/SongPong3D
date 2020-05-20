@@ -15,8 +15,8 @@ public class BallData : ScriptableObject
 
     public void OnEnable()
     {
-        prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
-        type = BallTypes.simple;
+        //prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
+        //type = BallTypes.simple;
         //notes = new NoteData[1];
     }
 }
