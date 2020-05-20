@@ -90,7 +90,7 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
+    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, Paddle paddle)
     {
         // INITIALIZE ID AND NOTES
         this.id = data.id;
@@ -109,8 +109,10 @@ public abstract class Ball : MonoBehaviour
         // APPEARANCE
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
+        axis = axisManager.GameAxis; // set the ball's axis
+        axisManager.onGameAxisChange += HandleGameAxisChange; // set up listener for gameAxis change
+
         // SET SPAWN LOCATION
-        axis = spawner.gameAxis; // set the ball's axis
         int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
         transform.position = spawnLoc;
@@ -188,4 +190,10 @@ public abstract class Ball : MonoBehaviour
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
+
+
+    private void HandleGameAxisChange()
+    {
+        Debug.Log("TEST");
+    }
 }
