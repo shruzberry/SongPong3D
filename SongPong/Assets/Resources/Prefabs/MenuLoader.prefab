@@ -43,7 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74017b1556c014ccc992bb22c019e772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songs: []
-  buttonPrefab: {fileID: 0}
-  verticalOffset: 0
-  spacing: 0
+  songs:
+  - {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
+  buttonPrefab: {fileID: 5410112315717356530, guid: 4b5b6f0423710426a8fdd0e7e8477051,
+    type: 3}
+  verticalOffset: 75
+  spacing: 50
