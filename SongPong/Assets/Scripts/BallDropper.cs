@@ -35,6 +35,7 @@ public class BallDropper : MonoBehaviour
     private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
     private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
+    private int ballID = 0;
 
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
@@ -140,6 +141,7 @@ public class BallDropper : MonoBehaviour
         if(onBallSpawned != null) onBallSpawned(ball);
 
         // Initialize the ball with id and notes
+        data.id = ballID++;
         ball.InitializeBall(data, spawner, paddle);
 
         // Add to list of balls
@@ -179,8 +181,11 @@ public class BallDropper : MonoBehaviour
         if(balls != null)
         {
             foreach(BallData data in ballData)
-            {                
-                spawnBall(data);
+            {
+                if(data.enabled)
+                {
+                    spawnBall(data);
+                }
             }
         }
         waitingBallList = balls;

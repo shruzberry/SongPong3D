@@ -16,6 +16,8 @@ TODO
  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
 using UnityEngine;
+using System.Collections.Generic;
+using System;
 using Types;
 
 public abstract class Ball : MonoBehaviour
@@ -24,8 +26,9 @@ public abstract class Ball : MonoBehaviour
 
     //___________ATTRIBUTES_____________
     public int id;
+    public bool canSpawn = true;
     public BallTypes type;
-    protected Vector2 spawnLoc;
+    public Vector2 spawnLoc;
     protected float size;
 
     protected Axis axis;
@@ -50,7 +53,7 @@ public abstract class Ball : MonoBehaviour
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected NoteData[] notes;
+    protected List<NoteData> notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -92,17 +95,22 @@ public abstract class Ball : MonoBehaviour
 
     public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
     {
-        Debug.Log("SPAWN");
         // INITIALIZE ID AND NOTES
         this.id = data.id;
         this.ballData = data;
-        this.notes = data.notes;
         this.type = data.type;
 
-        // INDEXING
+        // NOTES
+        this.notes = SortNotes(data.notes);
         currentNote = 0;
-        numNotes = notes.Length;
-        catchTimes = new float[numNotes];
+        numNotes = notes.Count;
+
+        // SET NAME
+        string ballName = id.ToString() + "_" + type.ToString();
+        this.name = ballName;
+
+        // INDEXING
+        catchTimes = new float[numNotes + 1];
 
         // REFERENCES
         this.paddle = paddle;
@@ -126,7 +134,30 @@ public abstract class Ball : MonoBehaviour
         SetState(new IdleState(this));
     }
 
+    protected List<NoteData> SortNotes(NoteData[] notes)
+    {
+        List<NoteData> noteList = new List<NoteData>();
+        foreach(NoteData nd in notes)
+        {
+            noteList.Add(nd);
+        }
+        if(noteList.Count > 0)
+        {
+            noteList.Sort(NoteData.CompareNotesByHitTime);
+        }
+
+        foreach(NoteData nd in noteList)
+        {
+            Debug.Log(nd.hitTime);
+        }
+        return noteList;
+    }
+
     public virtual void InitializeBallSpecific(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public virtual void ReadyActions(){if(onBallReady != null) onBallReady(this);}
 
@@ -159,7 +190,8 @@ public abstract class Ball : MonoBehaviour
     {
         if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
 
-        currentNote++;
+        if(currentNote < numNotes)
+            currentNote++;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

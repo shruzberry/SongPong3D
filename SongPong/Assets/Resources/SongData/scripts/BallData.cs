@@ -9,6 +9,7 @@ public class BallData : ScriptableObject
 {
     [HideInInspector]
     public int id;
+    public bool enabled = true;
     public BallTypes type;
     public NoteData[] notes;
     public GameObject prefab;

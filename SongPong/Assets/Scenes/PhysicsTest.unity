@@ -188,6 +188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BallDropper
       objectReference: {fileID: 0}
+    - target: {fileID: 9146009305604118117, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: printDebug
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 826d9436a67ab482c8f1875a17dbf645, type: 3}
 --- !u!1 &105164716
@@ -199,7 +204,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 105164718}
-  - component: {fileID: 105164717}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -207,19 +211,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &105164717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105164716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b514b77da363480788212efdf01f617, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameAxis: 0
 --- !u!4 &105164718
 Transform:
   m_ObjectHideFlags: 0
@@ -245,6 +236,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 4855667257081311114, guid: b419d5adbc7e440ffa50fee0ed2fec74,
+        type: 3}
+      propertyPath: gameAxis
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4855667257081311115, guid: b419d5adbc7e440ffa50fee0ed2fec74,
         type: 3}
@@ -474,7 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8421bd8ab2ed34e1d8154f2706d87946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axisManager: {fileID: 0}
+  spawner: {fileID: 0}
   paddleAxis: 1
   screenBounds: {x: 0, y: 0}
   movement: {x: 0, y: 0}
