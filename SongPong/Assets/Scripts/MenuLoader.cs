@@ -82,7 +82,3 @@ public class MenuLoader : MonoBehaviour
         position = position + (Vector2.down * spacing);
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> master
