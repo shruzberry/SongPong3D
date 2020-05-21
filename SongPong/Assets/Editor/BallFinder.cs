@@ -41,7 +41,7 @@ public class BallFinder : EditorWindow
     // for navigation bar
     int navButtonHeight = 20;
     int navButtonWidth = 35;
-    int ballButtonHeight = 30;
+    //int ballButtonHeight = 30;
     int ballButtonWidth = 100;
 
     int jumpToTime;

@@ -20,7 +20,6 @@ public class SongData : ScriptableObject
     {
         myPath = AssetDatabase.GetAssetPath(this);
         dataPath = GetDataPath(myPath);
-
     }
 
     private string GetDataPath(string myPath)

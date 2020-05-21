@@ -32,7 +32,7 @@ public class NoteListener : MonoBehaviour
 
     public List<NoteData> data;
 
-    private bool enabled;
+    private bool active = false;
     private SongController sc;
     private SpawnInfo si;
     
@@ -40,9 +40,9 @@ public class NoteListener : MonoBehaviour
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void Enable(){enabled = true;}
+    public void Enable(){active = true;}
 
-    public void Disable(){enabled = false;}
+    public void Disable(){active = false;}
 
     public void Clear(){data.Clear();}
 

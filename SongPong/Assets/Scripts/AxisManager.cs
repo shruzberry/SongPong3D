@@ -26,6 +26,6 @@ public class AxisManager : MonoBehaviour
 
     private void OnValidate() 
     {
-        Debug.Log("TesT");
+        //Debug.Log("TesT");
     }
 }
