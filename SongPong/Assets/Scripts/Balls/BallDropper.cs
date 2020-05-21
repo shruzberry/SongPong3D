@@ -23,6 +23,7 @@ using System.IO;
 public class BallDropper : MonoBehaviour
 {   
     //___________References______________
+    private SongController song;
     private AxisManager axisManager;
     private SpawnInfo spawner;
     private Paddle paddle;
@@ -51,6 +52,7 @@ public class BallDropper : MonoBehaviour
 
     private void Awake() 
     {
+        song = FindObjectOfType<SongController>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
