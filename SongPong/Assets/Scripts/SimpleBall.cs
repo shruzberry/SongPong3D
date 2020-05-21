@@ -51,6 +51,25 @@ public class SimpleBall : Ball
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * ERROR CHECKING
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    /**
+     * Make sure that this ball fits the requirements for a simple ball
+     **/
+    protected override void CheckForInvalid()
+    {
+        bool error = false;
+
+        if(numNotes > 1) error = true;
+
+        if(error)
+        {
+            Debug.LogError("BALL " + name + " DELETED BECAUSE IT HAS INCORRECT PARAMETERS.");
+            DeleteBall();
+        }
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * DROP TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -128,6 +147,8 @@ public class SimpleBall : Ball
    private void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.name == "Paddle"){
+            paddle = other.gameObject.GetComponent<Paddle>();
+            
             caught = true;
             catchTimes[currentNote] = Time.time;
         }

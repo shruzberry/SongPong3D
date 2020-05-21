@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Types;
 
 public class Paddle : MonoBehaviour
 {
     //____________REFERENCES_______________
-    public AxisManager axisManager;
+    public SpawnInfo spawner;
     public Axis paddleAxis;
     public Vector2 screenBounds;
 
@@ -16,9 +14,7 @@ public class Paddle : MonoBehaviour
     private float paddleXAxis;
 
     //____________ATTRIBUTES_______________
-    public enum Paddles{P1,P2}; // which paddle is this (P1 is left-side in x-axis mode)
-    //  /\ marking for deletion. has been migrated to types.cs
-    public Paddles paddleNum;
+    public Paddles paddleNum{get;}
     private float paddleRadius; // the half-width or radius of the paddle
     private float paddleHeight;
 
@@ -27,8 +23,8 @@ public class Paddle : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     void Awake(){
-        axisManager = FindObjectOfType<AxisManager>();
-        paddleAxis = axisManager.GameAxis;
+        spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
+        paddleAxis = spawner.gameAxis;
 
         paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;

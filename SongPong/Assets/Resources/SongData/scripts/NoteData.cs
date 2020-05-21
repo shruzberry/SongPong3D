@@ -9,4 +9,9 @@ public class NoteData : ScriptableObject
     public int hitPosition;
     public float hitTime;
     public Direction noteDirection;
+
+    public static int CompareNotesByHitTime(NoteData a, NoteData b)
+    {
+        return a.hitTime.CompareTo(b.hitTime);
+    }
 }

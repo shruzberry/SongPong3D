@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
-  m_Name: DUMMY
+  m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
+  m_Name: note 2
   m_EditorClassIdentifier: 
-  id: 0
-  enabled: 1
-  type: 1
-  notes:
-  - {fileID: 0}
-  prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
+  hitPosition: 8
+  hitTime: 6
+  noteDirection: 0

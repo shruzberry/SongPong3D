@@ -16,6 +16,8 @@ TODO
  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
 using UnityEngine;
+using System.Collections.Generic;
+using System;
 using Types;
 
 public abstract class Ball : MonoBehaviour
@@ -24,8 +26,9 @@ public abstract class Ball : MonoBehaviour
 
     //___________ATTRIBUTES_____________
     public int id;
+    public bool canSpawn = true;
     public BallTypes type;
-    protected Vector2 spawnLoc;
+    public Vector2 spawnLoc;
     protected float size;
 
     protected Axis axis;
@@ -46,11 +49,11 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallReady(Ball ball);
     public event BallReady onBallReady;
 
-    public delegate void BallCaught(Ball ball);
+    public delegate void BallCaught(Ball ball, Paddle paddle);
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected NoteData[] notes;
+    protected List<NoteData> notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -90,18 +93,22 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, Paddle paddle)
+    public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
     {
         // INITIALIZE ID AND NOTES
         this.id = data.id;
         this.ballData = data;
-        this.notes = data.notes;
         this.type = data.type;
+        string ballName = id.ToString() + "_" + type.ToString();
+        this.name = ballName;
+
+        // NOTES
+        this.notes = SortNotes(data.notes);
+        currentNote = 0;
+        numNotes = notes.Count;
 
         // INDEXING
-        currentNote = 0;
-        numNotes = notes.Length;
-        catchTimes = new float[numNotes];
+        catchTimes = new float[numNotes + 1];
 
         // REFERENCES
         this.paddle = paddle;
@@ -109,10 +116,8 @@ public abstract class Ball : MonoBehaviour
         // APPEARANCE
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
-        axis = axisManager.GameAxis; // set the ball's axis
-        axisManager.onGameAxisChange += HandleGameAxisChange; // set up listener for gameAxis change
-
         // SET SPAWN LOCATION
+        axis = spawner.gameAxis; // set the ball's axis
         int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
         transform.position = spawnLoc;
@@ -123,11 +128,51 @@ public abstract class Ball : MonoBehaviour
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
+        // CHECK FOR ERRORS
+        CheckForInvalid();
+
         // START IN IDLE STATE
         SetState(new IdleState(this));
     }
 
+    protected List<NoteData> SortNotes(NoteData[] notes)
+    {
+        try
+        {
+            List<NoteData> noteList = new List<NoteData>();
+            foreach(NoteData nd in notes)
+            {
+                noteList.Add(nd);
+            }
+            if(noteList.Count > 0)
+            {
+                noteList.Sort(NoteData.CompareNotesByHitTime);
+            }
+
+            foreach(NoteData nd in noteList)
+            {
+                Debug.Log(nd.hitTime);
+            }
+            return noteList;
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Ball " + name + " has one or more null notes.");
+            return null;
+        }
+    }
+
     public virtual void InitializeBallSpecific(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * ERROR
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    protected virtual void CheckForInvalid(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public virtual void ReadyActions(){if(onBallReady != null) onBallReady(this);}
 
@@ -158,9 +203,10 @@ public abstract class Ball : MonoBehaviour
 
     virtual public void CatchActions()
     {
-        if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
+        if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
 
-        currentNote++;
+        if(currentNote < numNotes)
+            currentNote++;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -178,7 +224,7 @@ public abstract class Ball : MonoBehaviour
 
     public void DeleteBall()
     {
-        Destroy(this.gameObject);
+        Destroy(this);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -190,10 +236,4 @@ public abstract class Ball : MonoBehaviour
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
-
-
-    private void HandleGameAxisChange()
-    {
-        Debug.Log("TEST");
-    }
 }

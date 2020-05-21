@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Axis {x,y};
 
 public class SpawnInfo : MonoBehaviour
 {
     private Vector2 screenBounds;
 
-    private Axis gameAxis;
-    private AxisManager axisManager;
+    //_______AXIS________________
+    private Axis defaultAxis = Axis.y; // stores the axis set at the start so if the axis changes, it triggers recalculation
+    public Axis gameAxis = Axis.y;
 
     //_______OPTIONS_____________
     [Range(0.0f,0.5f)]
@@ -41,9 +43,6 @@ public class SpawnInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Awake() 
     {
-        axisManager = FindObjectOfType<AxisManager>();
-        gameAxis = axisManager.GameAxis;
-
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         ballDropHeight = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height + ballHeightMod)).y;
         calcColumns();
@@ -60,6 +59,12 @@ public class SpawnInfo : MonoBehaviour
 
     private void UpdateAxis()
     {
+        // update axis
+        if(gameAxis != defaultAxis)
+        {
+            calcColumns();
+            defaultAxis = gameAxis;
+        }
         // update padding x axis
         if(paddingXAxis != defaultPaddingXAxis)
         {

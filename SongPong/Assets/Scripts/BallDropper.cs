@@ -23,7 +23,6 @@ using System.IO;
 public class BallDropper : MonoBehaviour
 {   
     //___________References______________
-    private AxisManager axisManager;
     private SpawnInfo spawner;
     private Paddle paddle;
 
@@ -36,6 +35,7 @@ public class BallDropper : MonoBehaviour
     private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
     private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
+    private int ballID = 0;
 
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
@@ -50,7 +50,6 @@ public class BallDropper : MonoBehaviour
 
     private void Awake() 
     {
-        axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
     }
@@ -128,24 +127,24 @@ public class BallDropper : MonoBehaviour
 
     public void spawnBall(BallData data)
     {
-        if(data.notes.Length == 0)
+        try{
+            Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
+            ball.transform.parent = transform; // set BallDropper gameobject to parent
+            // Initialize the ball with id and notes
+            data.id = ballID++;
+
+            ball.InitializeBall(data, spawner, paddle);
+            
+            // SUBSCRIBE ACTIONS TO THIS BALL
+            // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
+            if(onBallSpawned != null) onBallSpawned(ball);
+            // Add to list of balls
+            balls.Add(ball);
+        } 
+        catch(Exception e)
         {
-            Debug.LogError("No notes have been assigned to this ball.");
-            return;
+            ballID--;
         }
-
-        Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
-        ball.transform.parent = transform; // set BallDropper gameobject to parent
-
-        // SUBSCRIBE ACTIONS TO THIS BALL
-        // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
-        if(onBallSpawned != null) onBallSpawned(ball);
-
-        // Initialize the ball with id and notes
-        ball.InitializeBall(data, axisManager, spawner, paddle);
-
-        // Add to list of balls
-        balls.Add(ball);
     }  
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -181,8 +180,11 @@ public class BallDropper : MonoBehaviour
         if(balls != null)
         {
             foreach(BallData data in ballData)
-            {                
-                spawnBall(data);
+            {
+                if(data.enabled)
+                {
+                    spawnBall(data);
+                }
             }
         }
         waitingBallList = balls;
