@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
-    public Animator animator;
+    private Animator animator;
     private int levelToLoad;
 
     public override void Awake()
