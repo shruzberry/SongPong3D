@@ -93,7 +93,7 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, SpawnInfo spawner, Paddle paddle)
+    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, Paddle paddle)
     {
         // INITIALIZE ID AND NOTES
         this.id = data.id;
@@ -117,7 +117,7 @@ public abstract class Ball : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // SET SPAWN LOCATION
-        axis = spawner.gameAxis; // set the ball's axis
+        axis = axisManager.gameAxis; // set the ball's axis
         int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
         spawnLoc = spawner.GetSpawnLocation(spawnNumber);
         transform.position = spawnLoc;

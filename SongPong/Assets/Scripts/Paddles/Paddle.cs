@@ -5,6 +5,7 @@ public class Paddle : MonoBehaviour
 {
     //____________REFERENCES_______________
     public SpawnInfo spawner;
+    private AxisManager axisManager;
     public Axis paddleAxis;
     public Vector2 screenBounds;
 
@@ -24,7 +25,8 @@ public class Paddle : MonoBehaviour
 
     void Awake(){
         spawner = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
-        paddleAxis = spawner.gameAxis;
+        axisManager = FindObjectOfType<AxisManager>();
+        paddleAxis = axisManager.gameAxis;
 
         paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;

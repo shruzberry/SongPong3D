@@ -23,6 +23,7 @@ using System.IO;
 public class BallDropper : MonoBehaviour
 {   
     //___________References______________
+    private AxisManager axisManager;
     private SpawnInfo spawner;
     private Paddle paddle;
 
@@ -50,6 +51,7 @@ public class BallDropper : MonoBehaviour
 
     private void Awake() 
     {
+        axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
     }
@@ -133,7 +135,7 @@ public class BallDropper : MonoBehaviour
             // Initialize the ball with id and notes
             data.id = ballID++;
 
-            ball.InitializeBall(data, spawner, paddle);
+            ball.InitializeBall(data, axisManager, spawner, paddle);
             
             // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events

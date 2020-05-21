@@ -50,7 +50,7 @@ public class PlayerScore : MonoBehaviour
 
     void OnEnable()
     {
-        axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
+        axisManager = FindObjectOfType<AxisManager>();
         ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.onBallSpawned += AddBallListener;
         scoreText = GetComponentInChildren<Text>();
@@ -88,7 +88,7 @@ public class PlayerScore : MonoBehaviour
         ball.onBallCaught += Score; //can i have parameters?
     }
 
-    private void Score(Ball ball)
+    private void Score(Ball ball, Paddle paddle)
     {
         switch(player)
         {/*
