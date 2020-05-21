@@ -68,7 +68,7 @@ public class BallFinder : EditorWindow
 
     void OnEnable()
     {
-
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -81,6 +81,8 @@ public class BallFinder : EditorWindow
         DrawNavSettings();
         DrawActiveBalls();
         UpdateSong();
+
+        songData = songController.songData;
 
         if(Application.isPlaying)
             CheckMouseHover();
