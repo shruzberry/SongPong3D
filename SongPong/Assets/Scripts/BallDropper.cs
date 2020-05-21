@@ -127,25 +127,24 @@ public class BallDropper : MonoBehaviour
 
     public void spawnBall(BallData data)
     {
-        if(data.notes.Length == 0)
+        try{
+            Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
+            ball.transform.parent = transform; // set BallDropper gameobject to parent
+            // Initialize the ball with id and notes
+            data.id = ballID++;
+
+            ball.InitializeBall(data, spawner, paddle);
+            
+            // SUBSCRIBE ACTIONS TO THIS BALL
+            // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
+            if(onBallSpawned != null) onBallSpawned(ball);
+            // Add to list of balls
+            balls.Add(ball);
+        } 
+        catch(Exception e)
         {
-            Debug.LogError("No notes have been assigned to this ball.");
-            return;
+            ballID--;
         }
-
-        Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
-        ball.transform.parent = transform; // set BallDropper gameobject to parent
-
-        // SUBSCRIBE ACTIONS TO THIS BALL
-        // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
-        if(onBallSpawned != null) onBallSpawned(ball);
-
-        // Initialize the ball with id and notes
-        data.id = ballID++;
-        ball.InitializeBall(data, spawner, paddle);
-
-        // Add to list of balls
-        balls.Add(ball);
     }  
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

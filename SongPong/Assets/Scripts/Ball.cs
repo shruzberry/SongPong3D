@@ -99,15 +99,13 @@ public abstract class Ball : MonoBehaviour
         this.id = data.id;
         this.ballData = data;
         this.type = data.type;
+        string ballName = id.ToString() + "_" + type.ToString();
+        this.name = ballName;
 
         // NOTES
         this.notes = SortNotes(data.notes);
         currentNote = 0;
         numNotes = notes.Count;
-
-        // SET NAME
-        string ballName = id.ToString() + "_" + type.ToString();
-        this.name = ballName;
 
         // INDEXING
         catchTimes = new float[numNotes + 1];
@@ -130,30 +128,47 @@ public abstract class Ball : MonoBehaviour
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
+        // CHECK FOR ERRORS
+        CheckForInvalid();
+
         // START IN IDLE STATE
         SetState(new IdleState(this));
     }
 
     protected List<NoteData> SortNotes(NoteData[] notes)
     {
-        List<NoteData> noteList = new List<NoteData>();
-        foreach(NoteData nd in notes)
+        try
         {
-            noteList.Add(nd);
-        }
-        if(noteList.Count > 0)
-        {
-            noteList.Sort(NoteData.CompareNotesByHitTime);
-        }
+            List<NoteData> noteList = new List<NoteData>();
+            foreach(NoteData nd in notes)
+            {
+                noteList.Add(nd);
+            }
+            if(noteList.Count > 0)
+            {
+                noteList.Sort(NoteData.CompareNotesByHitTime);
+            }
 
-        foreach(NoteData nd in noteList)
-        {
-            Debug.Log(nd.hitTime);
+            foreach(NoteData nd in noteList)
+            {
+                Debug.Log(nd.hitTime);
+            }
+            return noteList;
         }
-        return noteList;
+        catch(Exception e)
+        {
+            Debug.LogError("Ball " + name + " has one or more null notes.");
+            return null;
+        }
     }
 
     public virtual void InitializeBallSpecific(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * ERROR
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    protected virtual void CheckForInvalid(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * IDLE
@@ -209,7 +224,7 @@ public abstract class Ball : MonoBehaviour
 
     public void DeleteBall()
     {
-        Destroy(this.gameObject);
+        Destroy(this);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
