@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Types;
 
 public class MenuLoader : MonoBehaviour
 {
@@ -32,12 +33,12 @@ public class MenuLoader : MonoBehaviour
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public List<SongData> songs;
     public Button buttonPrefab;
     public float verticalOffset;
     public int spacing;
 
     private Vector2 position;
+    private Object[] songs;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -51,18 +52,22 @@ public class MenuLoader : MonoBehaviour
     {
         position = new Vector2(0.0f, verticalOffset);
         loadAllSongs();
+        createSongButtons();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
     private void loadAllSongs()
+    {
+        songs = Resources.LoadAll("SongData", typeof(SongData));
+    }
+
+    private void createSongButtons()
     {
         foreach(SongData song in songs)
         {
             AddButton(buttonPrefab, song.name);
-            print("laoding song: " + song.name);
         }
     }
 
