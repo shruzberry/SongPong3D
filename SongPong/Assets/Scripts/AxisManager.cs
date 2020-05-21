@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
-public enum Axis {x,y};
+public enum Axis {x,y}; //marking for deletion. has been migrated to types.cs
 
 public class AxisManager : MonoBehaviour
 {
