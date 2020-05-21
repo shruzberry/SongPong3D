@@ -33,9 +33,12 @@ public class PlayerScore : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public Paddles player;
+    public int score = 0;
 
     private AxisManager axisManager;
-    private Text score;
+    private BallDropper ballDropper;
+    private Text scoreText;
+    private List<Ball> activeBalls;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -48,26 +51,54 @@ public class PlayerScore : MonoBehaviour
     void OnEnable()
     {
         axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
-        score = GetComponentInChildren<Text>();
+        ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
+        ballDropper.onBallSpawned += AddBallListener;
+        scoreText = GetComponentInChildren<Text>();
     }
 
     void Update()
     {
         checkPlayerSelect();
+        scoreText.text = "" + score;
+    }
+    
+    void OnDisable()
+    {
+        ballDropper.onBallSpawned -= AddBallListener;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* RUNTIME FUNCTIONS
+* PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    void checkPlayerSelect()
+    private void checkPlayerSelect()
     {
         switch (player)
         {
             case Paddles.P1:
-                score.alignment = TextAnchor.LowerLeft;
+                scoreText.alignment = TextAnchor.LowerLeft;
                 break;
             case Paddles.P2:
-                score.alignment = TextAnchor.LowerRight;
+                scoreText.alignment = TextAnchor.LowerRight;
+                break;
+        }
+    }
+
+    private void AddBallListener(Ball ball)
+    {
+        ball.onBallCaught += Score; //can i have parameters?
+    }
+
+    private void Score(Ball ball)
+    {
+        switch(player)
+        {
+            case Paddles.P1:
+                if(ball.direction == Direction.negative)
+                    score += 1;
+                break;
+            case Paddles.P2:
+                if(ball.direction == Direction.positive)
+                    score += 1;
                 break;
         }
     }

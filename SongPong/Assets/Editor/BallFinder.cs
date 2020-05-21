@@ -35,6 +35,7 @@ public class BallFinder : EditorWindow
 
     SongController songController;
     SongData songData;
+    SongData lastSong;
 
     float navBarSectionSize = .15f;
     
@@ -79,6 +80,7 @@ public class BallFinder : EditorWindow
         DrawRowLayouts();
         DrawNavSettings();
         DrawActiveBalls();
+        UpdateSong();
 
         if(Application.isPlaying)
             CheckMouseHover();
@@ -189,6 +191,14 @@ public class BallFinder : EditorWindow
     {
         return (Input.mousePosition.x == 0 || Input.mousePosition.y == 0 || Input.mousePosition.x == Screen.width - 1 || Input.mousePosition.y == Screen.height - 1);
     }
+
+    private void UpdateSong()
+    {/*
+        lastSong = songData;
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        if (lastSong.name != songController.songData.name);
+            songController.LoadSong(songData);
+    */}
 
     public void Update()
     {
