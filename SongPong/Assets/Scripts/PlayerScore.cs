@@ -91,7 +91,7 @@ public class PlayerScore : MonoBehaviour
     private void Score(Ball ball)
     {
         switch(player)
-        {
+        {/*
             case Paddles.P1:
                 if(ball.direction == Direction.negative)
                     score += 1;
@@ -100,6 +100,6 @@ public class PlayerScore : MonoBehaviour
                 if(ball.direction == Direction.positive)
                     score += 1;
                 break;
-        }
+        */}
     }
 }
