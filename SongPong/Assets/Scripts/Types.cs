@@ -13,4 +13,10 @@ namespace Types
     {
         simple, bounce
     }
+    
+    // which paddle is this (P1 is left-side in x-axis mode)
+    public enum Paddles
+    {
+        P1,P2
+    }
 }

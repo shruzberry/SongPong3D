@@ -49,7 +49,7 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallReady(Ball ball);
     public event BallReady onBallReady;
 
-    public delegate void BallCaught(Ball ball);
+    public delegate void BallCaught(Ball ball, Paddle paddle);
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
@@ -203,7 +203,7 @@ public abstract class Ball : MonoBehaviour
 
     virtual public void CatchActions()
     {
-        if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
+        if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
 
         if(currentNote < numNotes)
             currentNote++;

@@ -19,7 +19,7 @@ public class BallDebug : MonoBehaviour
         ball.onBallCaught += DebugCatch;
     }
 
-    public void DebugCatch(Ball ball)
+    public void DebugCatch(Ball ball, Paddle paddle)
     {
         if(!printDebug){return;}
 

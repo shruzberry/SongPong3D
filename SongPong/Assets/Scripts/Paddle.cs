@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
+using Types;
 
 public class Paddle : MonoBehaviour
 {
@@ -16,8 +14,7 @@ public class Paddle : MonoBehaviour
     private float paddleXAxis;
 
     //____________ATTRIBUTES_______________
-    public enum Paddles{P1,P2}; // which paddle is this (P1 is left-side in x-axis mode)
-    public Paddles paddleNum;
+    public Paddles paddleNum{get;}
     private float paddleRadius; // the half-width or radius of the paddle
     private float paddleHeight;
 

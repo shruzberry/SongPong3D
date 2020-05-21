@@ -147,6 +147,8 @@ public class SimpleBall : Ball
    private void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.name == "Paddle"){
+            paddle = other.gameObject.GetComponent<Paddle>();
+            
             caught = true;
             catchTimes[currentNote] = Time.time;
         }
