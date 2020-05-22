@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8567175004755019763}
   m_Layer: 9
   m_Name: Paddle
-  m_TagString: Untagged
+  m_TagString: Paddle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,10 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8421bd8ab2ed34e1d8154f2706d87946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
-  paddleAxis: 0
-  screenBounds: {x: 0, y: 0}
-  movement: {x: 0, y: 0}
+  bounds: []
   paddleNum: 0
 --- !u!61 &8567175004755019762
 BoxCollider2D:

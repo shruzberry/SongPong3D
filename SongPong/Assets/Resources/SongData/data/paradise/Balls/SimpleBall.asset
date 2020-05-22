@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
   m_Name: SimpleBall
   m_EditorClassIdentifier: 
-  id: 0
+  id: 1
   enabled: 1
   type: 0
   notes:

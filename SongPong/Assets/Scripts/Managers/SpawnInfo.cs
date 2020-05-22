@@ -7,7 +7,8 @@ public enum Axis {x,y};
 public class SpawnInfo : MonoBehaviour
 {
     private AxisManager axisManager;
-    private Axis spawnAxis;
+    private Axis gameAxis;
+    public Vector2 spawnAxis; // in world coordinates the line that spawns appear along
     private Vector2 screenBounds;
 
     //_______OPTIONS_____________
@@ -42,10 +43,20 @@ public class SpawnInfo : MonoBehaviour
     private void Awake() 
     {
         axisManager = FindObjectOfType<AxisManager>();
-        spawnAxis = axisManager.gameAxis;
+        gameAxis = axisManager.gameAxis;
 
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         ballDropHeight = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height + ballHeightMod)).y;
+
+        if(gameAxis == Axis.y)
+        {
+            spawnAxis = new Vector2(0,screenBounds.y);
+        }
+        else if(gameAxis == Axis.x)
+        {
+            spawnAxis = new Vector2(0,0);
+        }
+
         calcColumns();
     }
 
@@ -84,7 +95,7 @@ public class SpawnInfo : MonoBehaviour
     {
         ballCols = new float[NUM_COL+1]; // need n+1 lines to make n columns
 
-        if(spawnAxis == Axis.y)
+        if(gameAxis == Axis.y)
         {
             int width = Screen.width;
             int screenPadding = (int)(width * paddingYAxis);
@@ -97,7 +108,7 @@ public class SpawnInfo : MonoBehaviour
 			    ballCols[i] = Camera.main.ScreenToWorldPoint(new Vector3(colStep * i + screenPadding,0,0)).x;
 		    }
         }
-        else if(spawnAxis == Axis.x)
+        else if(gameAxis == Axis.x)
         {
             int height = Screen.height;
             int screenPadding = (int)(height * paddingXAxis);
@@ -117,7 +128,7 @@ public class SpawnInfo : MonoBehaviour
     {
         if(ballCols != null && showColumns)
         {
-            if(spawnAxis == Axis.y)
+            if(gameAxis == Axis.y)
             {
                 foreach(float x in ballCols)
                 {
@@ -132,7 +143,7 @@ public class SpawnInfo : MonoBehaviour
                     Gizmos.DrawWireSphere(new Vector3(x, ballDropHeight, 0), 0.2f);
                 }
             }
-            else if(spawnAxis == Axis.x)
+            else if(gameAxis == Axis.x)
             {
                 foreach(float y in ballCols)
                 {
@@ -157,8 +168,8 @@ public class SpawnInfo : MonoBehaviour
         float minDist = float.MaxValue;
 
         float compare;
-        if(spawnAxis == Axis.y){compare = worldPos.x;}
-        else if(spawnAxis == Axis.x){compare = worldPos.y;}
+        if(gameAxis == Axis.y){compare = worldPos.x;}
+        else if(gameAxis == Axis.x){compare = worldPos.y;}
         else{return 0;}
 
         for(int f = 0; f < ballCols.Length; f++)
@@ -177,11 +188,11 @@ public class SpawnInfo : MonoBehaviour
 
     public Vector2 GetSpawnLocation(int spawnNum)
     {
-        if(spawnAxis == Axis.y)
+        if(gameAxis == Axis.y)
         {
             return new Vector2(ballCols[spawnNum], ballDropHeight);
         }
-        else if(spawnAxis == Axis.x)
+        else if(gameAxis == Axis.x)
         {
             return new Vector2(0, ballCols[spawnNum]);
         }

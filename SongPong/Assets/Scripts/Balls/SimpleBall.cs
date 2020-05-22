@@ -33,7 +33,7 @@ public class SimpleBall : Ball
         SetDirectionSettings();
 
         // CALC DROP TIME
-        moveTime = CalcMoveTime();
+        //moveTime = CalcMoveTime();
     }
 
     public void SetDirectionSettings()
@@ -75,23 +75,31 @@ public class SimpleBall : Ball
 
     public override float CalcMoveTime()
     {
-        // Check if ball is negative or positive
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-
-        // Get Paddle Info
-        // returns abs value of paddle axis, makes it negative if ball is negative direction
-        float paddleAxis = paddle.getPaddleAxis();
-        float paddleHeightHalf = paddle.getPaddleHeight() / 2;
-        
-        // Determine Delta H (Height)
+        Debug.Log("MOVE TIME");
+        float time; // the time it takes to move
         float spawn = (axis == Axis.y) ? spawnLoc.y : spawnLoc.x; // decide which coordinate to use depending on the axis
-        deltaH = negative * (paddleAxis - spawn - radius - paddleHeightHalf); // calculate height to fall
+        float paddleHeightHalf = paddleManager.getPaddleHeight() / 2;
 
-        // Calculate delta T
-        // using physics equation dy = v0t + 1/2at^2 solved for time in the form
-        // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
-        float time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
+        if(axis == Axis.x)
+        {
+            // Check if ball is negative or positive
+            float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
+            
+            deltaH = negative * (paddleAxis - spawn - radius - paddleHeightHalf); // calculate height to fall
+            
+            // Calculate delta T
+            // using physics equation dy = v0t + 1/2at^2 solved for time in the form
+            // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
+            float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
+            time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
+        }
+        else
+        {
+            deltaH = paddleAxis - spawn + radius + paddleHeightHalf;
+            
+            float determinant = (Mathf.Pow(speed, 2) + (2 * -gravity * deltaH));
+            time = (-speed - Mathf.Sqrt(determinant)) / -gravity;
+        }
 
         if(float.IsNaN(time)){Debug.LogError("Drop time is NaN.");}
         return time;
@@ -146,7 +154,7 @@ public class SimpleBall : Ball
 
    private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.name == "Paddle"){
+        if(other.gameObject.tag == "Paddle"){
             paddle = other.gameObject.GetComponent<Paddle>();
             
             caught = true;

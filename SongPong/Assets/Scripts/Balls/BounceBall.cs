@@ -30,14 +30,14 @@ public class BounceBall : Ball
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
-        SetDirectionSettings();
-
         // CALC DROP TIME
         moveTime = CalcMoveTime();
     }
 
     public void SetDirectionSettings()
     {
+        direction = notes[currentNote].noteDirection;
+
         if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
         else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
         else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
@@ -46,7 +46,6 @@ public class BounceBall : Ball
         velocity = speed * dirVector;
         acceleration = gravity * dirVector;
 
-        speed = (direction == Direction.negative) ? -speed : speed;
         gravity = (direction == Direction.negative) ? -gravity : gravity;
     }
 
@@ -67,26 +66,43 @@ public class BounceBall : Ball
      */
     private float CalcDropTime()
     {
+        // Determine which way this ball is going
+        SetDirectionSettings();
+
         // Check if ball is negative or positive
         float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
 
         // Get Paddle Info
         // returns abs value of paddle axis, makes it negative if ball is negative direction
-        float paddleAxis = paddle.getPaddleAxis();
-        float paddleHeightHalf = paddle.getPaddleHeight() / 2;
+        float paddleHeightHalf = paddleManager.getPaddleHeight() / 2;
         
         // Determine Delta H (Height)
         float spawn = (axis == Axis.y) ? spawnLoc.y : spawnLoc.x; // decide which coordinate to use depending on the axis
+        Debug.Log("SPAWN? " + spawn);
         deltaH = negative * (paddleAxis - spawn - radius - paddleHeightHalf); // calculate height to fall
+
 
         // Calculate delta T
         // using physics equation dy = v0t + 1/2at^2 solved for time in the form
         // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
         float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
+
         float time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
 
-        if(float.IsNaN(time)){Debug.LogError("Drop time is NaN.");}
+        if(float.IsNaN(time))
+        {
+            Debug.LogError("Drop time is NaN.");
+            DebugDropTime(deltaH, determinant, time, gravity);
+        }
         return time;
+    }
+
+    private void DebugDropTime(float deltaH, float determinant, float time, float gravity)
+    {
+        Debug.Log("DELTA H: " + deltaH);
+        Debug.Log("GRAVITY: " + gravity);
+        Debug.Log("DETERMINANT: " + determinant);
+        Debug.Log("TIME: " + time);
     }
 
     /**
@@ -156,7 +172,7 @@ public class BounceBall : Ball
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.name == "Paddle"){
+        if(other.gameObject.tag == "Paddle"){
             caught = true;
             catchTimes[currentNote] = Time.time;
         }

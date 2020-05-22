@@ -26,7 +26,9 @@ public class BallDropper : MonoBehaviour
     private SongController song;
     private AxisManager axisManager;
     private SpawnInfo spawner;
+    private PaddleManager paddleManager;
     private Paddle paddle;
+    private float paddleAxis;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -53,6 +55,7 @@ public class BallDropper : MonoBehaviour
     private void Awake() 
     {
         song = FindObjectOfType<SongController>();
+        paddleManager = FindObjectOfType<PaddleManager>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
@@ -109,7 +112,7 @@ public class BallDropper : MonoBehaviour
             // this method is very brute force and could be improved by sorting the balls first
             foreach(Ball ball in waitingBallList)
             {
-                if(!isFinished && ball.NextHitTime() - ball.moveTime < Time.time)
+                if(!isFinished && ball.NextHitTime() - ball.moveTime < song.songTime)
                 {
                     droppedBalls.Add(ball);
                     activeBallList.Add(ball);
@@ -131,13 +134,16 @@ public class BallDropper : MonoBehaviour
 
     public void spawnBall(BallData data)
     {
+        if(!data.enabled) return;
+
         try{
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
+
             // Initialize the ball with id and notes
             data.id = ballID++;
 
-            ball.InitializeBall(data, axisManager, spawner, paddle);
+            ball.InitializeBall(data, axisManager, spawner, paddleManager);
             
             // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
