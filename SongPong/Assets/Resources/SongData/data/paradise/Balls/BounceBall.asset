@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
   m_Name: DUMMY
   m_EditorClassIdentifier: 
-  id: 0
+  id: 1
   enabled: 1
   type: 1
   notes:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: a4f361d6a308849d2826be1bda4b9063, type: 2}
+  - {fileID: 11400000, guid: 5aa157078cf82fc4f9afa2424452cbd3, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}

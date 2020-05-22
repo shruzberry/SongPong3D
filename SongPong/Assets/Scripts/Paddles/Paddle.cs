@@ -4,18 +4,22 @@ using Types;
 public class Paddle : MonoBehaviour
 {
     //____________REFERENCES_______________
+    [HideInInspector]
     public SpawnInfo spawner;
     private AxisManager axisManager;
+    [HideInInspector]
     public Axis paddleAxis;
+    [HideInInspector]
     public Vector2 screenBounds;
 
     //____________MOVEMENT_________________
+    [HideInInspector]
     public Vector2 movement;
     private float paddleYAxis;
     private float paddleXAxis;
 
     //____________ATTRIBUTES_______________
-    public Paddles paddleNum{get;}
+    public Paddles paddleNum;//{get;}
     private float paddleRadius; // the half-width or radius of the paddle
     private float paddleHeight;
 

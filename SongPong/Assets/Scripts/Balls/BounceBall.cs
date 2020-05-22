@@ -156,7 +156,7 @@ public class BounceBall : Ball
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.name == "Paddle"){
+        if(other.gameObject.tag == "Paddle"){
             caught = true;
             catchTimes[currentNote] = Time.time;
         }

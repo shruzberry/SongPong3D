@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: note 1
   m_EditorClassIdentifier: 
   hitPosition: 4
-  hitTime: 3
+  hitTime: 5.2
   noteDirection: 0

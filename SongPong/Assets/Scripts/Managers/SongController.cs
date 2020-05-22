@@ -39,7 +39,9 @@ public class SongController : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public SongData songData;
+    [HideInInspector]
     public int currentBeat;
+    [HideInInspector]
     public float songTime;
 
     [HideInInspector]
@@ -124,6 +126,7 @@ public class SongController : MonoBehaviour
 
     void Start()
     {
+        LoadSong(songData);
         JumpToBeat(startTime);
     }
 
