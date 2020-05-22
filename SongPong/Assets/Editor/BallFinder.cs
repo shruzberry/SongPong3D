@@ -167,6 +167,13 @@ public class BallFinder : EditorWindow
                 foreach(Ball ball in activeBalls)
                 {
                     EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
+                    foreach(NoteData note in ball.getNotes())
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space( 20f );
+                        EditorGUILayout.ObjectField(note, typeof(Object), true);
+                        GUILayout.EndHorizontal();
+                    }
                 }
             GUILayout.EndScrollView();
         GUILayout.EndArea();

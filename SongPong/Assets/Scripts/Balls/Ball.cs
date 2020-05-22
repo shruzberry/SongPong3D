@@ -151,7 +151,7 @@ public abstract class Ball : MonoBehaviour
 
             foreach(NoteData nd in noteList)
             {
-                Debug.Log(nd.hitTime);
+                //Debug.Log(nd.hitTime);
             }
             return noteList;
         }
@@ -236,4 +236,6 @@ public abstract class Ball : MonoBehaviour
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
+
+    public List<NoteData> getNotes(){return notes;}
 }
