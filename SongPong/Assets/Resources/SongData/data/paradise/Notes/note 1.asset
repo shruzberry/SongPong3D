@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
   m_Name: note 1
   m_EditorClassIdentifier: 
-  hitPosition: 4
-  hitTime: 5.2
+  hitPosition: 6
+  hitTime: 2.3
   noteDirection: 0

@@ -39,7 +39,7 @@ public class SongController : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public SongData songData;
-    [HideInInspector]
+    //[HideInInspector]
     public int currentBeat;
     [HideInInspector]
     public float songTime;
@@ -80,7 +80,7 @@ public class SongController : MonoBehaviour
 
     public void JumpToStart()
     {
-        goToTime(songData.startBeat);
+        JumpToBeat(songData.startBeat + (ToBeat(songData.offset)));
     }
 
     public void JumpToBeat(int beat)

@@ -6,14 +6,17 @@ using UnityEditor;
 [CreateAssetMenuAttribute(fileName="Song", menuName="Song")]
 public class SongData : ScriptableObject
 {
+    [HideInInspector]
     public float currentTime;
     public int bpm;
     public string name;
+    [HideInInspector]
     public string dataPath;
     public AudioClip song;
     public int startBeat = 0;
     public int endBeat = 0;
-
+    public float offset = 0;
+    [HideInInspector]
     public string myPath;
 
     public void OnEnable()
