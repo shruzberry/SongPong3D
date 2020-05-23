@@ -109,7 +109,11 @@ public class BallDropper : MonoBehaviour
             // this method is very brute force and could be improved by sorting the balls first
             foreach(Ball ball in waitingBallList)
             {
-                if(!isFinished && ball.NextHitTime() - ball.moveTime < Time.time)
+                int dropBeat = song.ToBeat(ball.NextHitTime() - ball.moveTime);
+                //print("drop beat: " + dropBeat);
+                //print("Hit Time: " + ball.NextHitTime());
+                //print("move time: " + ball.moveTime);
+                if(!isFinished && (dropBeat < song.currentBeat))
                 {
                     droppedBalls.Add(ball);
                     activeBallList.Add(ball);

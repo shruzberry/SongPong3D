@@ -53,6 +53,20 @@ public class SongController : MonoBehaviour
     private int startTime;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* STATIC FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public int ToBeat(float time)
+    {
+        return (int)((time / 60) * songData.bpm);
+    }
+
+    public float ToTime(int beat)
+    {
+        return (60.0f / songData.bpm) * (beat);
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -66,12 +80,8 @@ public class SongController : MonoBehaviour
     }
 
     public void Play(){source.Play();}
-    public void Pause(){source.Pause();}
     
-    public int ToBeat(float time)
-    {
-        return (int)(time / 60) * songData.bpm;
-    }
+    public void Pause(){source.Pause();}
 
     public void UpdateSongTime()
     {
