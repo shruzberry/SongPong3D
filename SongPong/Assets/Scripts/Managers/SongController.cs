@@ -40,7 +40,7 @@ public class SongController : MonoBehaviour
 
     public SongData songData;
     //[HideInInspector]
-    public int currentBeat;
+    public float currentBeat;
     [HideInInspector]
     public float songTime;
 
@@ -56,9 +56,9 @@ public class SongController : MonoBehaviour
 * STATIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public int ToBeat(float time)
+    public float ToBeat(float time)
     {
-        return (int)((time / 60) * songData.bpm);
+        return (float)((time / 60.0f) * songData.bpm);
     }
 
     public float ToTime(float beat)
@@ -93,10 +93,10 @@ public class SongController : MonoBehaviour
         goToTime(ToTime(songData.startBeat) + songData.offset);
     }
 
-    public void JumpToBeat(int beat)
+    public void JumpToBeat(float beat)
     {
         goToTime(
-            ((float)(beat * 60)) / songData.bpm
+            ToTime(beat)
         );
     }
 
@@ -143,7 +143,7 @@ public class SongController : MonoBehaviour
 
     void Update()
     {
-        currentBeat = (int)((source.time / 60.0f) * songData.bpm);
+        currentBeat = ToBeat(songTime);
         songTime = source.time;
     }
 }
