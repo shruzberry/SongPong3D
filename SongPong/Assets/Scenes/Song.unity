@@ -492,6 +492,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 335334683, guid: 1c783558b9dc24b80a22c3b3b27b3077, type: 3}
+      propertyPath: gameAxis
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1338863237352836497, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: m_Name
@@ -695,5 +699,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SongController
       objectReference: {fileID: 0}
+    - target: {fileID: 2801249904474146111, guid: 1a6cae9c5e99a884aa07b98ef2b6b162,
+        type: 3}
+      propertyPath: songData
+      value: 
+      objectReference: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a6cae9c5e99a884aa07b98ef2b6b162, type: 3}

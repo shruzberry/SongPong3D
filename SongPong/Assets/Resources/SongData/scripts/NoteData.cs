@@ -7,7 +7,7 @@ using Types;
 public class NoteData : ScriptableObject
 {
     public int hitPosition;
-    public int hitBeat;
+    public float hitBeat;
     [HideInInspector]
     public float hitTime;
     public Direction noteDirection;

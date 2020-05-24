@@ -61,7 +61,7 @@ public class SongController : MonoBehaviour
         return (int)((time / 60) * songData.bpm);
     }
 
-    public float ToTime(int beat)
+    public float ToTime(float beat)
     {
         return (60.0f / songData.bpm) * (beat);
     }
@@ -90,7 +90,7 @@ public class SongController : MonoBehaviour
 
     public void JumpToStart()
     {
-        JumpToBeat(songData.startBeat + (ToBeat(songData.offset)));
+        goToTime(ToTime(songData.startBeat) + songData.offset);
     }
 
     public void JumpToBeat(int beat)
@@ -117,6 +117,7 @@ public class SongController : MonoBehaviour
 
     private void goToTime(float time)
     {
+        print("jumping to time: " + time);
         source.time = time;
         songTime = source.time;
         source.Play();
@@ -137,7 +138,7 @@ public class SongController : MonoBehaviour
     void Start()
     {
         LoadSong(songData);
-        JumpToBeat(startTime);
+        JumpToStart();
     }
 
     void Update()
