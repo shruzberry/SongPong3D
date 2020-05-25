@@ -14,7 +14,7 @@ public class BallData : ScriptableObject
     public NoteData[] notes;
     [HideInInspector]
     public GameObject prefab;
-
+    
     public void OnEnable()
     {
         SetPrefab();

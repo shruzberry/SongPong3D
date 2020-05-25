@@ -57,7 +57,7 @@ public class BallFinder : EditorWindow
 * STARTUP FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    [MenuItem("Window/BallFinder")]
+    [MenuItem("Window/Ball Finder")]
     static void OpenWindow()
     {
         BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Ball Finder");

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
-  m_Name: just
+  m_Name: Col_0,Beat_161
   m_EditorClassIdentifier: 
-  hitPosition: 10
+  hitPosition: 0
   hitBeat: 161
-  hitTime: 66.413795
+  hitTime: 0
   noteDirection: 0

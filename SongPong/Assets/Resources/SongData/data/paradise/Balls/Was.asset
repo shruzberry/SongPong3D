@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
-  m_Name: She
+  m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
+  m_Name: Was
   m_EditorClassIdentifier: 
-  hitPosition: 6
-  hitBeat: 159.5
-  hitTime: 66
-  noteDirection: 0
+  id: 0
+  enabled: 1
+  type: 0
+  notes:
+  - {fileID: 11400000, guid: 0548995e0546348d2b8be86dd93d22a8, type: 2}
+  prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}
