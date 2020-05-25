@@ -25,6 +25,22 @@ public class SongEdit : MonoBehaviour
         saveBall(bd);        
     }
 
+    [MenuItem("SongEdit/Create Simple + Note Listener")]
+    public static void CreateSimple(string name, NoteData nd)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+
+        BallData bd = new BallData();
+        
+        saveNote(nd);
+
+        bd.type = BallTypes.simple;
+        bd.name = name;
+        bd.notes = new NoteData[1];
+        bd.notes[0] = nd;
+        saveBall(bd);        
+    }
+
     public static void saveBall(BallData type)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();

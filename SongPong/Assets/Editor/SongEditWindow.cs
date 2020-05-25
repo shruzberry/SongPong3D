@@ -33,6 +33,7 @@ public class SongEditWindow : EditorWindow
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     
     SongController songController;
+    NoteListener noteListener;
     
     string ballName = "";
 
@@ -51,6 +52,7 @@ public class SongEditWindow : EditorWindow
     void OnEnable()
     {
         songController = GameObject.Find("SongController").GetComponent<SongController>();
+        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();
         //songEdit = GameObject.Find("SongEdit").GetComponent<SongEdit>();
     }
 
@@ -64,6 +66,12 @@ public class SongEditWindow : EditorWindow
         if (GUILayout.Button("Create Simple + Note"))
         {
             SongEdit.CreateSimple(ballName);
+        }
+
+        if (GUILayout.Button("Create Simple + Note Listener"))
+        {
+            //Debug.Log(noteListener.data.Size);
+            //SongEdit.CreateSimple(ballName, noteListener.data[0]);
         }
     }
 }
