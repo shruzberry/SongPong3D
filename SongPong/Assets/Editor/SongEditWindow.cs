@@ -36,6 +36,8 @@ public class SongEditWindow : EditorWindow
     NoteListener noteListener;
     
     string ballName = "";
+    int colNum = 0;
+    float beatNum = 0.0f;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * STARTUP FUNCTIONS
@@ -62,10 +64,15 @@ public class SongEditWindow : EditorWindow
         GUILayout.Label(ballName);
 
         ballName = EditorGUILayout.TextField("Ball Name: ", ballName);
+        colNum = EditorGUILayout.IntField("Col: ", colNum);
+        beatNum = EditorGUILayout.FloatField("Beat: ", beatNum);
         
         if (GUILayout.Button("Create Simple + Note"))
         {
-            SongEdit.CreateSimple(ballName);
+            NoteData nd = new NoteData();
+            nd.hitPosition = colNum;
+            nd.hitBeat = beatNum;
+            SongEdit.CreateSimple(ballName, nd);
         }
 
         if (GUILayout.Button("Create Simple + Note Listener"))

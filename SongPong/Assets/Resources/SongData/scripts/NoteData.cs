@@ -12,7 +12,7 @@ public class NoteData : ScriptableObject
     public float hitTime;
     public Direction noteDirection;
     private SongController songController;
-
+    
     public static int CompareNotesByHitTime(NoteData a, NoteData b)
     {
         return a.hitTime.CompareTo(b.hitTime);
