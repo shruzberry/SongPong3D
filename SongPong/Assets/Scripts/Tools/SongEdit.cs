@@ -1,4 +1,24 @@
-﻿using System.Collections;
+﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+________ DEFENITION ________
+Class Name: SongEditorWindow.cs
+Purpose: Add Balls and Notes quicker
+
+________ USAGE ________
+* Go to SongEdit dropdown in the unity editor and call any public method
+* Or Call static SongEdit funtions
+
+________ PUBLIC ________
++ CreateSimple(string name, [NoteData note])
+    - Initialize Simple ball with an empty note
+    - Optional Seconds parameter defines the note associated with the ball
+
++=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* DEPENDENCIES
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -6,6 +26,11 @@ using Types;
 
 public class SongEdit : MonoBehaviour
 {
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PUBLIC FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     [MenuItem("SongEdit/Create Simple + Note")]
     public static void CreateSimple(string name)
     {
@@ -15,7 +40,6 @@ public class SongEdit : MonoBehaviour
         NoteData nd = new NoteData();
         
         nd.hitBeat = (int) songController.currentBeat;
-        nd.name = "Col_" + nd.hitPosition + ",Beat_" + nd.hitBeat;
         saveNote(nd);
 
         bd.type = BallTypes.simple;
@@ -40,6 +64,10 @@ public class SongEdit : MonoBehaviour
         bd.notes[0] = nd;
         saveBall(bd);        
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PRIVATE FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public static void saveBall(BallData type)
     {

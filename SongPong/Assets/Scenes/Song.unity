@@ -271,6 +271,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: NoteListener
       objectReference: {fileID: 0}
+    - target: {fileID: 6280165370638749529, guid: c2a0efe3840944e4e89b86f82abc5f4f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8369143983549443782, guid: c2a0efe3840944e4e89b86f82abc5f4f,
+        type: 3}
+      propertyPath: data.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8369143983549443782, guid: c2a0efe3840944e4e89b86f82abc5f4f,
+        type: 3}
+      propertyPath: data.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0548995e0546348d2b8be86dd93d22a8,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2a0efe3840944e4e89b86f82abc5f4f, type: 3}
 --- !u!1001 &1032017529

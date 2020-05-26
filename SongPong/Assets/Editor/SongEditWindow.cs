@@ -1,13 +1,11 @@
 ﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 ________ DEFENITION ________
-Class Name: SongEditor.cs
+Class Name: SongEditorWindow.cs
 Purpose: Add Balls and Notes quicker
 
 ________ USAGE ________
 * Go to Windows/Song Builder to open the editor
-* Use Navigation controls to change song time
-* Use Note Listener to capture note information
-* Click on balls to find them in the Asset Folder
+* Use controls to create balls
 
 ________ ATTRIBUTES ________
 
@@ -40,7 +38,7 @@ public class SongEditWindow : EditorWindow
     float beatNum = 0.0f;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* STARTUP FUNCTIONS
+* RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     [MenuItem("Window/Song Editor")]
@@ -54,8 +52,7 @@ public class SongEditWindow : EditorWindow
     void OnEnable()
     {
         songController = GameObject.Find("SongController").GetComponent<SongController>();
-        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();
-        //songEdit = GameObject.Find("SongEdit").GetComponent<SongEdit>();
+        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();    
     }
 
     void OnGUI()
@@ -72,13 +69,8 @@ public class SongEditWindow : EditorWindow
             NoteData nd = new NoteData();
             nd.hitPosition = colNum;
             nd.hitBeat = beatNum;
+            nd.name = ballName;
             SongEdit.CreateSimple(ballName, nd);
-        }
-
-        if (GUILayout.Button("Create Simple + Note Listener"))
-        {
-            //Debug.Log(noteListener.data.Size);
-            //SongEdit.CreateSimple(ballName, noteListener.data[0]);
         }
     }
 }
