@@ -32,7 +32,7 @@ public class NoteListener : MonoBehaviour
 
     public List<NoteData> data;
 
-    private bool active = false;
+    private bool active = true;
     private SongController sc;
     private SpawnInfo si;
     

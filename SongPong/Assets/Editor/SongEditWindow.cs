@@ -37,6 +37,8 @@ public class SongEditWindow : EditorWindow
     int colNum = 0;
     float beatNum = 0.0f;
 
+    Vector2 activeBallsScrollPosition;
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -57,13 +59,14 @@ public class SongEditWindow : EditorWindow
 
     void OnGUI()
     {
-        GUILayout.Label("Ball Name");
-        GUILayout.Label(ballName);
+        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();    
 
+        // User entered data field
         ballName = EditorGUILayout.TextField("Ball Name: ", ballName);
         colNum = EditorGUILayout.IntField("Col: ", colNum);
         beatNum = EditorGUILayout.FloatField("Beat: ", beatNum);
         
+        // Basic Action Buttons
         if (GUILayout.Button("Create Simple + Note"))
         {
             NoteData nd = new NoteData();
@@ -71,6 +74,33 @@ public class SongEditWindow : EditorWindow
             nd.hitBeat = beatNum;
             nd.name = ballName;
             SongEdit.CreateSimple(ballName, nd);
+        }
+
+        // Note Listener View
+        GUILayout.Label("Note Listener");
+        if(noteListener.data.Count >= 0)
+        {
+            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Height(100));
+            foreach(NoteData nd in noteListener.data)
+            {
+                GUILayout.Label("Col: " + nd.hitPosition + ", Beat: " + nd.hitBeat);
+            }
+            GUILayout.EndScrollView();
+        }
+
+        //Note Listener Action Buttons
+        if (GUILayout.Button("NoteListener to Simple Balls"))
+        {
+            int bounceNum = 0;
+            foreach(NoteData nd in noteListener.data)
+            {
+                NoteData note = new NoteData();
+                note.hitPosition = nd.hitPosition;
+                note.hitBeat = nd.hitBeat;
+                note.name = ballName + "_" + bounceNum;
+                SongEdit.CreateSimple(ballName + "_" + bounceNum, note);
+                bounceNum++;
+            }
         }
     }
 }

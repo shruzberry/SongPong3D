@@ -22,12 +22,5 @@ public class NoteData : ScriptableObject
     {
         songController = GameObject.Find("SongController").GetComponent<SongController>();
         hitTime = songController.ToTime(hitBeat);
-
-        //SetDescriptiveName();
-    }
-
-    void SetDescriptiveName()
-    {
-        this.name = "C_" + this.hitPosition + ",B_" + this.hitBeat;
     }
 }
