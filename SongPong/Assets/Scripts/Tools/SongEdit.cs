@@ -31,7 +31,6 @@ public class SongEdit : MonoBehaviour
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    [MenuItem("SongEdit/Create Simple + Note")]
     public static void CreateSimple(string name)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
@@ -49,7 +48,7 @@ public class SongEdit : MonoBehaviour
         saveBall(bd);        
     }
 
-    [MenuItem("SongEdit/Create Simple + Note Listener")]
+    //[MenuItem("SongEdit/Create Simple + Note Listener")]
     public static void CreateSimple(string name, NoteData nd)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
@@ -62,6 +61,34 @@ public class SongEdit : MonoBehaviour
         bd.name = name;
         bd.notes = new NoteData[1];
         bd.notes[0] = nd;
+        saveBall(bd);        
+    }
+
+    public static void CreateBounce(string name, List<NoteData> nd)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+
+        BallData bd = new BallData();
+        
+        foreach (NoteData noteData in nd)
+        {
+            
+        }
+
+        bd.type = BallTypes.bounce;
+        bd.name = name;
+        bd.notes = new NoteData[nd.Count];
+        
+        int i = 0;
+        foreach (NoteData noteData in nd)
+        {
+            noteData.name = name + "_" + i;
+            bd.notes[i] = noteData;
+            saveNote(noteData);
+            
+            i++;
+        }
+
         saveBall(bd);        
     }
 

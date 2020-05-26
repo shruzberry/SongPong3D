@@ -102,5 +102,10 @@ public class SongEditWindow : EditorWindow
                 bounceNum++;
             }
         }
+
+        if (GUILayout.Button("NoteListener Single Bounce Ball"))
+        {
+            SongEdit.CreateBounce(ballName, noteListener.data);
+        }
     }
 }
