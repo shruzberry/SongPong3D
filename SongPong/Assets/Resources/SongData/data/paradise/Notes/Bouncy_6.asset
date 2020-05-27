@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Bouncy_6
   m_EditorClassIdentifier: 
   hitPosition: 15
-  hitBeat: 133
-  hitTime: 55.03448
+  hitBeat: 132.5
+  hitTime: 54.827587
   noteDirection: 0

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LowBouncy_5
   m_EditorClassIdentifier: 
   hitPosition: 1
-  hitBeat: 135
-  hitTime: 0
+  hitBeat: 137.5
+  hitTime: 56.896553
   noteDirection: 0
