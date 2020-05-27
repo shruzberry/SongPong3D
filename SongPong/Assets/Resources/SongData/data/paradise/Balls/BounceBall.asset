@@ -16,5 +16,6 @@ MonoBehaviour:
   enabled: 1
   type: 1
   notes:
-  - {fileID: 11400000, guid: 7446b4c4fa1b0074691a8fa357051544, type: 2}
+  - {fileID: 11400000, guid: a4f361d6a308849d2826be1bda4b9063, type: 2}
+  - {fileID: 11400000, guid: 5aa157078cf82fc4f9afa2424452cbd3, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}

@@ -14,17 +14,17 @@ ________ FUNCTIONS ________
 - privateFunction(): description of usage
  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.IO;
+using Types;
 
 public class BallDropper : MonoBehaviour
 {   
     //___________References______________
     private SongController song;
     private AxisManager axisManager;
+    private Axis gameAxis;
     private SpawnInfo spawner;
     private PaddleManager paddleManager;
     private Paddle paddle;
@@ -57,6 +57,7 @@ public class BallDropper : MonoBehaviour
         song = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
         axisManager = FindObjectOfType<AxisManager>();
+        gameAxis = axisManager.gameAxis;
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
     }
@@ -72,11 +73,11 @@ public class BallDropper : MonoBehaviour
 
     private void Update()
     {
-        CheckDrop();
-
         UpdateActiveBalls();
 
         RemoveFinishedBalls();
+        
+        CheckDrop();
     }
 
     private void FixedUpdate() 
@@ -112,10 +113,10 @@ public class BallDropper : MonoBehaviour
             // this method is very brute force and could be improved by sorting the balls first
             foreach(Ball ball in waitingBallList)
             {
-                if(!isFinished && ball.NextHitTime() - ball.moveTime < song.songTime)
+                if(!isFinished && ball.NextHitTime() - ball.moveTimes[1] < Time.time)               // CURRENTLY LOCKED TO Y
                 {
                     droppedBalls.Add(ball);
-                    activeBallList.Add(ball);
+                    DropBall(ball);
                 }
             }
 
@@ -127,6 +128,11 @@ public class BallDropper : MonoBehaviour
             }
         }
 	}
+
+    public void DropBall(Ball ball)
+    {
+        activeBallList.Add(ball);
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SPAWN
@@ -144,6 +150,14 @@ public class BallDropper : MonoBehaviour
             data.id = ballID++;
 
             ball.InitializeBall(data, axisManager, spawner, paddleManager);
+
+            if(gameAxis == Axis.y)
+            {
+                if(ball.direction == Direction.positive)
+                {
+                    Debug.LogWarning(ball.name + " has a direction of positive in Y-Axis mode. Don't be a fool.");
+                }
+            }
             
             // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
@@ -164,7 +178,7 @@ public class BallDropper : MonoBehaviour
     private void RemoveFinishedBalls()
     {
         // Destroy any balls that are caught or missed
-		foreach(Ball rmBall in finishedBallList) 
+		foreach(Ball rmBall in finishedBallList)
         {
 			activeBallList.Remove(rmBall);
             rmBall.DeleteBall();

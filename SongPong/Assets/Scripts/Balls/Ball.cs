@@ -36,7 +36,6 @@ public abstract class Ball : MonoBehaviour
     //___________REFERENCES_____________
     protected PaddleManager paddleManager;
     protected Paddle paddle;
-    protected float paddleAxis;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -62,11 +61,11 @@ public abstract class Ball : MonoBehaviour
     [SerializeField]
     protected Vector2 velocity;
     protected Vector2 acceleration;
-    protected Direction direction;
+    public Direction direction;
 
     //___________TIME___________________
     public float spawnTime;
-    public float moveTime; // time it takes from spawn to target
+    public float[] moveTimes; // time it takes from spawn to target
     public float[] catchTimes;
 
     //___________INDEXING________________
@@ -97,11 +96,9 @@ public abstract class Ball : MonoBehaviour
     public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, PaddleManager paddleManager)
     {
         // INITIALIZE ID AND NOTES
-        this.id = data.id;
         this.ballData = data;
+        this.id = data.id;
         this.type = data.type;
-        string ballName = id.ToString() + "_" + type.ToString();
-        this.name = ballName;
 
         // NOTES
         this.notes = SortNotes(data.notes);
@@ -113,9 +110,9 @@ public abstract class Ball : MonoBehaviour
 
         // REFERENCES
         this.paddleManager = paddleManager;
-        this.paddleAxis = paddleManager.GetPaddleAxis();
 
         // APPEARANCE
+        this.name = id.ToString() + "_" + type.ToString();
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // SET SPAWN LOCATION
@@ -125,16 +122,32 @@ public abstract class Ball : MonoBehaviour
         transform.position = spawnLoc;
 
         // DIRECTION
-        direction = notes[currentNote].noteDirection;
+        SetDirectionSettings();
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
         // CHECK FOR ERRORS
-        CheckForInvalid();
+        if(CheckForInvalid() == true)
+        {
+            Debug.LogWarning("BALL " + name + " did not initialize because it has incorrect parameters.");
+        }
+
+        // CALC DROP TIME
+        moveTimes = CalcMoveTime();
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
+    }
+
+    public void SetDirectionSettings()
+    {
+        direction = notes[currentNote].noteDirection;
+        
+        if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
+        else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
+        else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
+        else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
     }
 
     protected List<NoteData> SortNotes(NoteData[] notes)
@@ -165,7 +178,7 @@ public abstract class Ball : MonoBehaviour
  * ERROR
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    protected virtual void CheckForInvalid(){}
+    protected virtual bool CheckForInvalid(){return false;}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * IDLE
@@ -192,7 +205,7 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
-    public abstract float CalcMoveTime();
+    public abstract float[] CalcMoveTime();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH

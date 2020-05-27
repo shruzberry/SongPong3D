@@ -12,6 +12,7 @@ public class CatchState : BallState
 
         if(ball.currentNote < ball.numNotes)
         {
+            ball.moveTimes = ball.CalcMoveTime();        
             ball.SetState(new MoveState(ball));
         }
         else

@@ -30,22 +30,6 @@ public class SimpleBall : Ball
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
-        SetDirectionSettings();
-
-        // CALC DROP TIME
-        //moveTime = CalcMoveTime();
-    }
-
-    public void SetDirectionSettings()
-    {
-        if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
-        else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
-        else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
-        else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
-
-        speed = (direction == Direction.negative) ? -speed : speed;
-        gravity = (direction == Direction.negative) ? -gravity : gravity;
-
         velocity = speed * dirVector;
         acceleration = gravity * dirVector;
     }
@@ -56,53 +40,57 @@ public class SimpleBall : Ball
     /**
      * Make sure that this ball fits the requirements for a simple ball
      **/
-    protected override void CheckForInvalid()
+    protected override bool CheckForInvalid()
     {
         bool error = false;
 
         if(numNotes > 1) error = true;
-
-        if(error)
-        {
-            Debug.LogError("BALL " + name + " DELETED BECAUSE IT HAS INCORRECT PARAMETERS.");
-            DeleteBall();
-        }
+        
+        return error;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * DROP TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float CalcMoveTime()
+    public override float[] CalcMoveTime()
     {
-        Debug.Log("MOVE TIME");
-        float time; // the time it takes to move
-        float spawn = (axis == Axis.y) ? spawnLoc.y : spawnLoc.x; // decide which coordinate to use depending on the axis
-        float paddleHeightHalf = paddleManager.getPaddleHeight() / 2;
+        return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));
+    }
 
-        if(axis == Axis.x)
-        {
-            // Check if ball is negative or positive
-            float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-            
-            deltaH = negative * (paddleAxis - spawn - radius - paddleHeightHalf); // calculate height to fall
-            
-            // Calculate delta T
+    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.y - pointB.y) - radius;
+    }
+
+    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.x - pointB.x) - radius;
+    }
+
+    /**
+     * Calculates the time it would take this ball to fall between pointA and pointB
+     **/
+    public float[] CalcTimeToFall(Vector2 pointA, Vector2 pointB)
+    {
+        // Calculate delta T
             // using physics equation dy = v0t + 1/2at^2 solved for time in the form
             // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-            float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
-            time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
-        }
-        else
-        {
-            deltaH = paddleAxis - spawn + radius + paddleHeightHalf;
-            
-            float determinant = (Mathf.Pow(speed, 2) + (2 * -gravity * deltaH));
-            time = (-speed - Mathf.Sqrt(determinant)) / -gravity;
-        }
+        float deltaX = GetTrueDeltaX(pointA, pointB);
+        float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
+        float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
 
-        if(float.IsNaN(time)){Debug.LogError("Drop time is NaN.");}
-        return time;
+        Debug.Log("TIMEX: " + timeX);
+
+        float deltaY = GetTrueDeltaY(pointA, pointB);
+        float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
+        float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
+
+        Debug.Log("TIME Y: " + timeY);
+
+        float[] fallTimes = {timeX, timeY};
+
+        return fallTimes;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

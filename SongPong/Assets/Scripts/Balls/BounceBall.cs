@@ -30,85 +30,75 @@ public class BounceBall : Ball
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
-        // CALC DROP TIME
-        moveTime = CalcMoveTime();
-    }
-
-    public void SetDirectionSettings()
-    {
-        direction = notes[currentNote].noteDirection;
-
-        if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
-        else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
-        else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
-        else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
-
+        // MOVEMENT
         velocity = speed * dirVector;
         acceleration = gravity * dirVector;
-
-        gravity = (direction == Direction.negative) ? -gravity : gravity;
     }
 
+    protected override bool CheckForInvalid()
+    {
+        bool error = false;
+
+        if(numNotes < 2) error = true;
+
+        // same note more than once
+
+        // notes have different directionss
+
+        return error;
+    }
+    
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * DROP TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float CalcMoveTime()
+    public override float[] CalcMoveTime()
     {
         if(currentNote == 0)
-            return CalcDropTime();
+            return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));           // LOCKED TO Y
         else
             return CalcBounceTime();
     }
 
+    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.y - pointB.y) - radius;
+    }
+
+    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.x - pointB.x) - radius;
+    }
+
     /**
-     * Calculates the DropTime for the BounceBall when it first falls from spawn
-     */
-    private float CalcDropTime()
+     * Calculates the time it would take this ball to fall between pointA and pointB
+     **/
+    public float[] CalcTimeToFall(Vector2 pointA, Vector2 pointB)
     {
-        // Determine which way this ball is going
-        SetDirectionSettings();
-
-        // Check if ball is negative or positive
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-
-        // Get Paddle Info
-        // returns abs value of paddle axis, makes it negative if ball is negative direction
-        float paddleHeightHalf = paddleManager.getPaddleHeight() / 2;
-        
-        // Determine Delta H (Height)
-        float spawn = (axis == Axis.y) ? spawnLoc.y : spawnLoc.x; // decide which coordinate to use depending on the axis
-        Debug.Log("SPAWN? " + spawn);
-        deltaH = negative * (paddleAxis - spawn - radius - paddleHeightHalf); // calculate height to fall
-
-
         // Calculate delta T
-        // using physics equation dy = v0t + 1/2at^2 solved for time in the form
-        // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * deltaH));
+            // using physics equation dy = v0t + 1/2at^2 solved for time in the form
+            // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
+        float deltaX = GetTrueDeltaX(pointA, pointB);
+        float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
+        float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
 
-        float time = (-speed + negative * Mathf.Sqrt(determinant)) / gravity;
+        Debug.Log("TIMEX: " + timeX);
 
-        if(float.IsNaN(time))
-        {
-            Debug.LogError("Drop time is NaN.");
-            DebugDropTime(deltaH, determinant, time, gravity);
-        }
-        return time;
+        float deltaY = GetTrueDeltaY(pointA, pointB);
+        float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
+        float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
+
+        Debug.Log("TIME Y: " + timeY);
+
+        float[] fallTimes = {timeX, timeY};
+
+        return fallTimes;
     }
-
-    private void DebugDropTime(float deltaH, float determinant, float time, float gravity)
-    {
-        Debug.Log("DELTA H: " + deltaH);
-        Debug.Log("GRAVITY: " + gravity);
-        Debug.Log("DETERMINANT: " + determinant);
-        Debug.Log("TIME: " + time);
-    }
-
+    
     /**
      * Calculates the velocity needed to hit on the next notes' time.
      */
-    private float CalcBounceTime()
+    private float[] CalcBounceTime()
     {
         float deltaT = notes[currentNote].hitTime - Time.time;
 
@@ -120,7 +110,9 @@ public class BounceBall : Ball
         // v0 = -at
         // we calculate only time to reach the peak, so (t/2)
         velocity = -acceleration * (deltaT / 2);
-        return deltaT;
+
+        float[] times = {0,deltaT};                                                                 // LOCKED TO Y
+        return times;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -131,12 +123,10 @@ public class BounceBall : Ball
     {
         // UPDATE VELOCITY
         Vector2 velocityStep = acceleration * Time.deltaTime;
-
         velocity += velocityStep;
 
         // UPDATE POSITION
         Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
-
         rb.MovePosition(transform.position + newPos);
     }
 
@@ -199,7 +189,7 @@ public class BounceBall : Ball
         exit = true;
     }
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DEBUG
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+     * DEBUG
+     *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 }
