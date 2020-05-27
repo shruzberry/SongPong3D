@@ -6,6 +6,9 @@ public class BounceBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
+
+    //________MOVEMENT______________
+    protected Vector2 velocity;
     public float speed = 0.0f;
     public float gravity = 3.0f;
 
@@ -31,8 +34,7 @@ public class BounceBall : Ball
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // MOVEMENT
-        velocity = speed * dirVector;
-        acceleration = gravity * dirVector;
+        velocity = speed * axisVector;
     }
 
     protected override bool CheckForInvalid()
@@ -55,7 +57,9 @@ public class BounceBall : Ball
     public override float[] CalcMoveTime()
     {
         if(currentNote == 0)
+        {
             return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));           // LOCKED TO Y
+        }
         else
             return CalcBounceTime();
     }
@@ -82,25 +86,28 @@ public class BounceBall : Ball
         float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
         float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
 
-        Debug.Log("TIMEX: " + timeX);
-
         float deltaY = GetTrueDeltaY(pointA, pointB);
         float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
         float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
-
-        Debug.Log("TIME Y: " + timeY);
 
         float[] fallTimes = {timeX, timeY};
 
         return fallTimes;
     }
-    
+
     /**
      * Calculates the velocity needed to hit on the next notes' time.
      */
     private float[] CalcBounceTime()
     {
+        // Calculate time to hit the next note (this is returned)
         float deltaT = notes[currentNote].hitTime - Time.time;
+
+        // Get distance between the previous notes' column and the next
+        Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
+        Debug.Log("DELTA D: " + deltaD);
+
+        // v = d / t
 
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
@@ -109,7 +116,11 @@ public class BounceBall : Ball
         // Comes from the kinematic equation v = v0 + at solved for v0
         // v0 = -at
         // we calculate only time to reach the peak, so (t/2)
-        velocity = -acceleration * (deltaT / 2);
+        //velocity = -acceleration * (deltaT / 2) + (otherAxisVector * deltaD / deltaT);
+
+        velocity = Vector2.zero;
+        velocity += axisVector * -gravity * (deltaT / 2);
+        velocity += otherAxisVector * (deltaD / deltaT);
 
         float[] times = {0,deltaT};                                                                 // LOCKED TO Y
         return times;
@@ -121,9 +132,12 @@ public class BounceBall : Ball
 
     public override void MoveActions()
     {
-        // UPDATE VELOCITY
-        Vector2 velocityStep = acceleration * Time.deltaTime;
+        // UPDATE VELOCITY along main axis
+        Vector2 velocityStep = axisVector * (gravity * Time.deltaTime);
         velocity += velocityStep;
+
+        // update velocity along other axis
+        
 
         // UPDATE POSITION
         Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);

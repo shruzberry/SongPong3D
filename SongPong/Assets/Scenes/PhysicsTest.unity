@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e59a33faa4154d698348ec1453570e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameAxis: 0
+  gameAxis: 1
 --- !u!4 &105164718
 Transform:
   m_ObjectHideFlags: 0
@@ -372,7 +372,7 @@ PrefabInstance:
     - target: {fileID: 4855667257081311114, guid: b419d5adbc7e440ffa50fee0ed2fec74,
         type: 3}
       propertyPath: showColumns
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4855667257081311115, guid: b419d5adbc7e440ffa50fee0ed2fec74,
         type: 3}

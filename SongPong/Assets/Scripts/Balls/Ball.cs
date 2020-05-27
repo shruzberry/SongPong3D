@@ -31,11 +31,13 @@ public abstract class Ball : MonoBehaviour
     protected float size;
 
     protected Axis axis;
-    protected Vector2 dirVector;
+    protected Vector2 axisVector; // the unit vector that represents the base of the axis and direction
+    protected Vector2 otherAxisVector; // the unit vector that represents the other axis (with same direction)
 
     //___________REFERENCES_____________
     protected PaddleManager paddleManager;
     protected Paddle paddle;
+    protected SpawnInfo spawnInfo;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -58,9 +60,6 @@ public abstract class Ball : MonoBehaviour
     public BallData ballData;
 
     //___________MOVEMENT_______________
-    [SerializeField]
-    protected Vector2 velocity;
-    protected Vector2 acceleration;
     public Direction direction;
 
     //___________TIME___________________
@@ -110,6 +109,7 @@ public abstract class Ball : MonoBehaviour
 
         // REFERENCES
         this.paddleManager = paddleManager;
+        this.spawnInfo = spawner;
 
         // APPEARANCE
         this.name = id.ToString() + "_" + type.ToString();
@@ -117,12 +117,11 @@ public abstract class Ball : MonoBehaviour
 
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
-        int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
-        spawnLoc = spawner.GetSpawnLocation(spawnNumber);
+        spawnLoc = GetNotePosition(currentNote);
         transform.position = spawnLoc;
 
         // DIRECTION
-        SetDirectionSettings();
+        SetAxisVectors();
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
@@ -140,14 +139,20 @@ public abstract class Ball : MonoBehaviour
         SetState(new IdleState(this));
     }
 
-    public void SetDirectionSettings()
+    public Vector2 GetNotePosition(int index)
+    {
+        int spawnNum = notes[index].hitPosition;
+        return spawnInfo.GetSpawnLocation(spawnNum);
+    }
+
+    public void SetAxisVectors()
     {
         direction = notes[currentNote].noteDirection;
         
-        if(axis == Axis.y && direction == Direction.positive) {dirVector = new Vector2(0,1);}
-        else if(axis == Axis.y && direction == Direction.negative) {dirVector = new Vector2(0,-1);}
-        else if(axis == Axis.x && direction == Direction.positive) {dirVector = new Vector2(1,0);}
-        else if(axis == Axis.x && direction == Direction.negative) {dirVector = new Vector2(-1,0);}
+        if(axis == Axis.y && direction == Direction.positive) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.y && direction == Direction.negative) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.x && direction == Direction.positive) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
+        else if(axis == Axis.x && direction == Direction.negative) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,1);}
     }
 
     protected List<NoteData> SortNotes(NoteData[] notes)

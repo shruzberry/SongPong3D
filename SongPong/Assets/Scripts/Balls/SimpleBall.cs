@@ -6,6 +6,10 @@ public class SimpleBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
+
+    //________MOVEMENT______________
+    protected Vector2 velocity;
+    protected Vector2 acceleration;
     public float speed = 0.0f;
     public float gravity = 3.0f;
 
@@ -30,8 +34,7 @@ public class SimpleBall : Ball
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
-        velocity = speed * dirVector;
-        acceleration = gravity * dirVector;
+        acceleration = gravity * axisVector;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -45,7 +48,7 @@ public class SimpleBall : Ball
         bool error = false;
 
         if(numNotes > 1) error = true;
-        
+
         return error;
     }
 
@@ -80,13 +83,9 @@ public class SimpleBall : Ball
         float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
         float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
 
-        Debug.Log("TIMEX: " + timeX);
-
         float deltaY = GetTrueDeltaY(pointA, pointB);
         float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
         float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
-
-        Debug.Log("TIME Y: " + timeY);
 
         float[] fallTimes = {timeX, timeY};
 
