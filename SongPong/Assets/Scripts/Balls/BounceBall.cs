@@ -51,93 +51,82 @@ public class BounceBall : Ball
     }
     
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DROP TIME
+ * MOVE TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float[] CalcMoveTime()
+    public override float CalcMoveTime()
     {
+        float time;
         if(currentNote == 0)
         {
-            return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));           // LOCKED TO Y
+            time = CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));           // TODO MAKE IT WORK WITH EITHER PADDLE!!!
         }
         else
-            return CalcBounceTime();
-    }
+        {
+            time = CalcBounceTime();
+        }
 
-    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
-    {
-        return Mathf.Abs(pointA.y - pointB.y) - radius;
-    }
-
-    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
-    {
-        return Mathf.Abs(pointA.x - pointB.x) - radius;
+        return time;
     }
 
     /**
      * Calculates the time it would take this ball to fall between pointA and pointB
      **/
-    public float[] CalcTimeToFall(Vector2 pointA, Vector2 pointB)
+    public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
     {
         // Calculate delta T
             // using physics equation dy = v0t + 1/2at^2 solved for time in the form
             // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float deltaX = GetTrueDeltaX(pointA, pointB);
-        float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
-        float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
-
         float deltaY = GetTrueDeltaY(pointA, pointB);
         float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
         float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
 
-        float[] fallTimes = {timeX, timeY};
-
-        return fallTimes;
+        return timeY;
     }
 
     /**
-     * Calculates the velocity needed to hit on the next notes' time.
+     * Returns the needed to hit on the next notes' time.
      */
-    private float[] CalcBounceTime()
+    private float CalcBounceTime()
     {
         // Calculate time to hit the next note (this is returned)
         float deltaT = notes[currentNote].hitTime - Time.time;
 
-        // Get distance between the previous notes' column and the next
-        Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
-        Debug.Log("DELTA D: " + deltaD);
-
-        // v = d / t
-
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
 
-        // Calculate the velocity needed to hit at given deltaT.
-        // Comes from the kinematic equation v = v0 + at solved for v0
-        // v0 = -at
-        // we calculate only time to reach the peak, so (t/2)
-        //velocity = -acceleration * (deltaT / 2) + (otherAxisVector * deltaD / deltaT);
-
-        velocity = Vector2.zero;
-        velocity += axisVector * -gravity * (deltaT / 2);
-        velocity += otherAxisVector * (deltaD / deltaT);
-
-        float[] times = {0,deltaT};                                                                 // LOCKED TO Y
-        return times;
+        return deltaT;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    /**
+     *  Updates the balls' velocity and time for its next hit
+     */
+    public override void ResetMove()
+    {
+        // Get time to next note hit
+        moveTime = CalcMoveTime();
+
+        // Get distance between the current column and the next
+        Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
+
+        // Calculate the velocity needed to hit at new deltaT.
+        // Comes from the kinematic equation v = v0 + at solved for v0
+        // v0 = -at
+        // we calculate only time to reach the peak, so (t/2)
+        velocity = Vector2.zero;
+        velocity += axisVector * -gravity * (moveTime / 2);
+        velocity += otherAxisVector * (deltaD / moveTime);
+    }
+
     public override void MoveActions()
     {
         // UPDATE VELOCITY along main axis
         Vector2 velocityStep = axisVector * (gravity * Time.deltaTime);
         velocity += velocityStep;
-
-        // update velocity along other axis
-        
 
         // UPDATE POSITION
         Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
@@ -182,12 +171,6 @@ public class BounceBall : Ball
         }
     }
 
-    public override void CatchActions()
-    {
-        base.CatchActions();
-        velocity = -velocity;
-    }
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -203,7 +186,17 @@ public class BounceBall : Ball
         exit = true;
     }
 
-    /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-     * DEBUG
-     *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * CALCULATIONS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.y - pointB.y) - radius;
+    }
+
+    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
+    {
+        return Mathf.Abs(pointA.x - pointB.x) - radius;
+    }
 }

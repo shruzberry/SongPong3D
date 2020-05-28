@@ -76,7 +76,7 @@ public class BallDropper : MonoBehaviour
         UpdateActiveBalls();
 
         RemoveFinishedBalls();
-        
+
         CheckDrop();
     }
 
@@ -93,7 +93,7 @@ public class BallDropper : MonoBehaviour
         foreach(Ball ball in activeBallList){
             ball.UpdateBall();
 
-            if(ball.checkIfFinished()) { 
+            if(ball.exit) { 
 				finishedBallList.Add(ball);
 			}
         }
@@ -113,7 +113,7 @@ public class BallDropper : MonoBehaviour
             // this method is very brute force and could be improved by sorting the balls first
             foreach(Ball ball in waitingBallList)
             {
-                if(!isFinished && ball.NextHitTime() - ball.moveTimes[1] < Time.time)               // CURRENTLY LOCKED TO Y
+                if(!isFinished && ball.NextHitTime() - ball.moveTime < Time.time)
                 {
                     droppedBalls.Add(ball);
                     DropBall(ball);

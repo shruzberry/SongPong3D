@@ -53,10 +53,10 @@ public class SimpleBall : Ball
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DROP TIME
+ * MOVE TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float[] CalcMoveTime()
+    public override float CalcMoveTime()
     {
         return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));
     }
@@ -74,22 +74,16 @@ public class SimpleBall : Ball
     /**
      * Calculates the time it would take this ball to fall between pointA and pointB
      **/
-    public float[] CalcTimeToFall(Vector2 pointA, Vector2 pointB)
+    public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
     {
         // Calculate delta T
             // using physics equation dy = v0t + 1/2at^2 solved for time in the form
             // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float deltaX = GetTrueDeltaX(pointA, pointB);
-        float determinantX = (Mathf.Pow(speed, 2) + (2 * gravity * deltaX));
-        float timeX = (-speed + Mathf.Sqrt(determinantX)) / gravity;
-
         float deltaY = GetTrueDeltaY(pointA, pointB);
         float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
         float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
 
-        float[] fallTimes = {timeX, timeY};
-
-        return fallTimes;
+        return timeY;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -168,18 +162,5 @@ public class SimpleBall : Ball
     {
         yield return new WaitForSeconds(3.0f);
         exit = true;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DEBUG
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    void OnDrawGizmos() 
-    {
-        if(spawnLoc != null){
-            Gizmos.color = Color.green;
-            Vector2 targetLoc = new Vector2(spawnLoc.x, spawnLoc.y + deltaH);
-            Gizmos.DrawLine(spawnLoc, targetLoc);
-        }
     }
 }

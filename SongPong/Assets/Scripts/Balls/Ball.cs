@@ -64,7 +64,7 @@ public abstract class Ball : MonoBehaviour
 
     //___________TIME___________________
     public float spawnTime;
-    public float[] moveTimes; // time it takes from spawn to target
+    public float moveTime; // time it takes from spawn to target
     public float[] catchTimes;
 
     //___________INDEXING________________
@@ -99,6 +99,10 @@ public abstract class Ball : MonoBehaviour
         this.id = data.id;
         this.type = data.type;
 
+        // APPEARANCE
+        this.name = id.ToString() + "_" + type.ToString();
+        gameObject.layer = LayerMask.NameToLayer("Balls");
+
         // NOTES
         this.notes = SortNotes(data.notes);
         currentNote = 0;
@@ -110,10 +114,6 @@ public abstract class Ball : MonoBehaviour
         // REFERENCES
         this.paddleManager = paddleManager;
         this.spawnInfo = spawner;
-
-        // APPEARANCE
-        this.name = id.ToString() + "_" + type.ToString();
-        gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
@@ -133,16 +133,10 @@ public abstract class Ball : MonoBehaviour
         }
 
         // CALC DROP TIME
-        moveTimes = CalcMoveTime();
+        moveTime = CalcMoveTime();
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
-    }
-
-    public Vector2 GetNotePosition(int index)
-    {
-        int spawnNum = notes[index].hitPosition;
-        return spawnInfo.GetSpawnLocation(spawnNum);
     }
 
     public void SetAxisVectors()
@@ -155,6 +149,29 @@ public abstract class Ball : MonoBehaviour
         else if(axis == Axis.x && direction == Direction.negative) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,1);}
     }
 
+    public virtual void InitializeBallSpecific(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * NOTES
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void NextNote()
+    {
+        if(currentNote < numNotes){currentNote++;}
+    }
+
+    /**
+     * Returns the position in world coordinates of the given note
+     */
+    public Vector2 GetNotePosition(int index)
+    {
+        int spawnNum = notes[index].hitPosition;
+        return spawnInfo.GetSpawnLocation(spawnNum);
+    }
+
+    /**
+     * Sort this balls' notes according to their hit time
+     */
     protected List<NoteData> SortNotes(NoteData[] notes)
     {
         try
@@ -172,12 +189,10 @@ public abstract class Ball : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.LogError("Ball " + name + " has one or more null notes.");
+            Debug.LogError("Ball " + name + " has one or more incorrect notes.");
             return null;
         }
     }
-
-    public virtual void InitializeBallSpecific(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * ERROR
@@ -210,34 +225,30 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
-    public abstract float[] CalcMoveTime();
+    public abstract float CalcMoveTime();
+    public virtual void ResetMove(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    virtual public void CatchActions()
+    public virtual void CatchActions()
     {
         if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
-
-        if(currentNote < numNotes)
-        {
-            currentNote++;
-        }
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MISS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract public bool CheckMiss();
-    abstract public void MissActions();
+    public abstract bool CheckMiss();
+    public abstract void MissActions();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract public void ExitActions();
+    public abstract void ExitActions();
 
     public void DeleteBall()
     {
@@ -248,9 +259,6 @@ public abstract class Ball : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public float getSize(){return size;}
-
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public bool checkIfFinished(){return exit;}
 }
