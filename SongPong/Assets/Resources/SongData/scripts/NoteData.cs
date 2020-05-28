@@ -15,6 +15,7 @@ public class NoteData : ScriptableObject
     
     public static int CompareNotesByHitTime(NoteData a, NoteData b)
     {
+        if(a.hitTime == b.hitTime) {throw new System.ArgumentException("contains notes with the same hit time.");}
         return a.hitTime.CompareTo(b.hitTime);
     }
 

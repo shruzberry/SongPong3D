@@ -37,7 +37,7 @@ public class BallDebug : MonoBehaviour
             catchTime = ball.catchTimes[currentNote] - ball.catchTimes[currentNote - 1];
         }
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
-        Debug.Log("Expected Move Time: " + ball.moveTime);
+        Debug.Log("Expected Move Time: " + ball.moveTime);                                              // LOCKED TO Y
         Debug.Log("Delta Time: " + catchTime);
         Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at time " + Time.time);
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");

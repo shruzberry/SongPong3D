@@ -31,12 +31,13 @@ public abstract class Ball : MonoBehaviour
     protected float size;
 
     protected Axis axis;
-    protected Vector2 dirVector;
+    protected Vector2 axisVector; // the unit vector that represents the base of the axis and direction
+    protected Vector2 otherAxisVector; // the unit vector that represents the other axis (with same direction)
 
     //___________REFERENCES_____________
     protected PaddleManager paddleManager;
     protected Paddle paddle;
-    protected float paddleAxis;
+    protected SpawnInfo spawnInfo;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -59,10 +60,7 @@ public abstract class Ball : MonoBehaviour
     public BallData ballData;
 
     //___________MOVEMENT_______________
-    [SerializeField]
-    protected Vector2 velocity;
-    protected Vector2 acceleration;
-    protected Direction direction;
+    public Direction direction;
 
     //___________TIME___________________
     public float spawnTime;
@@ -97,11 +95,13 @@ public abstract class Ball : MonoBehaviour
     public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, PaddleManager paddleManager)
     {
         // INITIALIZE ID AND NOTES
-        this.id = data.id;
         this.ballData = data;
+        this.id = data.id;
         this.type = data.type;
-        string ballName = id.ToString() + "_" + type.ToString();
-        this.name = ballName;
+
+        // APPEARANCE
+        this.name = id.ToString() + "_" + type.ToString();
+        gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // NOTES
         this.notes = SortNotes(data.notes);
@@ -113,30 +113,65 @@ public abstract class Ball : MonoBehaviour
 
         // REFERENCES
         this.paddleManager = paddleManager;
-        this.paddleAxis = paddleManager.GetPaddleAxis();
-
-        // APPEARANCE
-        gameObject.layer = LayerMask.NameToLayer("Balls");
+        this.spawnInfo = spawner;
 
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
-        int spawnNumber = notes[currentNote].hitPosition; // the first note's spawn location
-        spawnLoc = spawner.GetSpawnLocation(spawnNumber);
+        spawnLoc = GetNotePosition(currentNote);
         transform.position = spawnLoc;
 
         // DIRECTION
-        direction = notes[currentNote].noteDirection;
+        SetAxisVectors();
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
         // CHECK FOR ERRORS
-        CheckForInvalid();
+        if(CheckForInvalid() == true)
+        {
+            Debug.LogWarning("BALL " + name + " did not initialize because it has incorrect parameters.");
+        }
+
+        // CALC DROP TIME
+        moveTime = CalcMoveTime();
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
     }
 
+    public void SetAxisVectors()
+    {
+        direction = notes[currentNote].noteDirection;
+        
+        if(axis == Axis.y && direction == Direction.positive) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.y && direction == Direction.negative) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.x && direction == Direction.positive) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
+        else if(axis == Axis.x && direction == Direction.negative) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+    }
+
+    public virtual void InitializeBallSpecific(){}
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * NOTES
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void NextNote()
+    {
+        if(currentNote < numNotes){currentNote++;}
+    }
+
+    /**
+     * Returns the position in world coordinates of the given note
+     */
+    public Vector2 GetNotePosition(int index)
+    {
+        int spawnNum = notes[index].hitPosition;
+        return spawnInfo.GetSpawnLocation(spawnNum);
+    }
+
+    /**
+     * Sort this balls' notes according to their hit time
+     */
     protected List<NoteData> SortNotes(NoteData[] notes)
     {
         try
@@ -154,18 +189,16 @@ public abstract class Ball : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.LogError("Ball " + name + " has one or more null notes.");
+            Debug.LogError("Ball " + name + " has one or more incorrect notes.");
             return null;
         }
     }
-
-    public virtual void InitializeBallSpecific(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * ERROR
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    protected virtual void CheckForInvalid(){}
+    protected virtual bool CheckForInvalid(){return false;}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * IDLE
@@ -193,33 +226,29 @@ public abstract class Ball : MonoBehaviour
 
     public abstract void MoveActions();
     public abstract float CalcMoveTime();
+    public virtual void ResetMove(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    virtual public void CatchActions()
+    public virtual void CatchActions()
     {
         if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
-
-        if(currentNote < numNotes)
-        {
-            currentNote++;
-        }
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MISS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract public bool CheckMiss();
-    abstract public void MissActions();
+    public abstract bool CheckMiss();
+    public abstract void MissActions();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    abstract public void ExitActions();
+    public abstract void ExitActions();
 
     public void DeleteBall()
     {
@@ -230,11 +259,6 @@ public abstract class Ball : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public float getSize(){return size;}
-
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public bool checkIfFinished(){return exit;}
-
-    public List<NoteData> getNotes(){return notes;}
 }

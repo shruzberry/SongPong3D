@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
-  m_Name: DaDaDa_4
+  m_Name: BounceBall
   m_EditorClassIdentifier: 
   id: 0
   enabled: 1
-  type: 0
+  type: 1
   notes:
-  - {fileID: 11400000, guid: 187d093ac6d354602bc1e0b5d40ccc48, type: 2}
-  prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}
+  - {fileID: 11400000, guid: a4f361d6a308849d2826be1bda4b9063, type: 2}
+  - {fileID: 11400000, guid: 5aa157078cf82fc4f9afa2424452cbd3, type: 2}
+  prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}

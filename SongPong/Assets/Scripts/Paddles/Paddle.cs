@@ -11,8 +11,8 @@ public class Paddle : MonoBehaviour
 
     //____________ATTRIBUTES_______________
     public Paddles paddleNum;
-    private float paddleRadius; // the half-width or radius of the paddle
-    private float paddleHeight;
+    public float radius; // the half-width or radius of the paddle
+    public float height;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INIT
@@ -27,8 +27,8 @@ public class Paddle : MonoBehaviour
         this.bounds = bounds;
         this.paddleNum = num;
 
-        paddleRadius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        paddleHeight = GetComponent<SpriteRenderer>().bounds.size.y;
+        radius = GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        height = GetComponent<SpriteRenderer>().bounds.size.y;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

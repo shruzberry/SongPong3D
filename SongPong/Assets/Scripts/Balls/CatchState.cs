@@ -10,8 +10,11 @@ public class CatchState : BallState
     {
         ball.CatchActions();
 
+        ball.NextNote();
+
         if(ball.currentNote < ball.numNotes)
         {
+            ball.ResetMove();      
             ball.SetState(new MoveState(ball));
         }
         else

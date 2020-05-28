@@ -26,8 +26,7 @@ public class IdleState : BallState
     {
         ball.GetComponent<SpriteRenderer>().enabled = true;
 
-        //one fixed time step is added because the first move hasn't been called yet
-        ball.spawnTime = Time.time + Time.fixedDeltaTime;
+        ball.spawnTime = Time.time;
     }
 
 }
