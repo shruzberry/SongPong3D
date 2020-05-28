@@ -46,7 +46,6 @@ public class BallFinder : EditorWindow
     int ballButtonWidth = 100;
 
     int jumpToTime;
-    bool songPlaying;
 
     Rect fullWindow;
     Rect navBarSection;
@@ -58,7 +57,7 @@ public class BallFinder : EditorWindow
 * STARTUP FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    [MenuItem("Window/BallFinder")]
+    [MenuItem("Window/Ball Finder")]
     static void OpenWindow()
     {
         BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Ball Finder");
@@ -80,12 +79,8 @@ public class BallFinder : EditorWindow
         DrawRowLayouts();
         DrawNavSettings();
         DrawActiveBalls();
-        UpdateSong();
 
         songData = songController.songData;
-
-        if(Application.isPlaying)
-            CheckMouseHover();
     }
 
     void DrawRowLayouts()
@@ -167,40 +162,17 @@ public class BallFinder : EditorWindow
                 foreach(Ball ball in activeBalls)
                 {
                     EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
+                    foreach(NoteData note in ball.getNotes())
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space( 20f );
+                        EditorGUILayout.ObjectField(note, typeof(Object), true);
+                        GUILayout.EndHorizontal();
+                    }
                 }
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
-
-    void CheckMouseHover()
-    {
-        if(songPlaying && fullWindow.Contains(Event.current.mousePosition))
-        {
-            songController.Pause();
-            songPlaying = false;
-            Time.timeScale = 0.0f;
-        }
-        if(!songPlaying && !fullWindow.Contains(Event.current.mousePosition))
-        {
-            songController.Play();
-            songPlaying = true;
-            Time.timeScale = 1.0f;
-        }
-        
-    }
-
-    bool isMouseOverGame()
-    {
-        return (Input.mousePosition.x == 0 || Input.mousePosition.y == 0 || Input.mousePosition.x == Screen.width - 1 || Input.mousePosition.y == Screen.height - 1);
-    }
-
-    private void UpdateSong()
-    {/*
-        lastSong = songData;
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
-        if (lastSong.name != songController.songData.name);
-            songController.LoadSong(songData);
-    */}
 
     public void Update()
     {

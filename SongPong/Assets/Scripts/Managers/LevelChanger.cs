@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
-    private Animator animator;
+    public Animator animator;
     private int levelToLoad;
 
     public override void Awake()
@@ -12,10 +12,11 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         animator = GetComponent<Animator>();
     }
 
-    private void Update() {
+    private void Update() 
+    {
         if(Input.GetMouseButtonDown(0))
         {
-            FadeToNextLevel();
+            //FadeToNextLevel();
         }
     }
 

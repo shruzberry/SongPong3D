@@ -7,11 +7,20 @@ using Types;
 public class NoteData : ScriptableObject
 {
     public int hitPosition;
+    public float hitBeat;
+    [HideInInspector]
     public float hitTime;
     public Direction noteDirection;
-
+    private SongController songController;
+    
     public static int CompareNotesByHitTime(NoteData a, NoteData b)
     {
         return a.hitTime.CompareTo(b.hitTime);
+    }
+
+    void OnEnable()
+    {
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        hitTime = songController.ToTime(hitBeat);
     }
 }

@@ -12,9 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: a78b701d17ea944359998751347e0df6
   - enabled: 1
-    path: Assets/Scenes/PhysicsTest.unity
+    path: Assets/Scenes/Development/PhysicsTest.unity
     guid: bdc519e5eb1314d0f84a573e569d3468
   - enabled: 1
-    path: Assets/Scenes/Sean Workshop.unity
+    path: Assets/Scenes/Development/Sean Workshop.unity
     guid: cf64b8a6e3cff2d46a73259743d29009
   m_configObjects: {}

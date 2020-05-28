@@ -39,7 +39,9 @@ public class SongController : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public SongData songData;
-    public int currentBeat;
+    //[HideInInspector]
+    public float currentBeat;
+    [HideInInspector]
     public float songTime;
 
     [HideInInspector]
@@ -49,6 +51,20 @@ public class SongController : MonoBehaviour
 
     private AudioSource source;
     private int startTime;
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* STATIC FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public float ToBeat(float time)
+    {
+        return (float)((time / 60.0f) * songData.bpm);
+    }
+
+    public float ToTime(float beat)
+    {
+        return (60.0f / songData.bpm) * (beat);
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -64,12 +80,8 @@ public class SongController : MonoBehaviour
     }
 
     public void Play(){source.Play();}
-    public void Pause(){source.Pause();}
     
-    public int ToBeat(float time)
-    {
-        return (int)(time / 60) * songData.bpm;
-    }
+    public void Pause(){source.Pause();}
 
     public void UpdateSongTime()
     {
@@ -78,13 +90,13 @@ public class SongController : MonoBehaviour
 
     public void JumpToStart()
     {
-        goToTime(songData.startBeat);
+        goToTime(ToTime(songData.startBeat) + songData.offset);
     }
 
-    public void JumpToBeat(int beat)
+    public void JumpToBeat(float beat)
     {
         goToTime(
-            ((float)(beat * 60)) / songData.bpm
+            ToTime(beat)
         );
     }
 
@@ -105,6 +117,7 @@ public class SongController : MonoBehaviour
 
     private void goToTime(float time)
     {
+        print("jumping to time: " + time);
         source.time = time;
         songTime = source.time;
         source.Play();
@@ -124,12 +137,13 @@ public class SongController : MonoBehaviour
 
     void Start()
     {
-        JumpToBeat(startTime);
+        LoadSong(songData);
+        JumpToStart();
     }
 
     void Update()
     {
-        currentBeat = (int)((source.time / 60.0f) * songData.bpm);
+        currentBeat = ToBeat(songTime);
         songTime = source.time;
     }
 }

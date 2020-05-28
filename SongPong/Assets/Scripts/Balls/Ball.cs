@@ -235,4 +235,6 @@ public abstract class Ball : MonoBehaviour
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public bool checkIfFinished(){return exit;}
+
+    public List<NoteData> getNotes(){return notes;}
 }

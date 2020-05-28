@@ -32,7 +32,7 @@ public class NoteListener : MonoBehaviour
 
     public List<NoteData> data;
 
-    private bool active = false;
+    private bool active = true;
     private SongController sc;
     private SpawnInfo si;
     
@@ -58,15 +58,12 @@ public class NoteListener : MonoBehaviour
     
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
         {
             NoteData nd = new NoteData();
             
             nd.hitPosition = si.GetNearestColumn(Input.mousePosition);
-            if(sc != null)
-            {
-                nd.hitTime = sc.currentBeat;
-            }
+            nd.hitBeat = (int) sc.currentBeat;
             nd.noteDirection = Direction.positive;
 
             data.Add(nd);
