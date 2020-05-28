@@ -191,7 +191,7 @@ PrefabInstance:
     - target: {fileID: 9146009305604118117, guid: 826d9436a67ab482c8f1875a17dbf645,
         type: 3}
       propertyPath: printDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 826d9436a67ab482c8f1875a17dbf645, type: 3}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e59a33faa4154d698348ec1453570e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameAxis: 1
+  gameAxis: 0
 --- !u!4 &105164718
 Transform:
   m_ObjectHideFlags: 0

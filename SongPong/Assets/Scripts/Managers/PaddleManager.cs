@@ -44,14 +44,14 @@ public class PaddleManager : MonoBehaviour
         float[] P2bounds = {paddleXAxis, paddleXAxis, -screenBounds.y + paddleRadius, screenBounds.y - paddleRadius};
 
         // SPAWN P1
-        P1 = Instantiate(paddlePrefab).GetComponent<Paddle>();
+        P1 = Instantiate(paddlePrefab, new Vector2(-paddleXAxis, 0), Quaternion.identity).GetComponent<Paddle>();
         P1.Init(Paddles.P1, P1bounds);
         P1.gameObject.name = "P1";
         P1.transform.parent = this.gameObject.transform;
         P1.transform.eulerAngles = new Vector3(0,0,-90);
 
         // SPAWN P2
-        P2 = Instantiate(paddlePrefab).GetComponent<Paddle>();
+        P2 = Instantiate(paddlePrefab, new Vector2(paddleXAxis, 0), Quaternion.identity).GetComponent<Paddle>();
         P2.Init(Paddles.P2, P2bounds);
         P2.gameObject.name = "P2";
         P2.transform.eulerAngles = new Vector3(0,0,90);
@@ -88,30 +88,28 @@ public class PaddleManager : MonoBehaviour
         }
     }
 
-    public Vector2 GetPaddleLocation(Paddles paddle)
+    public Vector2 GetPaddleLocation(Paddles paddleName)
     {
+        // Set which paddle it wants
         Paddle thePaddle;
-        if(paddle == Paddles.P1) thePaddle = P1;
+        if(paddleName == Paddles.P1) thePaddle = P1;
         else thePaddle = P2;
 
-        if(thePaddle != null)
+        if(gameAxis == Axis.y)
         {
-            if(gameAxis == Axis.y)
-            {
-                Vector3 pos = thePaddle.transform.position;
-                float paddleHalfHeight = thePaddle.height / 2;
-                return new Vector2(pos.x, pos.y + paddleHalfHeight);
-            }
-            else
-            {
-                Debug.LogError("NOT IMPLEMENTED YET");
-                return Vector2.zero;
-            }
+            Vector3 pos = thePaddle.transform.position;
+            float paddleHalfHeight = thePaddle.height / 2;
+            return new Vector2(pos.x, pos.y + paddleHalfHeight);
         }
         else
         {
-            Debug.LogError("Paddle has not been set but its location is being accessed.");
-            return Vector2.zero;
+            Vector3 pos = thePaddle.transform.position;
+            float paddleHalfHeight = thePaddle.height / 2;
+
+            if(thePaddle == P1)
+                return new Vector2(pos.x + paddleHalfHeight, pos.y);
+            else
+                return new Vector2(pos.x - paddleHalfHeight, pos.y);
         }
     }
 
