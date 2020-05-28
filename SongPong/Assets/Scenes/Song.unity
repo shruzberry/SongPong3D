@@ -535,6 +535,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GamePaddle
       objectReference: {fileID: 0}
+    - target: {fileID: 7252988840568574120, guid: d7d999af5da8c472cb1c3712652c4264,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7252988840568574122, guid: d7d999af5da8c472cb1c3712652c4264,
         type: 3}
       propertyPath: m_LocalPosition.x

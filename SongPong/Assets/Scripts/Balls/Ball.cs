@@ -261,4 +261,6 @@ public abstract class Ball : MonoBehaviour
 
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
+    public List<NoteData> getNotes(){return notes;}
+
 }
