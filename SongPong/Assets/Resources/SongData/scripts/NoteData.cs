@@ -21,7 +21,10 @@ public class NoteData : ScriptableObject
 
     void OnEnable()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
-        hitTime = songController.ToTime(hitBeat);
+        if (GameObject.Find("SongController"))
+        {
+            songController = GameObject.Find("SongController").GetComponent<SongController>();
+            hitTime = songController.ToTime(hitBeat);
+        }
     }
 }

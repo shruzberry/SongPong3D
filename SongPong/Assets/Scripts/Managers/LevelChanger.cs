@@ -27,13 +27,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void FadeToLevel(int levelIndex)
     {
-        print("made it to fade trigger");
         levelToLoad = levelIndex;
-        if (animator.gameObject.activeSelf)
-        {
-            print("doing it");
-            animator.SetTrigger("FadeOut");
-        }
+        animator.SetTrigger("FadeOut");
     }
 
     public void OnFadeComplete()
