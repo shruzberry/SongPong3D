@@ -52,8 +52,8 @@ public class NoteListener : MonoBehaviour
 
     void Awake()
     {
-        sc = GameObject.Find("SongController").GetComponent<SongController>();
-        si = GameObject.Find("Spawner").GetComponent<SpawnInfo>();
+        sc = FindObjectOfType<SongController>();
+        si = FindObjectOfType<SpawnInfo>();
     }
     
     void Update()
