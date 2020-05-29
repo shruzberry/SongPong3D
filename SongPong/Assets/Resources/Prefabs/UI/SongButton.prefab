@@ -118,16 +118,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 353941582984348792, guid: 2ea64c75d62f04b599de28581d0a3c86,
+      - m_Target: {fileID: 353941582984348678, guid: 2ea64c75d62f04b599de28581d0a3c86,
           type: 3}
-        m_MethodName: FadeToLevel
-        m_Mode: 3
+        m_MethodName: SetTrigger
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: FadeOut
           m_BoolArgument: 0
         m_CallState: 1
 --- !u!1 &3779174053334200599

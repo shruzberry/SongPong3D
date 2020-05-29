@@ -18,6 +18,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         {
             FadeToNextLevel();
         }
+
+        if(SceneManager.GetActiveScene().buildIndex == 1)
+            this.gameObject.SetActive(false);
+
     }
 
     public void FadeToNextLevel()
