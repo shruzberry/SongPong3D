@@ -48,6 +48,7 @@ public class SimpleBall : Ball
         bool error = false;
 
         if(numNotes > 1) error = true;
+        if(float.IsNaN(moveTime)) error = true;
 
         return error;
     }
@@ -63,27 +64,35 @@ public class SimpleBall : Ball
 
     private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
     {
-        return Mathf.Abs(pointA.y - pointB.y) - radius;
+        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
+        return Mathf.Abs(pointA.y - pointB.y + (negative * radius));
     }
 
     private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
     {
-        return Mathf.Abs(pointA.x - pointB.x) - radius;
+        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
+        return Mathf.Abs(pointA.x - pointB.x + (negative * radius));
     }
 
     /**
      * Calculates the time it would take this ball to fall between pointA and pointB
      **/
     public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
-    {
+    {   
+        float delta;
+        if(axis == Axis.y)
+            delta = GetTrueDeltaY(pointA, pointB);
+        else
+            delta = GetTrueDeltaX(pointA, pointB);
         // Calculate delta T
             // using physics equation dy = v0t + 1/2at^2 solved for time in the form
             // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float deltaY = GetTrueDeltaY(pointA, pointB);
-        float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
-        float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
+        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
+        float time = (-speed + Mathf.Sqrt(determinant)) / gravity;
 
-        return timeY;
+        if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
+
+        return time;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -139,7 +148,7 @@ public class SimpleBall : Ball
             paddle = other.gameObject.GetComponent<Paddle>();
             
             caught = true;
-            catchTimes[currentNote] = Time.time;
+            catchTimes[currentNote] = song.GetSongTime();
         }
     }
 

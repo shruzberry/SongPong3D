@@ -110,6 +110,11 @@ public class SongController : MonoBehaviour
         goToTime(songData.endBeat);
     }
 
+    public float GetSongTime()
+    {
+        return source.time;
+    }
+
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS

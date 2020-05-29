@@ -74,23 +74,30 @@ public class BounceBall : Ball
      **/
     public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
     {
+        float delta;
+        if(axis == Axis.y)
+            delta = GetTrueDeltaY(pointA, pointB);
+        else
+            delta = GetTrueDeltaX(pointA, pointB);
         // Calculate delta T
             // using physics equation dy = v0t + 1/2at^2 solved for time in the form
             // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float deltaY = GetTrueDeltaY(pointA, pointB);
-        float determinantY = (Mathf.Pow(speed, 2) + (2 * gravity * deltaY));
-        float timeY = (-speed + Mathf.Sqrt(determinantY)) / gravity;
+        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
+        float time = (-speed + Mathf.Sqrt(determinant )) / gravity;
 
-        return timeY;
+        if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
+
+        return time;
     }
 
     /**
      * Returns the needed to hit on the next notes' time.
+     * TODO change to song time?
      */
     private float CalcBounceTime()
     {
         // Calculate time to hit the next note (this is returned)
-        float deltaT = notes[currentNote].hitTime - Time.time;
+        float deltaT = notes[currentNote].hitTime - song.GetSongTime();
 
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
@@ -153,7 +160,6 @@ public class BounceBall : Ball
                 missed = true;
             }
         }
-
         return missed;
     }
 
@@ -167,7 +173,7 @@ public class BounceBall : Ball
     {
         if(other.gameObject.tag == "Paddle"){
             caught = true;
-            catchTimes[currentNote] = Time.time;
+            catchTimes[currentNote] = song.GetSongTime();
         }
     }
 
@@ -192,11 +198,13 @@ public class BounceBall : Ball
 
     private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
     {
-        return Mathf.Abs(pointA.y - pointB.y) - radius;
+        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
+        return Mathf.Abs(pointA.y - pointB.y + (negative * radius));
     }
 
     private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
     {
-        return Mathf.Abs(pointA.x - pointB.x) - radius;
+        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
+        return Mathf.Abs(pointA.x - pointB.x + (negative * radius));
     }
 }

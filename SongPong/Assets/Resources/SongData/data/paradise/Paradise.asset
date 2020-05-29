@@ -17,7 +17,7 @@ MonoBehaviour:
   name: Paradise
   dataPath: Assets/Resources/SongData/data/paradise
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
-  startBeat: 60
+  startBeat: 0
   endBeat: 650
   offset: 0
   myPath: Assets/Resources/SongData/data/paradise/Paradise.asset

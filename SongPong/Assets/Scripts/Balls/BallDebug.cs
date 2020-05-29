@@ -7,10 +7,13 @@ public class BallDebug : MonoBehaviour
     public bool printDebug;
 
     BallDropper ballDropper;
+    SongController song;
     // Start is called before the first frame update
     void Awake()
     {
         ballDropper = FindObjectOfType<BallDropper>();
+        song = FindObjectOfType<SongController>();
+
         ballDropper.onBallSpawned += AttachBallListener;
     }
 
@@ -37,9 +40,9 @@ public class BallDebug : MonoBehaviour
             catchTime = ball.catchTimes[currentNote] - ball.catchTimes[currentNote - 1];
         }
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
-        Debug.Log("Expected Move Time: " + ball.moveTime);                                              // LOCKED TO Y
+        Debug.Log("Expected Move Time: " + ball.moveTime);
         Debug.Log("Delta Time: " + catchTime);
-        Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at time " + Time.time);
+        Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at time " + song.currentBeat);
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
     }
 }

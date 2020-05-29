@@ -150,7 +150,7 @@ public class BallDropper : MonoBehaviour
             // Initialize the ball with id and notes
             data.id = ballID++;
 
-            ball.InitializeBall(data, axisManager, spawner, paddleManager);
+            ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
 
             if(gameAxis == Axis.y)
             {

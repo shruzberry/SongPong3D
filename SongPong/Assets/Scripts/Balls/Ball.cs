@@ -38,6 +38,7 @@ public abstract class Ball : MonoBehaviour
     protected PaddleManager paddleManager;
     protected Paddle paddle;
     protected SpawnInfo spawnInfo;
+    public SongController song;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -92,8 +93,13 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, PaddleManager paddleManager)
+    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, PaddleManager paddleManager, SongController song)
     {
+        // REFERENCES
+        this.paddleManager = paddleManager;
+        this.spawnInfo = spawner;
+        this.song = song;
+
         // INITIALIZE ID AND NOTES
         this.ballData = data;
         this.id = data.id;
@@ -111,13 +117,10 @@ public abstract class Ball : MonoBehaviour
         // INDEXING
         catchTimes = new float[numNotes + 1];
 
-        // REFERENCES
-        this.paddleManager = paddleManager;
-        this.spawnInfo = spawner;
-
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
         spawnLoc = GetNotePosition(currentNote);
+        Debug.Log("SPAWN: " + spawnLoc);
         transform.position = spawnLoc;
 
         // DIRECTION
@@ -126,14 +129,14 @@ public abstract class Ball : MonoBehaviour
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
 
+        // CALC DROP TIME
+        moveTime = CalcMoveTime();
+
         // CHECK FOR ERRORS
         if(CheckForInvalid() == true)
         {
             Debug.LogWarning("BALL " + name + " did not initialize because it has incorrect parameters.");
         }
-
-        // CALC DROP TIME
-        moveTime = CalcMoveTime();
 
         // START IN IDLE STATE
         SetState(new IdleState(this));

@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class IdleState : BallState
 {
+    SongController song;
+
     public IdleState(Ball ball) : base(ball)
     {
+        song = ball.song;
     }
 
     public override void OnStateEnter()
@@ -26,7 +29,7 @@ public class IdleState : BallState
     {
         ball.GetComponent<SpriteRenderer>().enabled = true;
 
-        ball.spawnTime = Time.time;
+        ball.spawnTime = song.GetSongTime();
     }
 
 }
