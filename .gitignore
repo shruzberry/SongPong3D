@@ -60,5 +60,5 @@ sysinfo.txt
 crashlytics-build.properties
 
 # SongPong Specific ___CUSTOM___
-*.asset
 *.swp
+*.asset
