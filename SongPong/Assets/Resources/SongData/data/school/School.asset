@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3e293e262d3d1f4c8ce01b9950277b2, type: 3}
+  m_Name: School
+  m_EditorClassIdentifier: 
+  currentTime: 0
+  bpm: 96
+  name: School
+  dataPath: Assets/Resources/SongData/data/school
+  song: {fileID: 8300000, guid: ed444094b338b49a7b5aba3b2454e1d3, type: 3}
+  startBeat: 0
+  endBeat: 120
+  offset: 3.3
+  myPath: Assets/Resources/SongData/data/school/School.asset
