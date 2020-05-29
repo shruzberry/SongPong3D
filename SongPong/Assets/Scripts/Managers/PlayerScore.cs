@@ -90,7 +90,8 @@ public class PlayerScore : MonoBehaviour
 
     private void Score(Ball ball, Paddle paddle)
     {
-        if(paddle.paddleNum == player)
+        print("scoring" + paddle.paddleNum);
+        //if(paddle.paddleNum == player)
         {
             score += 1;
         }

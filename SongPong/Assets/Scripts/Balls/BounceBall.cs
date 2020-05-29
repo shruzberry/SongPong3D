@@ -171,9 +171,11 @@ public class BounceBall : Ball
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Paddle"){
+        if(other.gameObject.tag == "Paddle")
+        {
             caught = true;
             catchTimes[currentNote] = song.GetSongTime();
+            paddle = other.gameObject.GetComponent<Paddle>();
         }
     }
 
