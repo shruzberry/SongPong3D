@@ -9,14 +9,14 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public override void Awake()
     {
         base.Awake();
-        animator = GetComponent<Animator>();
+        animator = this.GetComponent<Animator>();
     }
 
     private void Update() 
     {
         if(Input.GetMouseButtonDown(0))
         {
-            //FadeToNextLevel();
+            FadeToNextLevel();
         }
     }
 
@@ -27,8 +27,13 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void FadeToLevel(int levelIndex)
     {
+        print("made it to fade trigger");
         levelToLoad = levelIndex;
-        animator.SetTrigger("FadeOut");
+        if (animator.gameObject.activeSelf)
+        {
+            print("doing it");
+            animator.SetTrigger("FadeOut");
+        }
     }
 
     public void OnFadeComplete()
