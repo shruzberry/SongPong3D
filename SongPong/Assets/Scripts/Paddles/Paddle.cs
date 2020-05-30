@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
 using Types;
+using UnityEngine.InputSystem;
 
 public class Paddle : MonoBehaviour
 {
+    //____________CONTROLS_________________
+    private InputMaster input;
+
     //____________REFERENCES_______________
     private AxisManager axisManager;
 
     //____________MOVEMENT_________________
     public float[] bounds;
+    public Vector2 paddlePos;
+    public float speed = 10.0f;
+    private Vector2 direction;
 
     //____________ATTRIBUTES_______________
     public Paddles paddleNum;
@@ -17,9 +24,23 @@ public class Paddle : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
+    void OnEnable()
+    { 
+        input.Enable();
+    }
 
-    void Awake(){
+    void OnDisable()
+    {
+        input.Disable();
+    }
+
+    void Awake()
+    {
         axisManager = FindObjectOfType<AxisManager>();
+
+        input = new InputMaster();
+        input.Paddle.Move.performed += mov => direction = mov.ReadValue<Vector2>();
     }
 
     public void Init(Paddles num, float[] bounds)
@@ -44,12 +65,20 @@ public class Paddle : MonoBehaviour
  * MOVE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-   private void movePaddle()
+    public void movePaddle()
     {
+        /*
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Vector2 paddlePos = mousePos; // set paddle pos
 
+        paddlePos.x = Mathf.Clamp(paddlePos.x, bounds[0], bounds[1]); // clamp x
+        paddlePos.y = Mathf.Clamp(paddlePos.y, bounds[2], bounds[3]); // clamp y
+
+        transform.position = paddlePos;
+        */
+        //paddlePos = context.ReadValue<Vector2>();
+        paddlePos += direction * speed * Time.deltaTime;
         paddlePos.x = Mathf.Clamp(paddlePos.x, bounds[0], bounds[1]); // clamp x
         paddlePos.y = Mathf.Clamp(paddlePos.y, bounds[2], bounds[3]); // clamp y
 

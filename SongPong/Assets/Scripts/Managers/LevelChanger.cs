@@ -25,10 +25,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     private void Update() 
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            FadeToNextLevel();
-        }
+        //if(Input.GetMouseButtonDown(0))
+        //{
+        //    FadeToNextLevel();
+        //}
 
         if(SceneManager.GetActiveScene().buildIndex == 1 && !songLoaded)
             SongInit();
