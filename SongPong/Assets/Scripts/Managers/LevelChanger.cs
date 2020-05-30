@@ -3,11 +3,19 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
+    
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* MEMBERS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public Animator animator;
     public SongData song;
     
     private int levelToLoad;
     private bool songLoaded = false;
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* RUNTIME FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public override void Awake()
     {
@@ -25,6 +33,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         if(SceneManager.GetActiveScene().buildIndex == 1 && !songLoaded)
             SongInit();
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PUBLIC FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void FadeToNextLevel()
     {
@@ -44,9 +56,12 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void SetSong(SongData sd)
     {  
-        print("made to setSong: " + sd.name);
         song = sd;
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PRIVATE FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void SongInit()
     {
@@ -54,5 +69,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         this.gameObject.SetActive(false);
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         songController.LoadSong(song);
+
+        BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
+        ballDropper.Activate();
     }
 }

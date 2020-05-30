@@ -50,6 +50,7 @@ public class SongController : MonoBehaviour
     public float songLength;
 
     private AudioSource source;
+    private BallDropper ballDropper;
     private int startTime;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -77,6 +78,8 @@ public class SongController : MonoBehaviour
         songLength = source.clip.length;
         numBeats = (int)((songLength / 60.0f) * songData.bpm);
         startTime = newSongData.startBeat;
+
+        ballDropper.ballMapName = newSongData.name;
     }
 
     public void Play(){source.Play();}
@@ -135,6 +138,7 @@ public class SongController : MonoBehaviour
     void Awake()
     {
         source = GetComponent<AudioSource>();
+        ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         source.clip = songData.song;
         songLength = source.clip.length;
         numBeats = (int)((songLength / 60.0f) * songData.bpm);

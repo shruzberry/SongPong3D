@@ -64,7 +64,7 @@ public class BallDropper : MonoBehaviour
 
     void Start()
     {
-        LoadBalls();
+        //LoadBalls();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -214,4 +214,11 @@ public class BallDropper : MonoBehaviour
         }
         waitingBallList = balls;
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * PUBLIC ACCESSORS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void Activate(){LoadBalls();}
+    
 }
