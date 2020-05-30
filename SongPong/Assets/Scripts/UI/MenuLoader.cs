@@ -40,6 +40,8 @@ public class MenuLoader : MonoBehaviour
     private Vector2 position;
     private Object[] songs;
 
+    LevelChanger levelChanger;
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -48,6 +50,11 @@ public class MenuLoader : MonoBehaviour
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    public void Awake()
+    {
+        levelChanger = GameObject.Find("LevelChanger").GetComponent<LevelChanger>();
+    }
+    
     public void Start()
     {
         position = new Vector2(0.0f, verticalOffset);
@@ -67,20 +74,28 @@ public class MenuLoader : MonoBehaviour
     {
         foreach(SongData song in songs)
         {
-            AddButton(buttonPrefab, song.name);
+            AddButton(buttonPrefab, song);
         }
     }
 
-    private void AddButton(Button prefab, string name)
+    private void AddButton(Button prefab, SongData sd)
     {
+        // Create Button
         Button button = Instantiate(prefab);
-        button.name = name;
-        //button.onClick.AddListener(callback);
+        button.name = sd.name;
  
+        // Create Label
         Text text = button.GetComponentInChildren<Text>();
         if (text)
-            text.text = name;
+            text.text = sd.name;
+
+        // Set SongData to be passed to levelChanger onClick
+        button.onClick.AddListener(() => 
+        {
+            levelChanger.SetSong(sd);
+        });
  
+        // Put Under Menu
         RectTransform transform = button.GetComponent<RectTransform>();
         transform.SetParent(GameObject.Find("Menu").transform, false);
         transform.anchoredPosition = position;

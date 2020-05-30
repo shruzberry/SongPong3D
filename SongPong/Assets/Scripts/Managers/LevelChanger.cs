@@ -4,7 +4,10 @@ using UnityEngine.SceneManagement;
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
     public Animator animator;
+    public SongData song;
+    
     private int levelToLoad;
+    private bool songLoaded = false;
 
     public override void Awake()
     {
@@ -19,9 +22,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
             FadeToNextLevel();
         }
 
-        if(SceneManager.GetActiveScene().buildIndex == 1)
-            this.gameObject.SetActive(false);
-
+        if(SceneManager.GetActiveScene().buildIndex == 1 && !songLoaded)
+            SongInit();
     }
 
     public void FadeToNextLevel()
@@ -38,5 +40,19 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public void OnFadeComplete()
     {
         SceneManager.LoadScene(levelToLoad);
+    }
+
+    public void SetSong(SongData sd)
+    {  
+        print("made to setSong: " + sd.name);
+        song = sd;
+    }
+
+    private void SongInit()
+    {
+        songLoaded = true;
+        this.gameObject.SetActive(false);
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        songController.LoadSong(song);
     }
 }
