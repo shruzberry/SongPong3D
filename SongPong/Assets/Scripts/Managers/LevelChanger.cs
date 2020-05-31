@@ -21,6 +21,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     {
         base.Awake();
         animator = this.GetComponent<Animator>();
+        CheckForNonMenuPlay();
     }
 
     private void Update() 
@@ -74,5 +75,15 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.Activate();  
+    }
+
+    private void CheckForNonMenuPlay()
+    {
+        // if we start the game in song scene
+        if(SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
+            paddleManager.Enable();
+        }
     }
 }

@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Types;
+using UnityEngine.InputSystem;
 
 public class NoteListener : MonoBehaviour
 {
@@ -33,8 +34,11 @@ public class NoteListener : MonoBehaviour
     public List<NoteData> data;
 
     private bool active = true;
+    private InputMaster input;
     private SongController sc;
     private SpawnInfo si;
+
+    Vector2 mousePos;
     
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -50,19 +54,33 @@ public class NoteListener : MonoBehaviour
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    void OnEnable()
+    { 
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.Disable();
+    }
+    
     void Awake()
     {
         sc = FindObjectOfType<SongController>();
         si = FindObjectOfType<SpawnInfo>();
+
+        input = new InputMaster();
+        input.NoteListener.MousePos.performed += mov => mousePos = mov.ReadValue<Vector2>();
     }
     
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
+        Keyboard kb = InputSystem.GetDevice<Keyboard>();
+        if(kb.spaceKey.wasPressedThisFrame)
         {
             NoteData nd = new NoteData();
             
-            nd.hitPosition = si.GetNearestColumn(Input.mousePosition);
+            nd.hitPosition = si.GetNearestColumn(mousePos);
             nd.hitBeat = (int) sc.currentBeat;
             nd.noteDirection = Direction.positive;
 

@@ -71,6 +71,33 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "NoteListener",
+            "id": "75c7cf47-23eb-4ced-b5cc-2157109c1c3c",
+            "actions": [
+                {
+                    "name": "MousePos",
+                    "type": "Value",
+                    "id": "e8b5d1c9-7ee3-48a7-8253-a27e5814bd33",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "efc2faab-c735-4a69-9745-b8b8d4c660dc",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MousePos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

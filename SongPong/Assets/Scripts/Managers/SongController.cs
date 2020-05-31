@@ -125,7 +125,6 @@ public class SongController : MonoBehaviour
 
     private void goToTime(float time)
     {
-        print("jumping to time: " + time);
         source.time = time;
         songTime = source.time;
         source.Play();
