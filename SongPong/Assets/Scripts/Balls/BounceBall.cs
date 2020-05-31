@@ -74,16 +74,14 @@ public class BounceBall : Ball
      **/
     public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
     {
-        float delta;
-        if(axis == Axis.y)
-            delta = GetTrueDeltaY(pointA, pointB);
-        else
-            delta = GetTrueDeltaX(pointA, pointB);
-        // Calculate delta T
-            // using physics equation dy = v0t + 1/2at^2 solved for time in the form
-            // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
+        // Calculate delta H
+        // |(AB • axisVector) +- ballradius|
+        float delta = Mathf.Abs(Vector2.Dot(pointA - pointB, axisVector) - (negative * radius));
+
+        // Calculate delta T using physics equation dy = v0t + 1/2at^2 solved for time in the form
+        // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
         float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
-        float time = (-speed + Mathf.Sqrt(determinant )) / gravity;
+        float time = (-speed + Mathf.Sqrt(determinant )) / (gravity);
 
         if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
 
@@ -96,6 +94,8 @@ public class BounceBall : Ball
      */
     private float CalcBounceTime()
     {
+        Debug.Log("CURRENT NOTE: " + currentNote);
+        Debug.Log("HIT TIME: " + notes[currentNote].hitTime);
         // Calculate time to hit the next note (this is returned)
         float deltaT = notes[currentNote].hitTime - song.GetSongTime();
 
@@ -114,6 +114,8 @@ public class BounceBall : Ball
      */
     public override void ResetMove()
     {
+        SetAxisVectors();
+
         // Get time to next note hit
         moveTime = CalcMoveTime();
 
@@ -190,21 +192,5 @@ public class BounceBall : Ball
     {
         yield return new WaitForSeconds(1.0f);
         exit = true;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * CALCULATIONS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.y - pointB.y + (negative * radius));
-    }
-
-    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.x - pointB.x + (negative * radius));
     }
 }

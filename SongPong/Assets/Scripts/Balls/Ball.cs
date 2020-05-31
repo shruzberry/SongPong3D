@@ -61,7 +61,7 @@ public abstract class Ball : MonoBehaviour
     public BallData ballData;
 
     //___________MOVEMENT_______________
-    public Direction direction;
+    public float negative;
 
     //___________TIME___________________
     public float spawnTime;
@@ -120,7 +120,7 @@ public abstract class Ball : MonoBehaviour
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
         spawnLoc = GetNotePosition(currentNote);
-        Debug.Log("SPAWN: " + spawnLoc);
+//        Debug.Log("SPAWN: " + spawnLoc);
         transform.position = spawnLoc;
 
         // DIRECTION
@@ -142,14 +142,25 @@ public abstract class Ball : MonoBehaviour
         SetState(new IdleState(this));
     }
 
-    public void SetAxisVectors()
+    public virtual void SetAxisVectors()
     {
-        direction = notes[currentNote].noteDirection;
+        negative = (notes[currentNote].noteDirection == Direction.negative) ? -1.0f : 1.0f;
         
-        if(axis == Axis.y && direction == Direction.positive) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.y && direction == Direction.negative) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.x && direction == Direction.positive) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
-        else if(axis == Axis.x && direction == Direction.negative) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+        if(axis == Axis.y && negative == 1.0f) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.y && negative == -1.0f) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.x && negative == 1.0f) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
+        else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+/*
+        Vector2 testVector = new Vector2(2.90917239817623f,3.0f);
+        Debug.Log("Test Vector: " + testVector);
+        Debug.Log("Axis Vector: " + axisVector);
+        float dotProduct = Vector2.Dot(testVector, axisVector);
+        Debug.Log("Dot Product: " + dotProduct);
+*/
+    }
+
+    public void SetDirection()
+    {
     }
 
     public virtual void InitializeBallSpecific(){}
@@ -160,7 +171,7 @@ public abstract class Ball : MonoBehaviour
 
     public void NextNote()
     {
-        if(currentNote < numNotes){currentNote++;}
+        currentNote++;
     }
 
     /**

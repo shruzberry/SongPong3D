@@ -152,6 +152,7 @@ public class BallDropper : MonoBehaviour
 
             ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
 
+/*
             if(gameAxis == Axis.y)
             {
                 if(ball.direction == Direction.positive)
@@ -159,6 +160,7 @@ public class BallDropper : MonoBehaviour
                     Debug.LogWarning(ball.name + " has a direction of positive in Y-Axis mode. Don't be a fool.");
                 }
             }
+*/
             
             // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events

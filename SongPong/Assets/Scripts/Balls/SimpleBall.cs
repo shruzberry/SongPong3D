@@ -62,31 +62,17 @@ public class SimpleBall : Ball
         return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));
     }
 
-    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.y - pointB.y + (negative * radius));
-    }
-
-    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.x - pointB.x + (negative * radius));
-    }
-
     /**
      * Calculates the time it would take this ball to fall between pointA and pointB
      **/
     public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
-    {   
-        float delta;
-        if(axis == Axis.y)
-            delta = GetTrueDeltaY(pointA, pointB);
-        else
-            delta = GetTrueDeltaX(pointA, pointB);
-        // Calculate delta T
-            // using physics equation dy = v0t + 1/2at^2 solved for time in the form
-            // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
+    {
+        // Calculate delta H
+        // |(AB • axisVector) +- ballradius|
+        float delta = Mathf.Abs(Vector2.Dot(pointA - pointB, axisVector) - (negative * radius));
+
+        // Calculate delta T using physics equation dy = v0t + 1/2at^2 solved for time in the form
+        // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
         float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
         float time = (-speed + Mathf.Sqrt(determinant)) / gravity;
 
@@ -102,7 +88,7 @@ public class SimpleBall : Ball
     public override void MoveActions()
     {
         // UPDATE VELOCITY
-        Vector2 velocityStep = acceleration * Time.deltaTime;
+        Vector2 velocityStep = axisVector * (gravity * Time.deltaTime);
 
         velocity += velocityStep;
 
