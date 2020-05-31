@@ -39,6 +39,9 @@ public abstract class Ball : MonoBehaviour
     protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
+    
+    //___________COMPONENTS_____________
+    protected SpriteRenderer ball_renderer;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -65,7 +68,6 @@ public abstract class Ball : MonoBehaviour
 
     //___________TIME___________________
     public float spawnTime;
-    public float moveTime; // time it takes from spawn to target
     public float[] catchTimes;
 
     //___________INDEXING________________
@@ -100,6 +102,9 @@ public abstract class Ball : MonoBehaviour
         this.spawnInfo = spawner;
         this.song = song;
 
+        // COMPONENTS
+        this.ball_renderer = GetComponent<SpriteRenderer>();
+
         // INITIALIZE ID AND NOTES
         this.ballData = data;
         this.id = data.id;
@@ -128,9 +133,6 @@ public abstract class Ball : MonoBehaviour
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
-
-        // CALC DROP TIME
-        moveTime = CalcMoveTime();
 
         // CHECK FOR ERRORS
         if(CheckForInvalid() == true)
@@ -239,7 +241,6 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
-    public abstract float CalcMoveTime();
     public virtual void ResetMove(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

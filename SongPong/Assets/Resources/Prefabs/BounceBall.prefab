@@ -97,9 +97,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.000933981, y: 0}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.05797279
+  m_Radius: 0.06
 --- !u!50 &2092558329866218601
 Rigidbody2D:
   serializedVersion: 4
@@ -134,5 +134,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  status: 0
-  dropTime: 0
+  type: 0
+  spawnLoc: {x: 0, y: 0}
+  song: {fileID: 0}
+  ready: 0
+  caught: 0
+  missed: 0
+  exit: 0
+  ballData: {fileID: 0}
+  negative: 0
+  spawnTime: 0
+  moveTime: 0
+  catchTimes: []
+  numNotes: 0
+  currentNote: 0
+  speed: 0
+  gravity: 3
+  rb: {fileID: 0}

@@ -24,7 +24,7 @@ public class BallDropper : MonoBehaviour
     //___________References______________
     private SongController song;
     private AxisManager axisManager;
-    private Axis gameAxis;
+    private Axis axis;
     private SpawnInfo spawner;
     private PaddleManager paddleManager;
     private Paddle paddle;
@@ -35,11 +35,21 @@ public class BallDropper : MonoBehaviour
     public event OnBallSpawned onBallSpawned;
     
     //___________Balls___________________
+    private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
+    private List<BallData> waitingBallDataList = new List<BallData>(); // all ball data that hasn't been used yet
+
     private List<Ball> balls = new List<Ball>(); // every ball in this song
     private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
     private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
     private int ballID = 0;
+
+    //__________Ball Types_______________
+    private GameObject simpleBall;
+    private GameObject bounceBall;
+
+    //___________Move Behaviors__________
+    public float fallTime;
 
     //___________Loader__________________
     public string dataLocation = "SongData/data/";
@@ -57,14 +67,31 @@ public class BallDropper : MonoBehaviour
         song = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
         axisManager = FindObjectOfType<AxisManager>();
-        gameAxis = axisManager.gameAxis;
+        axis = axisManager.gameAxis;
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
+
+        simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
+        bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
     }
 
-    void Start()
+    private void Start()
     {
         LoadBalls();
+        CalcMoveTimes();
+    }
+
+    private void CalcMoveTimes()
+    {
+        Vector2 spawnAxis = spawner.spawnAxis;
+        Vector2 paddleAxis = paddleManager.GetPaddleAxis();
+        Vector2 axisVector;
+        if(axis == Axis.y) {axisVector = new Vector2(0,1);}
+        else{axisVector = new Vector2(1,0);}
+
+        fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, 0.0f, 3.0f);
+        fallTime = song.ToBeat(fallTime);
+        Debug.Log("FALL TIME: " + fallTime);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -77,7 +104,7 @@ public class BallDropper : MonoBehaviour
 
         RemoveFinishedBalls();
 
-        CheckDrop();
+        CheckSpawn();
     }
 
     private void FixedUpdate() 
@@ -100,77 +127,73 @@ public class BallDropper : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * DROP
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void CheckDrop() 
-    {
-        if(waitingBallList.Count != 0)
-        {
-            List<Ball> droppedBalls = new List<Ball>();
-
-            // check each ball that hasn't been dropped yet to see if it should be dropped.
-            // this method is very brute force and could be improved by sorting the balls first
-            foreach(Ball ball in waitingBallList)
-            {
-                float dropBeat = song.ToBeat(ball.NextHitTime() - ball.moveTime);
-                if(!isFinished && (dropBeat < song.currentBeat))
-                {
-                    droppedBalls.Add(ball);
-                    DropBall(ball);
-                }
-            }
-
-            // remove any balls that dropped from the waiting pool
-            // (this action must occur outside of the foreach loop)
-            foreach(Ball ball in droppedBalls)
-            {
-                waitingBallList.Remove(ball);
-            }
-        }
-	}
-
-    public void DropBall(Ball ball)
-    {
-        activeBallList.Add(ball);
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void spawnBall(BallData data)
+    public void CheckSpawn()
     {
-        if(!data.enabled) return;
+        List<BallData> spawnedBalls = new List<BallData>();
+
+        // check every ballData
+        // TODO change this to just look at the first ball, but need to sort first
+        foreach(BallData ballData in waitingBallDataList)
+        {         
+            // check every note
+            // TODO change this to just look at the first note, but need to sort first   
+            foreach(NoteData note in ballData.notes)
+            {
+                float dropBeat = note.hitBeat - fallTime;
+                if(!isFinished && dropBeat <= song.currentBeat)
+                {
+                    spawnedBalls.Add(ballData);
+
+                    Ball ball = SpawnBall(ballData);
+                }
+            }
+        }
+        RemoveBallsFromWaiting(spawnedBalls);
+        spawnedBalls.Clear();
+    }
+
+    private void RemoveBallsFromWaiting(List<BallData> spawnedBalls)
+    {
+        // remove any balls that dropped from the waiting pool
+        // (this action must occur outside of the foreach loop)
+        foreach(BallData ball in spawnedBalls)
+        {
+            waitingBallDataList.Remove(ball);
+        }
+    }
+
+    public Ball SpawnBall(BallData data)
+    {
+        if(!data.enabled) return null; // if the ball is disabled, don't spawn it
 
         try{
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
 
-            // Initialize the ball with id and notes
+            // Initialize the ball with id
             data.id = ballID++;
 
             ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
-
-/*
-            if(gameAxis == Axis.y)
-            {
-                if(ball.direction == Direction.positive)
-                {
-                    Debug.LogWarning(ball.name + " has a direction of positive in Y-Axis mode. Don't be a fool.");
-                }
-            }
-*/
-            
+     
             // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
+
             // Add to list of balls
             balls.Add(ball);
+            activeBallList.Add(ball);
+            
+            Debug.Log("DROP BALL " + ball.name + "at beat " + song.currentBeat);
+
+            return ball;
         } 
         catch(Exception e)
         {
             ballID--;
+            return null;
         }
     }  
 
@@ -208,12 +231,10 @@ public class BallDropper : MonoBehaviour
         {
             foreach(BallData data in ballData)
             {
-                if(data.enabled)
-                {
-                    spawnBall(data);
-                }
+                ballDataList.Add(data);
             }
         }
         waitingBallList = balls;
+        waitingBallDataList = ballDataList;
     }
 }

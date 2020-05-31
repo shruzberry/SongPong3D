@@ -9,7 +9,6 @@ public class SimpleBall : Ball
 
     //________MOVEMENT______________
     protected Vector2 velocity;
-    protected Vector2 acceleration;
     public float speed = 0.0f;
     public float gravity = 3.0f;
 
@@ -33,8 +32,6 @@ public class SimpleBall : Ball
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
-
-        acceleration = gravity * axisVector;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -48,37 +45,8 @@ public class SimpleBall : Ball
         bool error = false;
 
         if(numNotes > 1) error = true;
-        if(float.IsNaN(moveTime)) error = true;
 
         return error;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * MOVE TIME
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public override float CalcMoveTime()
-    {
-        return CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));
-    }
-
-    /**
-     * Calculates the time it would take this ball to fall between pointA and pointB
-     **/
-    public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
-    {
-        // Calculate delta H
-        // |(AB • axisVector) +- ballradius|
-        float delta = Mathf.Abs(Vector2.Dot(pointA - pointB, axisVector) - (negative * radius));
-
-        // Calculate delta T using physics equation dy = v0t + 1/2at^2 solved for time in the form
-        // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
-        float time = (-speed + Mathf.Sqrt(determinant)) / gravity;
-
-        if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
-
-        return time;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -104,21 +72,7 @@ public class SimpleBall : Ball
 
     public override bool CheckMiss()
     {
-        if(axis == Axis.y)
-        {
-            if(transform.position.y < -screenBounds.y && !missed)
-            {
-                missed = true;
-            }
-        }
-        else if(axis == Axis.x)
-        {
-            if((transform.position.x < -screenBounds.x || transform.position.x > screenBounds.x) && !missed)
-            {
-                missed = true;
-            }
-        }
-
+        if(!ball_renderer.isVisible) missed = true;
         return missed;
     }
 
