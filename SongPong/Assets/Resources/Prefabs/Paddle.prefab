@@ -97,7 +97,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounds: []
+  paddlePos: {x: 0, y: 0}
+  speed: 10
   paddleNum: 0
+  radius: 0
+  height: 0
 --- !u!61 &8567175004755019762
 BoxCollider2D:
   m_ObjectHideFlags: 0

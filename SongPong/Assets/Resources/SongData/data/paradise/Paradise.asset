@@ -15,9 +15,9 @@ MonoBehaviour:
   currentTime: 0
   bpm: 145
   name: Paradise
-  dataPath: Assets/Resources/SongData/data/paradise
+  dataPath: Assets/Resources/SongData/data/Paradise
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
-  startBeat: 0
+  startBeat: 10
   endBeat: 650
   offset: 0
-  myPath: Assets/Resources/SongData/data/paradise/Paradise.asset
+  myPath: Assets/Resources/SongData/data/Paradise/Paradise.asset
