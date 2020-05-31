@@ -25,11 +25,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     private void Update() 
     {
-        //if(Input.GetMouseButtonDown(0))
-        //{
-        //    FadeToNextLevel();
-        //}
-
         if(SceneManager.GetActiveScene().buildIndex == 1 && !songLoaded)
             SongInit();
     }
@@ -65,12 +60,19 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     private void SongInit()
     {
+        AxisManager axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
+        axisManager.gameAxis = song.axis;
+        
+        PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
+        paddleManager.Enable();
+
+
         songLoaded = true;
         this.gameObject.SetActive(false);
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         songController.LoadSong(song);
 
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        ballDropper.Activate();
+        ballDropper.Activate();  
     }
 }

@@ -19,7 +19,7 @@ public class PaddleManager : MonoBehaviour
 
     public Vector2 screenBounds;
 
-    private void Awake() 
+    public void Enable() 
     {
         axisManager = FindObjectOfType<AxisManager>();
         paddlePrefab = Resources.Load("Prefabs/Paddle") as GameObject;

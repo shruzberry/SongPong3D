@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Types;
 
 [CreateAssetMenuAttribute(fileName="Song", menuName="Song")]
 public class SongData : ScriptableObject
@@ -10,9 +11,10 @@ public class SongData : ScriptableObject
     public float currentTime;
     public int bpm;
     public string name;
-    //[HideInInspector]
+    [HideInInspector]
     public string dataPath;
     public AudioClip song;
+    public Axis axis;
     public int startBeat = 0;
     public int endBeat = 0;
     public float offset = 0;
