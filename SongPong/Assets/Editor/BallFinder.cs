@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class BallFinder : EditorWindow
 {
@@ -67,7 +68,7 @@ public class BallFinder : EditorWindow
 
     void OnEnable()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        //songController = GameObject.Find("SongController").GetComponent<SongController>();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -76,11 +77,17 @@ public class BallFinder : EditorWindow
 
     void OnGUI()
     {
-        DrawRowLayouts();
-        DrawNavSettings();
-        DrawActiveBalls();
-
-        songData = songController.songData;
+        if(SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            DrawRowLayouts();
+            DrawNavSettings();
+            DrawActiveBalls();
+            songData = songController.songData;
+        }
+        else
+        {
+            GUILayout.Label("You must be in the Song Scene to use this tool");
+        }
     }
 
     void DrawRowLayouts()
@@ -101,7 +108,6 @@ public class BallFinder : EditorWindow
     void DrawNavSettings()
     {
         songController = GameObject.Find("SongController").GetComponent<SongController>();
-
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));

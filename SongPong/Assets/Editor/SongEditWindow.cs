@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.SceneManagement;
+
 
 public class SongEditWindow : EditorWindow
 {
@@ -53,12 +55,17 @@ public class SongEditWindow : EditorWindow
 
     void OnEnable()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
-        noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();    
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            songController = GameObject.Find("SongController").GetComponent<SongController>();
+            noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();    
+        }
     }
 
     void OnGUI()
     {
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
         noteListener = GameObject.Find("NoteListener").GetComponent<NoteListener>();    
 
         // User entered data field
@@ -106,6 +113,12 @@ public class SongEditWindow : EditorWindow
         if (GUILayout.Button("NoteListener Single Bounce Ball"))
         {
             SongEdit.CreateBounce(ballName, noteListener.data);
+        }
+        }
+
+        else
+        {
+            GUILayout.Label("You must be in the Song Scene to use this tool");
         }
     }
 }
