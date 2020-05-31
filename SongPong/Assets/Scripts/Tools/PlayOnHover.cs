@@ -1,15 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class PlayOnHover : MonoBehaviour
 {
     private SongController songController;
     bool songPlaying;
+    private InputMaster input;
+    private Vector2 mousePos;
+
+    void OnEnable()
+    { 
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.Disable();
+    }
 
     void Awake()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>(); 
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        input = new InputMaster();
+        input.NoteListener.MousePos.performed += mov => mousePos = mov.ReadValue<Vector2>();
     }
 
     void Update()
@@ -36,9 +52,8 @@ public class PlayOnHover : MonoBehaviour
 
     bool isMouseOverGame()
     {
-        var view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        var view = Camera.main.ScreenToViewportPoint(mousePos);
         var isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
-        //return (Input.mousePosition.x == 0 || Input.mousePosition.y == 0 || Input.mousePosition.x == Screen.width - 1 || Input.mousePosition.y == Screen.height - 1);
         return !isOutside;
     }
 }
