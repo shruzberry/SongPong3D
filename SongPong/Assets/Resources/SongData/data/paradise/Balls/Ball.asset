@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ball
   m_EditorClassIdentifier: 
   id: 0
-  enabled: 1
+  enabled: 0
   type: 1
   notes:
   - {fileID: 11400000, guid: 0df7ef992cce949babb42e9141b3e074, type: 2}

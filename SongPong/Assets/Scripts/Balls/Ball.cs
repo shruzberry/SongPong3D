@@ -59,7 +59,7 @@ public abstract class Ball : MonoBehaviour
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected List<NoteData> notes;
+    protected NoteData[] notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -115,9 +115,9 @@ public abstract class Ball : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // NOTES
-        this.notes = SortNotes(data.notes);
+        this.notes = data.notes;
         currentNote = 0;
-        numNotes = notes.Count;
+        numNotes = notes.Length;
 
         // INDEXING
         catchTimes = new float[numNotes + 1];
@@ -183,31 +183,6 @@ public abstract class Ball : MonoBehaviour
     {
         int spawnNum = notes[index].hitPosition;
         return spawnInfo.GetSpawnLocation(spawnNum);
-    }
-
-    /**
-     * Sort this balls' notes according to their hit time
-     */
-    protected List<NoteData> SortNotes(NoteData[] notes)
-    {
-        try
-        {
-            List<NoteData> noteList = new List<NoteData>();
-            foreach(NoteData nd in notes)
-            {
-                noteList.Add(nd);
-            }
-            if(noteList.Count > 0)
-            {
-                noteList.Sort(NoteData.CompareNotesByHitTime);
-            }
-            return noteList;
-        }
-        catch(Exception e)
-        {
-            Debug.LogError("Ball " + name + " has one or more incorrect notes.");
-            return null;
-        }
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -276,6 +251,6 @@ public abstract class Ball : MonoBehaviour
 
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public List<NoteData> getNotes(){return notes;}
+    public NoteData[] getNotes(){return notes;}
 
 }

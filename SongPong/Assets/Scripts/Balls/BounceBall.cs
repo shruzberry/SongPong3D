@@ -60,8 +60,6 @@ public class BounceBall : Ball
      */
     private float CalcBounceTime()
     {
-        Debug.Log("CURRENT NOTE: " + currentNote);
-        Debug.Log("HIT TIME: " + notes[currentNote].hitTime);
         // Calculate time to hit the next note (this is returned)
         float deltaT = notes[currentNote].hitTime - song.GetSongTime();
 

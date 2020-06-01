@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using System;
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
 public class BallData : ScriptableObject
@@ -20,6 +21,11 @@ public class BallData : ScriptableObject
         SetPrefab();
     }
 
+    private void OnValidate() 
+    {
+        SortNotes(notes);
+    }
+
     private void SetPrefab()
     {
         switch(type)
@@ -32,6 +38,38 @@ public class BallData : ScriptableObject
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Sort this balls' notes according to their hit time
+     */
+    protected void SortNotes(NoteData[] notes)
+    {
+        try
+        {
+            List<NoteData> noteList = new List<NoteData>();
+            foreach(NoteData nd in notes)
+            {
+                // If a note is null, don't need to keep sorting.
+                if(nd == null)
+                {
+                    Debug.LogWarning("Ball \"" + name + "\" has null notes."); 
+                    break;
+                }
+
+                noteList.Add(nd);
+            }
+
+            if(noteList.Count > 0)
+            {
+                noteList.Sort(NoteData.CompareNotesByHitTime);
+            }
+            this.notes = noteList.ToArray();
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Ball \"" + name + "\" has one or more invalid notes.");
         }
     }
 }
