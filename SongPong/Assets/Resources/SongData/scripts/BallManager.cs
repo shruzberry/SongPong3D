@@ -13,7 +13,6 @@ public class BallManager : ScriptableObject
 
     private void OnValidate()
     {
-        Debug.LogWarning("Updating Balls...");
         UpdateBalls();
         SortBalls();
     }

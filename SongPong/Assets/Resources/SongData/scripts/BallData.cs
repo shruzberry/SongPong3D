@@ -33,7 +33,6 @@ public class BallData : ScriptableObject
 
     private void OnValidate() 
     {
-        Debug.LogWarning("VALIDATING BALL");
         SortNotes(notes);
         if(onBallValidate != null) onBallValidate();
     }
