@@ -17,7 +17,6 @@ ________ FUNCTIONS ________
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Types;
 
 public class BallDropper : MonoBehaviour
 {   
@@ -38,11 +37,8 @@ public class BallDropper : MonoBehaviour
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
     private List<BallData> waitingBallDataList = new List<BallData>(); // all ball data that hasn't been used yet
 
-    private List<Ball> balls = new List<Ball>(); // every ball in this song
-    private List<Ball> waitingBallList = new List<Ball>(); // all balls waiting to drop
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
     private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
-    private int ballID = 0;
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -102,9 +98,9 @@ public class BallDropper : MonoBehaviour
     {
         UpdateActiveBalls();
 
-        RemoveFinishedBalls();
-
         CheckSpawn();
+
+        RemoveFinishedBalls();
     }
 
     private void FixedUpdate() 
@@ -173,9 +169,6 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
 
-            // Initialize the ball with id
-            data.id = ballID++;
-
             ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
      
             // SUBSCRIBE ACTIONS TO THIS BALL
@@ -183,7 +176,6 @@ public class BallDropper : MonoBehaviour
             if(onBallSpawned != null) onBallSpawned(ball);
 
             // Add to list of balls
-            balls.Add(ball);
             activeBallList.Add(ball);
             
             Debug.Log("DROP BALL " + ball.name + "at beat " + song.currentBeat);
@@ -192,10 +184,19 @@ public class BallDropper : MonoBehaviour
         } 
         catch(Exception e)
         {
-            ballID--;
             return null;
         }
-    }  
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * RESET
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void ResetBalls()
+    {
+        activeBallList = new List<Ball>();
+        waitingBallDataList = ballDataList;
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * REMOVE
@@ -227,14 +228,13 @@ public class BallDropper : MonoBehaviour
         string path = dataLocation + ballMapName + "/Balls/";
         BallData[] ballData = Resources.LoadAll<BallData>(path);
 
-        if(balls != null)
+        if(ballData != null)
         {
             foreach(BallData data in ballData)
             {
                 ballDataList.Add(data);
             }
         }
-        waitingBallList = balls;
         waitingBallDataList = ballDataList;
     }
 }
