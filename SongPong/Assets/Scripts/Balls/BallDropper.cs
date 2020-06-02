@@ -171,7 +171,6 @@ public class BallDropper : MonoBehaviour
 
             ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
      
-            // SUBSCRIBE ACTIONS TO THIS BALL
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
 
