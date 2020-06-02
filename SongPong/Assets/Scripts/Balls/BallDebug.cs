@@ -40,9 +40,9 @@ public class BallDebug : MonoBehaviour
             catchTime = ball.catchTimes[currentNote] - ball.catchTimes[currentNote - 1];
         }
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
-        Debug.Log("Expected Move Time: " + ball.moveTime);
-        Debug.Log("Delta Time: " + catchTime);
-        Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at time " + song.currentBeat);
+        Debug.Log("Expected Move Time (Beats): " + ballDropper.fallTime);
+        Debug.Log("Actual Move Time (Beats): " + song.ToBeat(catchTime));
+        Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at beat " + song.currentBeat);
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
     }
 }

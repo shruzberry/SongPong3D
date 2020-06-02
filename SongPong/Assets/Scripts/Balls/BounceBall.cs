@@ -54,42 +54,6 @@ public class BounceBall : Ball
  * MOVE TIME
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override float CalcMoveTime()
-    {
-        float time;
-        if(currentNote == 0)
-        {
-            time = CalcTimeToFall(spawnLoc, paddleManager.GetPaddleLocation(Paddles.P1));           // TODO MAKE IT WORK WITH EITHER PADDLE!!!
-        }
-        else
-        {
-            time = CalcBounceTime();
-        }
-
-        return time;
-    }
-
-    /**
-     * Calculates the time it would take this ball to fall between pointA and pointB
-     **/
-    public float CalcTimeToFall(Vector2 pointA, Vector2 pointB)
-    {
-        float delta;
-        if(axis == Axis.y)
-            delta = GetTrueDeltaY(pointA, pointB);
-        else
-            delta = GetTrueDeltaX(pointA, pointB);
-        // Calculate delta T
-            // using physics equation dy = v0t + 1/2at^2 solved for time in the form
-            // t = (-v0 +- sqrt(v0^2 + 2*a*dy)) / a
-        float determinant = (Mathf.Pow(speed, 2) + (2 * gravity * delta));
-        float time = (-speed + Mathf.Sqrt(determinant )) / gravity;
-
-        if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
-
-        return time;
-    }
-
     /**
      * Returns the needed to hit on the next notes' time.
      * TODO change to song time?
@@ -114,8 +78,9 @@ public class BounceBall : Ball
      */
     public override void ResetMove()
     {
-        // Get time to next note hit
-        moveTime = CalcMoveTime();
+        SetAxisVectors();
+
+        float moveTime = CalcBounceTime();
 
         // Get distance between the current column and the next
         Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
@@ -146,20 +111,7 @@ public class BounceBall : Ball
 
     public override bool CheckMiss()
     {
-        if(axis == Axis.y)
-        {
-            if(transform.position.y < -screenBounds.y && !missed)
-            {
-                missed = true;
-            }
-        }
-        else if(axis == Axis.x)
-        {
-            if((transform.position.x < -screenBounds.x || transform.position.x > screenBounds.x) && !missed)
-            {
-                missed = true;
-            }
-        }
+        if(!ball_renderer.isVisible) missed = true;
         return missed;
     }
 
@@ -192,21 +144,5 @@ public class BounceBall : Ball
     {
         yield return new WaitForSeconds(1.0f);
         exit = true;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * CALCULATIONS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    private float GetTrueDeltaY(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.y - pointB.y + (negative * radius));
-    }
-
-    private float GetTrueDeltaX(Vector2 pointA, Vector2 pointB)
-    {
-        float negative = (direction == Direction.negative) ? -1.0f : 1.0f;
-        return Mathf.Abs(pointA.x - pointB.x + (negative * radius));
     }
 }

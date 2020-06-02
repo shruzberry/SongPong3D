@@ -14,6 +14,8 @@ public class PaddleManager : MonoBehaviour
     private List<Paddle> paddles = new List<Paddle>();
     private float paddleYAxis;
     private float paddleXAxis;
+    private Vector2 paddleAxis_y;
+    private Vector2 paddleAxis_x;
     private float paddleRadius;
     private float paddleHeight;
 
@@ -38,6 +40,7 @@ public class PaddleManager : MonoBehaviour
     {
         // Calculate the paddle axis location
         paddleXAxis = screenBounds.x - (screenBounds.x * 0.1f);
+        paddleAxis_x = new Vector2(screenBounds.x - (screenBounds.x * 0.1f), 0);
 
         // SET BOUNDS
         float[] P1bounds = {-paddleXAxis, -paddleXAxis, -screenBounds.y + paddleRadius, screenBounds.y - paddleRadius};
@@ -65,6 +68,7 @@ public class PaddleManager : MonoBehaviour
     {
         // Calculate the paddle axis location
         paddleYAxis = -screenBounds.y + (screenBounds.y * 0.15f);
+        paddleAxis_y = new Vector2(0, -screenBounds.y + (screenBounds.y * 0.15f));
 
         // Set bounds for the paddle
         float[] P1bounds = {-screenBounds.x + paddleRadius, screenBounds.x - paddleRadius, paddleYAxis, paddleYAxis};
@@ -76,15 +80,15 @@ public class PaddleManager : MonoBehaviour
         P1.transform.eulerAngles = new Vector3(0,0,0);
     }
 
-    public float GetPaddleAxis()
+    public Vector2 GetPaddleAxis()
     {
         if(gameAxis == Axis.y)
-            return paddleYAxis;
+            return paddleAxis_y;
         else if(gameAxis == Axis.x)
-            return paddleXAxis;
+            return paddleAxis_x;
         else{
             Debug.LogError("INVALID AXIS DETECTED.");
-            return 0;
+            return Vector2.zero;
         }
     }
 

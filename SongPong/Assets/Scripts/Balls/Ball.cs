@@ -39,6 +39,9 @@ public abstract class Ball : MonoBehaviour
     protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
+    
+    //___________COMPONENTS_____________
+    protected SpriteRenderer ball_renderer;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -56,16 +59,15 @@ public abstract class Ball : MonoBehaviour
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected List<NoteData> notes;
+    protected NoteData[] notes;
     [HideInInspector]
     public BallData ballData;
 
     //___________MOVEMENT_______________
-    public Direction direction;
+    public float negative;
 
     //___________TIME___________________
     public float spawnTime;
-    public float moveTime; // time it takes from spawn to target
     public float[] catchTimes;
 
     //___________INDEXING________________
@@ -100,6 +102,9 @@ public abstract class Ball : MonoBehaviour
         this.spawnInfo = spawner;
         this.song = song;
 
+        // COMPONENTS
+        this.ball_renderer = GetComponent<SpriteRenderer>();
+
         // INITIALIZE ID AND NOTES
         this.ballData = data;
         this.id = data.id;
@@ -110,9 +115,9 @@ public abstract class Ball : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // NOTES
-        this.notes = SortNotes(data.notes);
+        this.notes = data.notes;
         currentNote = 0;
-        numNotes = notes.Count;
+        numNotes = notes.Length;
 
         // INDEXING
         catchTimes = new float[numNotes + 1];
@@ -120,7 +125,7 @@ public abstract class Ball : MonoBehaviour
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
         spawnLoc = GetNotePosition(currentNote);
-        Debug.Log("SPAWN: " + spawnLoc);
+//        Debug.Log("SPAWN: " + spawnLoc);
         transform.position = spawnLoc;
 
         // DIRECTION
@@ -128,9 +133,6 @@ public abstract class Ball : MonoBehaviour
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
         InitializeBallSpecific();
-
-        // CALC DROP TIME
-        moveTime = CalcMoveTime();
 
         // CHECK FOR ERRORS
         if(CheckForInvalid() == true)
@@ -142,14 +144,25 @@ public abstract class Ball : MonoBehaviour
         SetState(new IdleState(this));
     }
 
-    public void SetAxisVectors()
+    public virtual void SetAxisVectors()
     {
-        direction = notes[currentNote].noteDirection;
+        negative = (notes[currentNote].noteDirection == Direction.negative) ? -1.0f : 1.0f;
         
-        if(axis == Axis.y && direction == Direction.positive) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.y && direction == Direction.negative) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.x && direction == Direction.positive) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
-        else if(axis == Axis.x && direction == Direction.negative) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+        if(axis == Axis.y && negative == 1.0f) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.y && negative == -1.0f) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.x && negative == 1.0f) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
+        else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+/*
+        Vector2 testVector = new Vector2(2.90917239817623f,3.0f);
+        Debug.Log("Test Vector: " + testVector);
+        Debug.Log("Axis Vector: " + axisVector);
+        float dotProduct = Vector2.Dot(testVector, axisVector);
+        Debug.Log("Dot Product: " + dotProduct);
+*/
+    }
+
+    public void SetDirection()
+    {
     }
 
     public virtual void InitializeBallSpecific(){}
@@ -160,7 +173,7 @@ public abstract class Ball : MonoBehaviour
 
     public void NextNote()
     {
-        if(currentNote < numNotes){currentNote++;}
+        currentNote++;
     }
 
     /**
@@ -170,31 +183,6 @@ public abstract class Ball : MonoBehaviour
     {
         int spawnNum = notes[index].hitPosition;
         return spawnInfo.GetSpawnLocation(spawnNum);
-    }
-
-    /**
-     * Sort this balls' notes according to their hit time
-     */
-    protected List<NoteData> SortNotes(NoteData[] notes)
-    {
-        try
-        {
-            List<NoteData> noteList = new List<NoteData>();
-            foreach(NoteData nd in notes)
-            {
-                noteList.Add(nd);
-            }
-            if(noteList.Count > 0)
-            {
-                noteList.Sort(NoteData.CompareNotesByHitTime);
-            }
-            return noteList;
-        }
-        catch(Exception e)
-        {
-            Debug.LogError("Ball " + name + " has one or more incorrect notes.");
-            return null;
-        }
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -228,7 +216,6 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
-    public abstract float CalcMoveTime();
     public virtual void ResetMove(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -264,6 +251,6 @@ public abstract class Ball : MonoBehaviour
 
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public List<NoteData> getNotes(){return notes;}
+    public NoteData[] getNotes(){return notes;}
 
 }

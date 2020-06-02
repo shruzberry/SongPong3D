@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4100339267235431663}
   - component: {fileID: 2340725175468661431}
   - component: {fileID: -4914575063395382804}
+  - component: {fileID: 4859509252022318338}
   m_Layer: 0
   m_Name: SimpleBall
   m_TagString: Untagged
@@ -97,9 +98,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.000933981, y: 0}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.05797279
+  m_Radius: 0.06
 --- !u!114 &2340725175468661431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,15 +114,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  type: 0
+  spawnLoc: {x: 0, y: 0}
+  song: {fileID: 0}
   ready: 0
   caught: 0
   missed: 0
   exit: 0
   ballData: {fileID: 0}
-  velocity: {x: 0, y: 0}
+  negative: 0
   spawnTime: 0
-  moveTime: 0
-  catchTime: 0
+  catchTimes: []
   numNotes: 0
   currentNote: 0
   speed: 0
@@ -148,3 +151,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4859509252022318338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4100339267235431660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e547b9c2cd0b0414485702334d6ba7af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using System;
+using UnityEngine.Events;
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
 public class BallData : ScriptableObject
@@ -14,10 +16,26 @@ public class BallData : ScriptableObject
     public NoteData[] notes;
     [HideInInspector]
     public GameObject prefab;
+
+    public delegate void OnBallValidate();
+    public event OnBallValidate onBallValidate;
     
     public void OnEnable()
     {
         SetPrefab();
+    }
+
+    public void SetName()
+    {
+        this.name = type + "Ball" + id;
+        AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), name);
+    }
+
+    private void OnValidate() 
+    {
+        Debug.LogWarning("VALIDATING BALL");
+        SortNotes(notes);
+        if(onBallValidate != null) onBallValidate();
     }
 
     private void SetPrefab()
@@ -33,5 +51,41 @@ public class BallData : ScriptableObject
             default:
                 break;
         }
+    }
+
+    /**
+     * Sort this balls' notes according to their hit time
+     */
+    protected void SortNotes(NoteData[] notes)
+    {
+        try
+        {
+            List<NoteData> noteList = new List<NoteData>();
+            foreach(NoteData nd in notes)
+            {
+                // If a note is null, don't need to keep sorting.
+                if(nd == null)
+                {
+                    Debug.LogWarning("Ball \"" + name + "\" has null notes."); 
+                    
+                }
+                noteList.Add(nd);
+            }
+
+            if(noteList.Count > 0)
+            {
+                noteList.Sort(NoteData.CompareNotesByHitTime);
+            }
+            this.notes = noteList.ToArray();
+        }
+        catch(Exception e)
+        {
+            Debug.LogError("Ball \"" + name + "\" has one or more invalid notes.");
+        }
+    }
+
+    public static int CompareBallsBySpawnTime(BallData a, BallData b)
+    {
+        return a.notes[0].hitTime.CompareTo(b.notes[0].hitTime);
     }
 }
