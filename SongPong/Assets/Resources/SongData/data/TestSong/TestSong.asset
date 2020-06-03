@@ -9,10 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
-  m_Name: note 1
+  m_Script: {fileID: 11500000, guid: b3e293e262d3d1f4c8ce01b9950277b2, type: 3}
+  m_Name: TestSong
   m_EditorClassIdentifier: 
-  hitPosition: 8
-  hitBeat: 20
-  hitTime: 8.275862
-  noteDirection: 0
+  currentTime: 0
+  bpm: 0
+  name: 
+  dataPath: 
+  song: {fileID: 0}
+  axis: 0
+  startBeat: 0
+  endBeat: 0
+  offset: 0
+  myPath: 
