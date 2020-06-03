@@ -79,8 +79,8 @@ public class Paddle : MonoBehaviour
         */
         //paddlePos = context.ReadValue<Vector2>();
         paddlePos += direction * speed * Time.deltaTime;
-        paddlePos.x = Mathf.Clamp(paddlePos.x, bounds[0], bounds[1]); // clamp x
-        paddlePos.y = Mathf.Clamp(paddlePos.y, bounds[2], bounds[3]); // clamp y
+        //paddlePos.x = Mathf.Clamp(paddlePos.x, bounds[0], bounds[1]); // clamp x
+        //paddlePos.y = Mathf.Clamp(paddlePos.y, bounds[2], bounds[3]); // clamp y
 
         transform.position = paddlePos;
     }

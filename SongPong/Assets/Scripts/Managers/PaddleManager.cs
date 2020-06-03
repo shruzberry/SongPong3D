@@ -21,6 +21,12 @@ public class PaddleManager : MonoBehaviour
 
     public Vector2 screenBounds;
 
+    private void Update() 
+    {
+        if(P1 != null)
+            P1.transform.position = Clamp.ClampToAxis(P1.transform.position, new Vector2(0,1), -screenBounds.x, screenBounds.x);
+    }
+
     public void Enable() 
     {
         axisManager = FindObjectOfType<AxisManager>();
