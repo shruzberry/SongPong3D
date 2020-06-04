@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
-    
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -66,7 +65,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         
         //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
         //paddleManager.Enable();
-
 
         songLoaded = true;
         this.gameObject.SetActive(false);

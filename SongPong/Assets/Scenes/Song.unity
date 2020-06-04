@@ -252,8 +252,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 0
+  height: 0
   speed: 10
   playerIndex: 1
+  paddleAxis: {x: 0, y: 0}
+  axisValue: 0
 --- !u!50 &128661834
 Rigidbody2D:
   serializedVersion: 4
@@ -950,10 +954,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1535828539}
     m_Modifications:
-    - target: {fileID: 335334683, guid: 1c783558b9dc24b80a22c3b3b27b3077, type: 3}
-      propertyPath: gameAxis
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1338863237352836497, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: m_Name
@@ -1527,8 +1527,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 0
+  height: 0
   speed: 10
   playerIndex: 0
+  paddleAxis: {x: 0, y: 0}
+  axisValue: 0
 --- !u!212 &5436574408238752829
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class BallDropper : MonoBehaviour
     private AxisManager axisManager;
     private Axis axis;
     private SpawnInfo spawner;
-    private PaddleManager paddleManager;
+    private PlayerInputHandler paddleManager;
     private Paddle paddle;
     private float paddleAxis;
 
@@ -61,7 +61,7 @@ public class BallDropper : MonoBehaviour
     private void Awake()
     {
         song = FindObjectOfType<SongController>();
-        paddleManager = FindObjectOfType<PaddleManager>();
+        paddleManager = FindObjectOfType<PlayerInputHandler>();
         axisManager = FindObjectOfType<AxisManager>();
         axis = axisManager.gameAxis;
         spawner = FindObjectOfType<SpawnInfo>();

@@ -15,4 +15,4 @@ MonoBehaviour:
   hitPosition: 0
   hitBeat: 40
   hitTime: 16.551723
-  noteDirection: 0
+  noteDirection: 1

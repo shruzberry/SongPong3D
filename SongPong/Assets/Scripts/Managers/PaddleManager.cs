@@ -23,20 +23,20 @@ public class PaddleManager : MonoBehaviour
 
     private void Update() 
     {
-        if(P1 != null)
-            P1.transform.position = Clamp.ClampToAxis(P1.transform.position, new Vector2(0,1), -screenBounds.x, screenBounds.x);
+        //if(P1 != null)
+            //P1.transform.position = Clamp.ClampToAxis(P1.transform.position, new Vector2(0,1), -screenBounds.x, screenBounds.x);
     }
 
-    public void Enable() 
+    public void Enable()
     {
         axisManager = FindObjectOfType<AxisManager>();
         paddlePrefab = Resources.Load("Prefabs/Paddle") as GameObject;
 
         paddleRadius = paddlePrefab.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         paddleHeight = paddlePrefab.GetComponent<SpriteRenderer>().bounds.size.y;
-
+        
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
-
+        
         gameAxis = axisManager.gameAxis;
         if(gameAxis == Axis.x) InitializePaddlesX();
         else if(gameAxis == Axis.y) InitializePaddleY();
@@ -44,6 +44,7 @@ public class PaddleManager : MonoBehaviour
 
     public void InitializePaddlesX()
     {
+        Debug.Log("X");
         // Calculate the paddle axis location
         paddleXAxis = screenBounds.x - (screenBounds.x * 0.1f);
         paddleAxis_x = new Vector2(screenBounds.x - (screenBounds.x * 0.1f), 0);
@@ -72,6 +73,7 @@ public class PaddleManager : MonoBehaviour
      **/
     public void InitializePaddleY()
     {
+        Debug.Log("Y");
         // Calculate the paddle axis location
         paddleYAxis = -screenBounds.y + (screenBounds.y * 0.15f);
         paddleAxis_y = new Vector2(0, -screenBounds.y + (screenBounds.y * 0.15f));

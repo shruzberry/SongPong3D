@@ -18,6 +18,7 @@ public class Paddle : MonoBehaviour
 
     //____________ATTRIBUTES_______________
     public Paddles paddleNum;
+    public Vector2 clampAxis;
     public float radius; // the half-width or radius of the paddle
     public float height;
 
@@ -79,6 +80,7 @@ public class Paddle : MonoBehaviour
         */
         //paddlePos = context.ReadValue<Vector2>();
         paddlePos += direction * speed * Time.deltaTime;
+        //paddlePos = Clamp.ClampToAxis(paddlePos, clampAxis);
         //paddlePos.x = Mathf.Clamp(paddlePos.x, bounds[0], bounds[1]); // clamp x
         //paddlePos.y = Mathf.Clamp(paddlePos.y, bounds[2], bounds[3]); // clamp y
 

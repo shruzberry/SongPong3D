@@ -4,41 +4,42 @@ using UnityEngine;
 
 public class Clamp : MonoBehaviour
 {
-    private Vector3 screenBounds;
-    private Vector2 clampAxis;
     /**
-     * AxisCalc
-     * Take in Vector2 as position
-     * Takes in which edge you want it to clamp to
-     * Returns Vector2 with the clamped version of what you passed in
-     * 
-     * Include Radius in overload version?
-     * Include Dimensions as parameters
-     */
-
-    private void Awake() 
-    {
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
-    }
-
-    /**
-     * Vector2 clampAxis : the vector that is the axis the paddle will move on
+     * Vector2 position : the position of the GameObject to Clamp
+     * float radius : the radius (bounds/2) of the GameObject
+     * Vector2 clampAxis : the vector that is the direction of the axis
+     *      (0,1) would be a horizontal axis
+     *      (1,0) would be a vertical axis
      * float min : the lowest value possible
      * float max : the hightest value possible
      */
-    public static Vector2 ClampToAxis(Vector2 position, Vector2 clampAxis, float min, float max)
+    public static Vector2 ClampToAxis(Vector2 position, float radius, Vector2 axisDir, float axisShift)
     {
-        // such as (0,1)
-        // moves along the y-axis, up and down
-        if(clampAxis.x == 0)
-        {
-            position.y = Mathf.Clamp(position.y, min, max);
-        }
-        // such as (1,0)
-        // moves along the x-axis, sideways
-        else
-            position.x = Mathf.Clamp(position.x, min, max);
+        Vector3 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
+        axisDir = Vector3.Normalize(axisDir);
 
+        // (0,1) moves sideways
+        if(axisDir == Vector2.right)
+        {
+            if(axisShift > screenBounds.y)
+            {
+                Debug.LogError("AXIS SHIFT EXCEEDS SCREEN BOUNDS");
+                return position;
+            }
+            position.x = Mathf.Clamp(position.x, -screenBounds.x + radius, screenBounds.x - radius);
+            position.y = axisShift;
+        }
+        // (1,0) moves up/down
+        else
+        {
+            if(axisShift > screenBounds.x)
+            {
+                Debug.LogError("AXIS SHIFT EXCEEDS SCREEN BOUNDS");
+                return position;
+            }
+            position.x = axisShift;
+            position.y = Mathf.Clamp(position.y, -screenBounds.y + radius, screenBounds.y - radius);
+        }
         return position;
     }
 
