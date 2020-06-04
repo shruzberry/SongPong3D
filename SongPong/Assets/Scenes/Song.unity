@@ -255,7 +255,7 @@ MonoBehaviour:
   radius: 0
   height: 0
   speed: 10
-  playerIndex: 1
+  playerIndex: 2
   paddleAxis: {x: 0, y: 0}
   axisValue: 0
 --- !u!50 &128661834
@@ -402,7 +402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 432298415}
-  - component: {fileID: 432298416}
+  - component: {fileID: 432298417}
   m_Layer: 0
   m_Name: PlayerInputManager
   m_TagString: Untagged
@@ -424,7 +424,7 @@ Transform:
   m_Father: {fileID: 2135634209}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &432298416
+--- !u!114 &432298417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -433,49 +433,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 432298414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NotificationBehavior: 0
-  m_MaxPlayerCount: -1
-  m_AllowJoining: 1
-  m_JoinBehavior: 0
-  m_PlayerJoinedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_PlayerLeftEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_JoinAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Join
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 7fd5c99c-41af-467a-b761-c10a1ba6965a
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: bf43151a-af0d-4873-bc14-05f29cd8b09e
-        m_Path: <Keyboard>/space
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Join
-        m_Flags: 0
-    m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 8811777762463785226, guid: 71e8be3995c1e4b858ee8c6ff89d5c33,
+  m_Actions: {fileID: -944628639613478452, guid: 09e278d4ae9694c8582b4b989624f25b,
     type: 3}
-  m_SplitScreen: 0
-  m_MaintainAspectRatioInSplitScreen: 0
-  m_FixedNumberOfSplitScreens: -1
-  m_SplitScreenRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5436574408238752822}
+        m_MethodName: Move
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 97324925-b0e1-4fd1-a005-662f6c8e0824
+    m_ActionName: Paddle/MoveP1[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 128661833}
+        m_MethodName: Move
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9f9f474c-5a96-4286-beef-2e89ae91f1f7
+    m_ActionName: Paddle/MoveP2[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8b5d1c9-7ee3-48a7-8253-a27e5814bd33
+    m_ActionName: NoteListener/MousePos[/Mouse/position]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard
+  m_DefaultActionMap: Paddle
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &444003107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,7 +1543,7 @@ MonoBehaviour:
   radius: 0
   height: 0
   speed: 10
-  playerIndex: 0
+  playerIndex: 1
   paddleAxis: {x: 0, y: 0}
   axisValue: 0
 --- !u!212 &5436574408238752829

@@ -75,7 +75,7 @@ public class PlayerInputHandler : MonoBehaviour
 * INPUT
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void MoveP1(CallbackContext context)
+    /*public void MoveP1(CallbackContext context)
     {
         if(paddleMover != null)
             P1.SetInputVector(context.ReadValue<Vector2>());
@@ -85,7 +85,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if(paddleMover != null)
             P2.SetInputVector(context.ReadValue<Vector2>());
-    }
+    }*/
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS

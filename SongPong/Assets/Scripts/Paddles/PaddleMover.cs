@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class PaddleMover : MonoBehaviour
 {
+    [HideInInspector]
     public float radius; // the half-width or radius of the paddle
+    [HideInInspector]
     public float height; // the height / thickness of the paddle
 
     public float speed = 10.0f;
@@ -22,9 +26,9 @@ public class PaddleMover : MonoBehaviour
         this.axisValue = axisValue;
     }
 
-    public void SetInputVector(Vector2 direction)
+    public void Move(CallbackContext context)
     {
-        _movement = direction;
+        _movement = context.ReadValue<Vector2>();
     }
     
     private void Awake() 
