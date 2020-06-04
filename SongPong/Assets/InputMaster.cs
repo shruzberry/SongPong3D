@@ -19,9 +19,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""c1626425-5569-4a46-882d-03e7e51ed0dc"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""MoveP1"",
                     ""type"": ""PassThrough"",
                     ""id"": ""97324925-b0e1-4fd1-a005-662f6c8e0824"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MoveP2"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""9f9f474c-5a96-4286-beef-2e89ae91f1f7"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -35,7 +43,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MoveP1"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -45,8 +53,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard Left"",
-                    ""action"": ""Move"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -56,8 +64,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard Left"",
-                    ""action"": ""Move"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -67,8 +75,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard Left"",
-                    ""action"": ""Move"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -78,8 +86,63 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard Left"",
-                    ""action"": ""Move"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrow Keys"",
+                    ""id"": ""21c1b09b-3c4e-4a12-a07d-1fc76bd1e4e7"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveP2"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d858fc2f-304a-463b-8a39-3a6997566573"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b4d6da5a-1c28-4a00-ab48-5b633adfc290"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""dfc0a5e6-e8fd-4e09-9761-09a86ea5b926"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c78ea898-ae31-4e7f-b7f3-73421d2150d4"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MoveP2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -90,7 +153,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""75c7cf47-23eb-4ced-b5cc-2157109c1c3c"",
             ""actions"": [
                 {
-                    ""name"": ""Mouse Pos"",
+                    ""name"": ""MousePos"",
                     ""type"": ""Value"",
                     ""id"": ""e8b5d1c9-7ee3-48a7-8253-a27e5814bd33"",
                     ""expectedControlType"": ""Vector2"",
@@ -106,7 +169,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Mouse Pos"",
+                    ""action"": ""MousePos"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -115,23 +178,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Mouse"",
-            ""bindingGroup"": ""Mouse"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Mouse>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Keyboard Left"",
-            ""bindingGroup"": ""Keyboard Left"",
+            ""name"": ""Keyboard"",
+            ""bindingGroup"": ""Keyboard"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
+                    ""isOptional"": true,
                     ""isOR"": false
                 }
             ]
@@ -140,10 +192,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
 }");
         // Paddle
         m_Paddle = asset.FindActionMap("Paddle", throwIfNotFound: true);
-        m_Paddle_Move = m_Paddle.FindAction("Move", throwIfNotFound: true);
+        m_Paddle_MoveP1 = m_Paddle.FindAction("MoveP1", throwIfNotFound: true);
+        m_Paddle_MoveP2 = m_Paddle.FindAction("MoveP2", throwIfNotFound: true);
         // NoteListener
         m_NoteListener = asset.FindActionMap("NoteListener", throwIfNotFound: true);
-        m_NoteListener_MousePos = m_NoteListener.FindAction("Mouse Pos", throwIfNotFound: true);
+        m_NoteListener_MousePos = m_NoteListener.FindAction("MousePos", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -193,12 +246,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
     // Paddle
     private readonly InputActionMap m_Paddle;
     private IPaddleActions m_PaddleActionsCallbackInterface;
-    private readonly InputAction m_Paddle_Move;
+    private readonly InputAction m_Paddle_MoveP1;
+    private readonly InputAction m_Paddle_MoveP2;
     public struct PaddleActions
     {
         private @InputMaster m_Wrapper;
         public PaddleActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_Paddle_Move;
+        public InputAction @MoveP1 => m_Wrapper.m_Paddle_MoveP1;
+        public InputAction @MoveP2 => m_Wrapper.m_Paddle_MoveP2;
         public InputActionMap Get() { return m_Wrapper.m_Paddle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -208,16 +263,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PaddleActionsCallbackInterface != null)
             {
-                @Move.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMove;
-                @Move.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMove;
-                @Move.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMove;
+                @MoveP1.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP1;
+                @MoveP1.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP1;
+                @MoveP1.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP1;
+                @MoveP2.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP2;
+                @MoveP2.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP2;
+                @MoveP2.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnMoveP2;
             }
             m_Wrapper.m_PaddleActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
+                @MoveP1.started += instance.OnMoveP1;
+                @MoveP1.performed += instance.OnMoveP1;
+                @MoveP1.canceled += instance.OnMoveP1;
+                @MoveP2.started += instance.OnMoveP2;
+                @MoveP2.performed += instance.OnMoveP2;
+                @MoveP2.canceled += instance.OnMoveP2;
             }
         }
     }
@@ -255,27 +316,19 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public NoteListenerActions @NoteListener => new NoteListenerActions(this);
-    private int m_MouseSchemeIndex = -1;
-    public InputControlScheme MouseScheme
+    private int m_KeyboardSchemeIndex = -1;
+    public InputControlScheme KeyboardScheme
     {
         get
         {
-            if (m_MouseSchemeIndex == -1) m_MouseSchemeIndex = asset.FindControlSchemeIndex("Mouse");
-            return asset.controlSchemes[m_MouseSchemeIndex];
-        }
-    }
-    private int m_KeyboardLeftSchemeIndex = -1;
-    public InputControlScheme KeyboardLeftScheme
-    {
-        get
-        {
-            if (m_KeyboardLeftSchemeIndex == -1) m_KeyboardLeftSchemeIndex = asset.FindControlSchemeIndex("Keyboard Left");
-            return asset.controlSchemes[m_KeyboardLeftSchemeIndex];
+            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
+            return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }
     public interface IPaddleActions
     {
-        void OnMove(InputAction.CallbackContext context);
+        void OnMoveP1(InputAction.CallbackContext context);
+        void OnMoveP2(InputAction.CallbackContext context);
     }
     public interface INoteListenerActions
     {

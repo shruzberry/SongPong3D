@@ -64,8 +64,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         AxisManager axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
         axisManager.gameAxis = song.axis;
         
-        PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
-        paddleManager.Enable();
+        //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
+        //paddleManager.Enable();
 
 
         songLoaded = true;
@@ -82,8 +82,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
-            paddleManager.Enable();
+            //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
+            //paddleManager.Enable();
         }
     }
 }
