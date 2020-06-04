@@ -35,13 +35,13 @@ public class Paddle : MonoBehaviour
         input.Disable();
     }
 
-    void Awake()
+    /*void Awake()
     {
         axisManager = FindObjectOfType<AxisManager>();
 
         input = new InputMaster();
         input.Paddle.Move.performed += mov => direction = mov.ReadValue<Vector2>();
-    }
+    }*/
 
     public void Init(Paddles num, float[] bounds)
     {
