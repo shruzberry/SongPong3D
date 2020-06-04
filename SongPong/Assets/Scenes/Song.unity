@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  playerIndex: 0
+  playerIndex: 1
 --- !u!50 &128661834
 Rigidbody2D:
   serializedVersion: 4
@@ -903,6 +903,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BallDropper
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492843242582942967, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 826d9436a67ab482c8f1875a17dbf645, type: 3}
