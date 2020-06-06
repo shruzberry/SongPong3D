@@ -162,22 +162,50 @@ public class BallFinder : EditorWindow
         List<Ball> activeBalls =  dropper.getActiveBalls();
         
         GUILayout.BeginArea(viewSection);
-            GUILayout.Label("Active Balls");
-            
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(viewSection.width), GUILayout.Height(viewSection.height - 75));
-                foreach(Ball ball in activeBalls)
-                {
-                    EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
-                    foreach(NoteData note in ball.getNotes())
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Space( 20f );
-                        EditorGUILayout.ObjectField(note, typeof(Object), true);
-                        GUILayout.EndHorizontal();
-                    }
-                }
+                DrawBallDataList(dropper.getWaitingBalls(), Color.blue);
+                DrawBallsList(dropper.getActiveBalls(), Color.green);
+                DrawBallsList(dropper.getFinishedBalls(), Color.red);  
             GUILayout.EndScrollView();
         GUILayout.EndArea();
+    }
+
+    void DrawBallsList(List<Ball> balls, Color color)
+    {
+        foreach(Ball ball in balls)
+        {
+            Color oldColor = GUI.color;
+            GUI.color = color;                
+            EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
+            foreach(NoteData note in ball.getNotes())
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Space( 20f );
+                EditorGUILayout.ObjectField(note, typeof(Object), true);
+                        GUILayout.EndHorizontal();
+            }
+
+            GUI.color = oldColor;
+        }
+    }
+
+    void DrawBallDataList(List<BallData> balls, Color color)
+    {
+        foreach(BallData ball in balls)
+        {
+            Color oldColor = GUI.color;
+            GUI.color = color;
+            EditorGUILayout.ObjectField(ball, typeof(Object), true);
+            foreach(NoteData note in ball.notes)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Space( 20f );
+                EditorGUILayout.ObjectField(note, typeof(Object), true);
+                        GUILayout.EndHorizontal();
+            }
+
+            GUI.color = oldColor;
+        }
     }
 
     public void Update()

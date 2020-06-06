@@ -217,7 +217,10 @@ public class BallDropper : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    public List<BallData> getWaitingBalls(){return waitingBallDataList;}
+
     public List<Ball> getActiveBalls(){return activeBallList;}
+    public List<Ball> getFinishedBalls(){return finishedBallList;}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * LOADER
