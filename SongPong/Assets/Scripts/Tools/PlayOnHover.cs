@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayOnHover : MonoBehaviour
 {
     private SongController songController;
-    bool songPlaying;
+    public bool songPlaying;
     private InputMaster input;
     private Vector2 mousePos;
 
