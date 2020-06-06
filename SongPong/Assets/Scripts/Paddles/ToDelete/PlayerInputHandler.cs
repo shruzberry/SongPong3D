@@ -7,6 +7,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerInputHandler : MonoBehaviour
 {
+    /*
     private AxisManager axisManager;
     private Vector3 screenBounds;
 
@@ -23,9 +24,7 @@ public class PlayerInputHandler : MonoBehaviour
     private Vector2 paddleAxis_x;
     private Vector2 paddleAxis_y;
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* INITIALIZE
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
 
     private void Awake()
     {
@@ -37,10 +36,10 @@ public class PlayerInputHandler : MonoBehaviour
 
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
 
-        if(axisManager.gameAxis == Axis.x) {InitPaddlesX(movers[0], movers[1]);}
-        else if(axisManager.gameAxis == Axis.y) {InitPaddlesY(movers[0], movers[1]);}
+        //if(axisManager.gameAxis == Axis.x) {InitPaddlesX(movers[0], movers[1]);}
+        //else if(axisManager.gameAxis == Axis.y) {InitPaddlesY(movers[0], movers[1]);}
     }
-
+/*
     private void InitPaddlesX(PaddleMover mover1, PaddleMover mover2)
     {
         // Calculate the paddle axis location
@@ -48,11 +47,11 @@ public class PlayerInputHandler : MonoBehaviour
         paddleAxis_x = new Vector2(screenBounds.x - (screenBounds.x * 0.1f), 0);
 
         this.P1 = mover1;
-        P1.Initialize(Vector2.up, -paddleXAxis);
+        //P1.Initialize(Vector2.up, -paddleXAxis);
         P1.transform.eulerAngles = new Vector3(0,0,-90);
 
         this.P2 = mover2;
-        P2.Initialize(Vector2.up, paddleXAxis);
+        //P2.Initialize(Vector2.up, paddleXAxis);
         P2.transform.eulerAngles = new Vector3(0,0,90);
 
     }
@@ -63,17 +62,15 @@ public class PlayerInputHandler : MonoBehaviour
         paddleAxis_y = new Vector2(0, -screenBounds.y + (screenBounds.y * 0.15f));
 
         this.P1 = mover1;
-        P1.Initialize(Vector2.right, paddleYAxis);
+        //P1.Initialize(Vector2.right, paddleYAxis);
         P1.transform.eulerAngles = new Vector3(0,0,0);
 
         this.P2 = mover2;
-        P2.Initialize(Vector2.right, -paddleYAxis);
+        //P2.Initialize(Vector2.right, -paddleYAxis);
         P2.transform.eulerAngles = new Vector3(0,0,180);
     }
+*/
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* INPUT
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     /*public void MoveP1(CallbackContext context)
     {
@@ -90,7 +87,7 @@ public class PlayerInputHandler : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
+/*
     public Vector2 GetPaddleAxis()
     {
         Axis gameAxis = axisManager.gameAxis;
@@ -103,6 +100,8 @@ public class PlayerInputHandler : MonoBehaviour
             return Vector2.zero;
         }
     }
+*/
+
 /*
     public Vector2 GetPaddleLocation(Paddles paddleName)
     {

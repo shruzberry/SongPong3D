@@ -61,7 +61,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     private void SongInit()
     {
         AxisManager axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
-        axisManager.gameAxis = song.axis;
+        //axisManager.gameAxis = song.axis;
         
         //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
         //paddleManager.Enable();

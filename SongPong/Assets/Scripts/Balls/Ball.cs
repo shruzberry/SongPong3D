@@ -35,7 +35,7 @@ public abstract class Ball : MonoBehaviour
     protected Vector2 otherAxisVector; // the unit vector that represents the other axis (with same direction)
 
     //___________REFERENCES_____________
-    protected PlayerInputHandler paddleManager;
+    //protected PlayerInputHandler paddleManager;
     protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
@@ -95,10 +95,10 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner, PlayerInputHandler paddleManager, SongController song)
+    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner,/* PlayerInputHandler paddleManager,*/ SongController song)
     {
         // REFERENCES
-        this.paddleManager = paddleManager;
+        //this.paddleManager = paddleManager;
         this.spawnInfo = spawner;
         this.song = song;
 

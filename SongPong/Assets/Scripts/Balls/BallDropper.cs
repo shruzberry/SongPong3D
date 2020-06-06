@@ -25,7 +25,7 @@ public class BallDropper : MonoBehaviour
     private AxisManager axisManager;
     private Axis axis;
     private SpawnInfo spawner;
-    private PlayerInputHandler paddleManager;
+    //private PlayerInputHandler paddleManager;
     private Paddle paddle;
     private float paddleAxis;
 
@@ -61,7 +61,7 @@ public class BallDropper : MonoBehaviour
     private void Awake()
     {
         song = FindObjectOfType<SongController>();
-        paddleManager = FindObjectOfType<PlayerInputHandler>();
+        //paddleManager = FindObjectOfType<PlayerInputHandler>();
         axisManager = FindObjectOfType<AxisManager>();
         axis = axisManager.gameAxis;
         spawner = FindObjectOfType<SpawnInfo>();
@@ -80,7 +80,8 @@ public class BallDropper : MonoBehaviour
     private void CalcMoveTimes()
     {
         Vector2 spawnAxis = spawner.spawnAxis;
-        Vector2 paddleAxis = paddleManager.GetPaddleAxis();
+        //Vector2 paddleAxis = paddleManager.GetPaddleAxis();
+        Vector2 paddleAxis = GameObject.Find("Game").GetComponent<AxisManager>().GetPaddleAxis();
         Vector2 axisVector;
         if(axis == Axis.y) {axisVector = new Vector2(0,1);}
         else{axisVector = new Vector2(1,0);}
@@ -169,7 +170,7 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
 
-            ball.InitializeBall(data, axisManager, spawner, paddleManager, song);
+            ball.InitializeBall(data, axisManager, spawner, /*paddleManager,*/ song);
 
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
