@@ -88,9 +88,9 @@ public class PlayerScore : MonoBehaviour
         ball.onBallCaught += Score; //can i have parameters?
     }
 
-    private void Score(Ball ball, Paddle paddle)
+    private void Score(Ball ball)
     {
-        print("scoring" + paddle.paddleNum);
+        //print("scoring" + paddle.paddleNum);
         //if(paddle.paddleNum == player)
         {
             score += 1;

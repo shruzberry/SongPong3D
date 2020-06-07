@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayOnHover : MonoBehaviour
 {
     private SongController songController;
-    public bool songPlaying;
+    public bool songPlaying = false;
     private InputMaster input;
     private Vector2 mousePos;
 
@@ -44,6 +44,7 @@ public class PlayOnHover : MonoBehaviour
         }
         if(!songPlaying && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
         {
+            Debug.Log("TEST");
             songController.Play();
             songPlaying = true;
             Time.timeScale = 1.0f;

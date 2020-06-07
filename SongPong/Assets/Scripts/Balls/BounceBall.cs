@@ -127,7 +127,6 @@ public class BounceBall : Ball
         {
             caught = true;
             catchTimes[currentNote] = song.GetSongTime();
-            paddle = other.gameObject.GetComponent<Paddle>();
         }
     }
 
@@ -135,9 +134,14 @@ public class BounceBall : Ball
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void ExitActions()
+    public override void OnExitActions()
     {
         StartCoroutine(WaitThenDestroy());
+    }
+
+    public override void ExitActions()
+    {
+        
     }
 
     IEnumerator WaitThenDestroy()

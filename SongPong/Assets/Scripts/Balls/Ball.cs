@@ -36,7 +36,6 @@ public abstract class Ball : MonoBehaviour
 
     //___________REFERENCES_____________
     //protected PlayerInputHandler paddleManager;
-    protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
     
@@ -55,7 +54,7 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallReady(Ball ball);
     public event BallReady onBallReady;
 
-    public delegate void BallCaught(Ball ball, Paddle paddle);
+    public delegate void BallCaught(Ball ball);
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
@@ -224,7 +223,7 @@ public abstract class Ball : MonoBehaviour
 
     public virtual void CatchActions()
     {
-        if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
+        if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -237,6 +236,8 @@ public abstract class Ball : MonoBehaviour
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public abstract void OnExitActions();
 
     public abstract void ExitActions();
 

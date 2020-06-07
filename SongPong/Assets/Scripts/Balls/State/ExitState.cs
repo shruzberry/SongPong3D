@@ -8,11 +8,12 @@ public class ExitState : BallState
 
     public override void OnStateEnter()
     {
-        ball.ExitActions();
+        ball.OnExitActions();
     }
 
     public override void Tick()
     {
+        ball.ExitActions();
         if(ball.exit)
         {
             ball.SetState(new IdleState(ball));

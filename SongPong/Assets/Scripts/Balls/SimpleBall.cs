@@ -15,6 +15,7 @@ public class SimpleBall : Ball
     //________COMPONENTS____________
     Vector3 screenBounds;
     public Rigidbody2D rb;
+    public Animator animator;
 
     //________MOVEMENT______________
     private float deltaH;
@@ -31,6 +32,7 @@ public class SimpleBall : Ball
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
     }
 
@@ -84,9 +86,7 @@ public class SimpleBall : Ball
 
    private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Paddle"){
-            paddle = other.gameObject.GetComponent<Paddle>();
-            
+        if(other.gameObject.tag == "Paddle"){            
             caught = true;
             catchTimes[currentNote] = song.GetSongTime();
         }
@@ -95,16 +95,26 @@ public class SimpleBall : Ball
     public override void CatchActions()
     {
         base.CatchActions();
-        velocity = -velocity;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    public override void OnExitActions()
+    {
+        animator.SetTrigger("isFinished");
+        velocity = -velocity;
+    }
+
     public override void ExitActions()
     {
-        StartCoroutine(WaitThenDestroy());
+        MoveActions();
+    }
+
+    public void OnAnimationFinish()
+    {
+        exit = true;
     }
 
     IEnumerator WaitThenDestroy()
