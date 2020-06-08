@@ -16,6 +16,8 @@ public class BallData : ScriptableObject
     public NoteData[] notes;
     [HideInInspector]
     public GameObject prefab;
+    [HideInInspector]
+    public bool active;
 
     public delegate void OnBallValidate();
     public event OnBallValidate onBallValidate;

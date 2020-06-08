@@ -73,7 +73,7 @@ public class BallDropper : MonoBehaviour
 
     private void Start()
     {
-        LoadBalls();
+        //LoadBalls();
         CalcMoveTimes();
     }
 
@@ -218,7 +218,12 @@ public class BallDropper : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public List<BallData> getWaitingBalls(){return waitingBallDataList;}
-
+    public BallData[] getAllBallData()
+    {
+        string path = dataLocation + ballMapName + "/Balls/";
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        return ballData;
+    }
     public List<Ball> getActiveBalls(){return activeBallList;}
     public List<Ball> getFinishedBalls(){return finishedBallList;}
 

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: simpleBall1
   m_EditorClassIdentifier: 
   id: 1
-  enabled: 1
+  enabled: 0
   type: 0
   notes:
   - {fileID: 11400000, guid: 0df7ef992cce949babb42e9141b3e074, type: 2}
+  - {fileID: 11400000, guid: 1ca9b6f7e252444b187f93b1aa99bc18, type: 2}
   prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}

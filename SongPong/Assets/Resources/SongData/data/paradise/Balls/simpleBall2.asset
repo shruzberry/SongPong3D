@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: simpleBall2
   m_EditorClassIdentifier: 
   id: 2
-  enabled: 1
+  enabled: 0
   type: 0
   notes:
   - {fileID: 11400000, guid: 1ca9b6f7e252444b187f93b1aa99bc18, type: 2}

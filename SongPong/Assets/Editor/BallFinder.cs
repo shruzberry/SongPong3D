@@ -27,6 +27,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Types;
+
 
 public class BallFinder : EditorWindow
 {
@@ -66,11 +68,6 @@ public class BallFinder : EditorWindow
         window.Show();
     }
 
-    void OnEnable()
-    {
-        //songController = GameObject.Find("SongController").GetComponent<SongController>();
-    }
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * GUI DRAW FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -81,7 +78,7 @@ public class BallFinder : EditorWindow
         {
             DrawRowLayouts();
             DrawNavSettings();
-            DrawActiveBalls();
+            DrawBallData();
             songData = songController.songData;
         }
         else
@@ -156,56 +153,46 @@ public class BallFinder : EditorWindow
         GUILayout.EndArea();
     }
 
-    void DrawActiveBalls()
+    void DrawBallData()
     {
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         List<Ball> activeBalls =  dropper.getActiveBalls();
         
         GUILayout.BeginArea(viewSection);
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(viewSection.width), GUILayout.Height(viewSection.height - 75));
-                DrawBallDataList(dropper.getWaitingBalls(), Color.blue);
-                DrawBallsList(dropper.getActiveBalls(), Color.green);
-                DrawBallsList(dropper.getFinishedBalls(), Color.red);  
+                DrawBallDataList(dropper.getAllBallData(), Color.blue);
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
 
-    void DrawBallsList(List<Ball> balls, Color color)
+    void DrawBallDataList(BallData[] balls, Color color)
     {
-        foreach(Ball ball in balls)
-        {
-            Color oldColor = GUI.color;
-            GUI.color = color;                
-            EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
-            foreach(NoteData note in ball.getNotes())
-            {
-                GUILayout.BeginHorizontal();
-                GUILayout.Space( 20f );
-                EditorGUILayout.ObjectField(note, typeof(Object), true);
-                        GUILayout.EndHorizontal();
-            }
+        GUIStyle s = new GUIStyle(GUI.skin.button);
+        s.alignment = TextAnchor.MiddleLeft;
+        var w = GUILayout.Width(100);
 
-            GUI.color = oldColor;
-        }
-    }
-
-    void DrawBallDataList(List<BallData> balls, Color color)
-    {
         foreach(BallData ball in balls)
         {
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            EditorGUILayout.ObjectField(ball, typeof(Object), true);
+            GUILayout.BeginHorizontal();
+                ball.name = EditorGUILayout.TextField("", ball.name, s, w);                
+                ball.type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
+                ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+            GUILayout.EndHorizontal();
+
             foreach(NoteData note in ball.notes)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Space( 20f );
-                EditorGUILayout.ObjectField(note, typeof(Object), true);
-                        GUILayout.EndHorizontal();
+                    GUILayout.Space( 50.0f );
+                    note.name = EditorGUILayout.TextField("", note.name, s, w);
+                    note.hitPosition = EditorGUILayout.IntField("", note.hitPosition, s, w); 
+                    note.hitTime = EditorGUILayout.FloatField("", note.hitTime, s, w);                
+                    note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, w);
+                GUILayout.EndHorizontal();
             }
 
-            GUI.color = oldColor;
+            GUILayout.Label("----");
         }
+        
     }
 
     public void Update()
