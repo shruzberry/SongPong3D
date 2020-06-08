@@ -70,6 +70,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         this.gameObject.SetActive(false);
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         songController.LoadSong(song);
+        songController.Play();
 
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.Activate();  

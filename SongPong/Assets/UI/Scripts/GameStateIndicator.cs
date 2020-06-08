@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameStateIndicator : MonoBehaviour
 {
-    private PlayOnHover song;
+    private SongController song;
     public Sprite playing;
     public Sprite paused;
 
@@ -13,18 +13,18 @@ public class GameStateIndicator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        song = FindObjectOfType<PlayOnHover>();
+        song = FindObjectOfType<SongController>();
         image = GetComponent<Image>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(song.songPlaying)
+        if(song.isPlaying)
         {
             image.sprite = playing;
         }
-        else if(!song.songPlaying)
+        else if(!song.isPlaying)
         {
             image.sprite = paused;
         }

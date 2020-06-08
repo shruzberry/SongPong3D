@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayOnHover : MonoBehaviour
 {
-    private SongController songController;
-    public bool songPlaying = false;
+    private SongController song;
     private InputMaster input;
     private Vector2 mousePos;
 
@@ -23,7 +22,7 @@ public class PlayOnHover : MonoBehaviour
 
     void Awake()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        song = GameObject.FindObjectOfType<SongController>();
         input = new InputMaster();
         input.NoteListener.MousePos.performed += mov => mousePos = mov.ReadValue<Vector2>();
     }
@@ -36,17 +35,14 @@ public class PlayOnHover : MonoBehaviour
 
     void CheckMouseHover()
     {
-        if(songPlaying && !isMouseOverGame()) //fullWindow.Contains(Event.current.mousePosition)
+        if(song.isPlaying && !isMouseOverGame()) //fullWindow.Contains(Event.current.mousePosition)
         {
-            songController.Pause();
-            songPlaying = false;
+            song.Pause();
             Time.timeScale = 0.0f;
         }
-        if(!songPlaying && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
+        if(!song.isPlaying && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
         {
-            Debug.Log("TEST");
-            songController.Play();
-            songPlaying = true;
+            song.Play();
             Time.timeScale = 1.0f;
         }    
     }

@@ -38,19 +38,25 @@ public class SongController : MonoBehaviour
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    // REFERENCES
+    private AudioSource source;
+    private BallDropper ballDropper;
+
+    // COMPONENTS
     public SongData songData;
-    //[HideInInspector]
+
+    // INFORMATION
     public float currentBeat;
     [HideInInspector]
     public float songTime;
-
     [HideInInspector]
-    public int numBeats;
+    public int numBeats; // total number of beats in this song
     [HideInInspector]
-    public float songLength;
+    public float songLength; // length of song in (sec)
 
-    private AudioSource source;
-    private BallDropper ballDropper;
+    // BOOLEANS
+    public bool isPlaying;
+
     private int startTime;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -82,9 +88,17 @@ public class SongController : MonoBehaviour
         ballDropper.ballMapName = newSongData.name;
     }
 
-    public void Play(){source.Play();}
+    public void Play()
+    {
+        isPlaying = true;
+        source.Play();
+    }
     
-    public void Pause(){source.Pause();}
+    public void Pause()
+    {
+        isPlaying = false;
+        source.Pause();
+    }
 
     public void UpdateSongTime()
     {
