@@ -79,7 +79,7 @@ public class BallData : ScriptableObject
             }
             this.notes = noteList.ToArray();
         }
-        catch(Exception e)
+        catch (Exception)
         {
             Debug.LogError("Ball \"" + name + "\" has one or more invalid notes.");
         }

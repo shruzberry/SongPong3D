@@ -182,7 +182,7 @@ public class BallDropper : MonoBehaviour
 
             return ball;
         }
-        catch(Exception e)
+        catch (Exception)
         {
             return null;
         }
