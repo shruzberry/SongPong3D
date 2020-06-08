@@ -79,7 +79,7 @@ public class SongController : MonoBehaviour
         numBeats = (int)((songLength / 60.0f) * songData.bpm);
         startTime = newSongData.startBeat;
 
-        ballDropper.ballMapName = newSongData.name;
+        ballDropper.ballMapName = newSongData.songName;
     }
 
     public void Play(){source.Play();}
