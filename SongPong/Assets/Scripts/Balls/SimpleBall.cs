@@ -52,6 +52,15 @@ public class SimpleBall : Ball
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public override void OnIdleExit()
+    {
+        base.OnIdleExit();
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -86,9 +95,10 @@ public class SimpleBall : Ball
 
    private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Paddle"){            
+        if(other.gameObject.tag == "Paddle"){
+            paddle = other.gameObject.GetComponent<Paddle>();
             caught = true;
-            catchTimes[currentNote] = song.GetSongTime();
+            catchTimesBeats[currentNote] = song.GetSongTimeBeats();
         }
     }
 

@@ -10,7 +10,7 @@ public class SongData : ScriptableObject
     [HideInInspector]
     public float currentTime;
     public int bpm;
-    public string name;
+    public string songName;
     [HideInInspector]
     public string dataPath;
     public AudioClip song;

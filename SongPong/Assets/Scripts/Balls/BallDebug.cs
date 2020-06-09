@@ -27,22 +27,23 @@ public class BallDebug : MonoBehaviour
         if(!printDebug){return;}
 
         int currentNote = ball.currentNote;
-        float catchTime = 0;
+        float catchTimeBeats = 0;
 
         // for the first drop, use the spawn time in deltaT
         if(currentNote == 0)
         {
-            catchTime = ball.catchTimes[0] - ball.spawnTime;
+            catchTimeBeats = ball.catchTimesBeats[0] - ball.spawnTimeBeats;
         }
         // for bounces, etc. use the last catch time
         else
         {
-            catchTime = ball.catchTimes[currentNote] - ball.catchTimes[currentNote - 1];
+            Debug.Log("FIX ME");
+            catchTimeBeats = ball.catchTimesBeats[currentNote] - ball.catchTimesBeats[currentNote - 1];
         }
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
-        Debug.Log("Expected Move Time (Beats): " + ballDropper.fallTime);
-        Debug.Log("Actual Move Time (Beats): " + song.ToBeat(catchTime));
-        Debug.Log("Caught " + ball.type + "Ball " + ball.id + " at beat " + song.currentBeat);
+        Debug.Log("Expected Move Time (Beats) – " + ballDropper.GetFallTimeBeats());
+        Debug.Log("Actual Move Time (Beats) – " + catchTimeBeats);
+        Debug.Log("Caught " + ball.name + " at beat " + song.GetSongTimeBeats());
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
     }
 }

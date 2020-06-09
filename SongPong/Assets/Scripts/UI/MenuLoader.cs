@@ -82,12 +82,12 @@ public class MenuLoader : MonoBehaviour
     {
         // Create Button
         Button button = Instantiate(prefab);
-        button.name = sd.name;
+        button.name = sd.songName;
  
         // Create Label
         Text text = button.GetComponentInChildren<Text>();
         if (text)
-            text.text = sd.name;
+            text.text = sd.songName;
 
         // Add scene transition listener
         button.onClick.AddListener(() => 

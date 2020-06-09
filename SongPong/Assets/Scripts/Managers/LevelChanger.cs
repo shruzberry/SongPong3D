@@ -8,9 +8,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public Animator animator;
     public SongData song;
-    
+
     private int levelToLoad;
-    private bool songLoaded = false;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
@@ -23,10 +22,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         CheckForNonMenuPlay();
     }
 
-    private void Update() 
+    private void Update()
     {
-        if(SceneManager.GetActiveScene().buildIndex == 1 && !songLoaded)
-            SongInit();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -50,7 +47,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     }
 
     public void SetSong(SongData sd)
-    {  
+    {
         song = sd;
     }
 
@@ -58,22 +55,22 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void SongInit()
+    private void InitSong()
     {
-        AxisManager axisManager = GameObject.Find("Game").GetComponent<AxisManager>();
-        //axisManager.gameAxis = song.axis;
-        
-        //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
-        //paddleManager.Enable();
+        // PADDLES
+        PaddleManager paddleManager = FindObjectOfType<PaddleManager>();
+        paddleManager.Activate();
 
-        songLoaded = true;
-        this.gameObject.SetActive(false);
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        songController.LoadSong(song);
-        songController.Play();
+        // SONG
+        SongController song = FindObjectOfType<SongController>();
+        song.LoadSong(this.song);
 
+        // BALL DROPPER
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        ballDropper.Activate();  
+        ballDropper.Activate();
+        ballDropper.ballMapName = song.songName;
+
+        song.Play();
     }
 
     private void CheckForNonMenuPlay()
@@ -81,8 +78,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            //PaddleManager paddleManager = GameObject.Find("PaddleManager").GetComponent<PaddleManager>();
-            //paddleManager.Enable();
+            InitSong();
         }
     }
 }

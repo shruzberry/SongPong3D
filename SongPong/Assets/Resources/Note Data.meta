@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: e9d6be30b78f2cc44bad9ff4d8d9e37a
+=======
+<<<<<<< HEAD:SongPong/Assets/Scenes/Song.meta
+guid: 764401ca8c3414fbaafda2e899564c02
+=======
+guid: e9d6be30b78f2cc44bad9ff4d8d9e37a
+>>>>>>> master:SongPong/Assets/Resources/Note Data.meta
+>>>>>>> master
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -11,7 +11,7 @@ public class PlayOnHover : MonoBehaviour
     private Vector2 mousePos;
 
     void OnEnable()
-    { 
+    {
         input.Enable();
     }
 
@@ -22,14 +22,14 @@ public class PlayOnHover : MonoBehaviour
 
     void Awake()
     {
-        song = GameObject.FindObjectOfType<SongController>();
+        song = FindObjectOfType<SongController>();
         input = new InputMaster();
         input.NoteListener.MousePos.performed += mov => mousePos = mov.ReadValue<Vector2>();
     }
 
     void Update()
     {
-        if(Application.isPlaying)
+        if(Application.isPlaying && song.isLoaded)
             CheckMouseHover();
     }
 
@@ -44,7 +44,7 @@ public class PlayOnHover : MonoBehaviour
         {
             song.Play();
             Time.timeScale = 1.0f;
-        }    
+        }
     }
 
     bool isMouseOverGame()

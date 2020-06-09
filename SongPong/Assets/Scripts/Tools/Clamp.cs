@@ -13,13 +13,16 @@ public class Clamp : MonoBehaviour
      * float min : the lowest value possible
      * float max : the hightest value possible
      */
-    public static Vector2 ClampToAxis(Vector2 position, float radius, Vector2 axisDir, float axisShift)
+    public static Vector2 ClampToAxis(Vector2 position, float radius, Vector2 axisDir)
     {
         Vector3 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
-        axisDir = Vector3.Normalize(axisDir);
+        Vector3 normalizedAxisVector = Abs(Vector3.Normalize(axisDir));
+        float axisShift = Vector2.Dot(normalizedAxisVector, axisDir);
+        //Debug.Log("AXIS: " + axisDir);
+        //Debug.Log("NORM: " + normalizedAxisVector);
 
         // (0,1) moves sideways
-        if(axisDir == Vector2.right)
+        if(normalizedAxisVector == Vector3.up || normalizedAxisVector == -Vector3.up)
         {
             if(axisShift > screenBounds.y)
             {
@@ -30,7 +33,7 @@ public class Clamp : MonoBehaviour
             position.y = axisShift;
         }
         // (1,0) moves up/down
-        else
+        else if(axisDir == Vector2.right)
         {
             if(axisShift > screenBounds.x)
             {
@@ -43,4 +46,11 @@ public class Clamp : MonoBehaviour
         return position;
     }
 
+    /**
+     * Returns the absolute value of a vector (all values are positive)
+     */
+    public static Vector2 Abs (Vector2 vec)
+    {
+        return new Vector2(Mathf.Abs(vec.x), Mathf.Abs(vec.y));
+    }
 }

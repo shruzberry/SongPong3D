@@ -13,11 +13,14 @@ public class PaddleMover : MonoBehaviour
 
     [HideInInspector]
     public Vector2 paddleAxis;
-    [HideInInspector]
-    public float axisValue;
 
     private Vector2 _movement;
     private Vector2 paddlePos;
+
+    private void Awake() 
+    {
+        height = GetComponent<Collider2D>().bounds.size.y;
+    }
 
     public void Move(CallbackContext context)
     {
@@ -27,7 +30,21 @@ public class PaddleMover : MonoBehaviour
     void Update()
     {
         paddlePos += _movement * speed * Time.deltaTime;
-        paddlePos = Clamp.ClampToAxis(paddlePos, radius, paddleAxis, axisValue);
+        paddlePos = Clamp.ClampToAxis(paddlePos, radius, paddleAxis);
         transform.position = paddlePos;
+    }
+
+    public Vector2 GetAxis()
+    {
+        return paddleAxis;
+    }
+
+    /**
+     * Returns the paddles' axis adjusted so that it lies on the top of the paddle instead of the middle
+     */
+    public Vector2 GetPaddleTopAxis()
+    {
+        float paddleHalfHeight = height / 2;
+        return paddleAxis - (paddleAxis.normalized * paddleHalfHeight);
     }
 }
