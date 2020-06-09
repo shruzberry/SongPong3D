@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using System;
 
 public class SongEdit : MonoBehaviour
 {
@@ -90,6 +91,12 @@ public class SongEdit : MonoBehaviour
         }
 
         saveBall(bd);        
+    }
+
+    public static void AppendToBall(BallData ball, NoteData note)
+    {
+        Array.Resize( ref ball.notes, ball.notes.Length + 1);
+        ball.notes[ball.notes.Length - 1] = note;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
