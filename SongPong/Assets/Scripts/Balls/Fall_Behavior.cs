@@ -17,7 +17,6 @@ public class Fall_Behavior : MoveBehavior
         float time = (-speed + Mathf.Sqrt(determinant)) / gravity;
 
         if(float.IsNaN(time)) Debug.LogError("TIME IS NAN.");
-
         return time;
     }
 }

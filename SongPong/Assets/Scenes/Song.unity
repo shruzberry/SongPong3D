@@ -797,6 +797,11 @@ PrefabInstance:
       propertyPath: ballMapName
       value: Paradise
       objectReference: {fileID: 0}
+    - target: {fileID: 1492843242582942966, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: printLoadedBalls
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1492843242582942967, guid: 826d9436a67ab482c8f1875a17dbf645,
         type: 3}
       propertyPath: m_Name
@@ -806,6 +811,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146009305604118117, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: printDebug
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 826d9436a67ab482c8f1875a17dbf645, type: 3}
@@ -850,7 +860,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 335334683, guid: 1c783558b9dc24b80a22c3b3b27b3077, type: 3}
       propertyPath: gameAxis
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1338863237352836497, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
@@ -958,7 +968,7 @@ GameObject:
   - component: {fileID: 1660985502}
   - component: {fileID: 1660985503}
   m_Layer: 0
-  m_Name: PaddleAxis
+  m_Name: PaddleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -987,13 +997,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1660985501}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c3494e764d8f4aa8ba6af5b9a63b198, type: 3}
+  m_Script: {fileID: 11500000, guid: 83fb956c7a68c4130af37182b0e1cee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   axisManager: {fileID: 1163970131}
   paddle1: {fileID: 5436574408238752817}
   paddle2: {fileID: 445699344}
-  padding: 0.03
+  padding: 0.05
 --- !u!1 &1898151677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,6 +1176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SongController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2801249904474146111, guid: 1a6cae9c5e99a884aa07b98ef2b6b162,
+        type: 3}
+      propertyPath: isLoaded
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a6cae9c5e99a884aa07b98ef2b6b162, type: 3}

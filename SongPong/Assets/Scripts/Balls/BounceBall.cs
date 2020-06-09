@@ -25,10 +25,6 @@ public class BounceBall : Ball
 
     public override void InitializeBallSpecific()
     {
-        // ATTRIBUTES
-        size = GetComponent<Collider2D>().bounds.size.y;
-        radius = size / 2;
-
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
@@ -61,7 +57,8 @@ public class BounceBall : Ball
     private float CalcBounceTime()
     {
         // Calculate time to hit the next note (this is returned)
-        float deltaT = notes[currentNote].hitTime - song.GetSongTime();
+        // TODO convert to beats
+        float deltaT = notes[currentNote].hitTime - song.GetSongTimeSeconds();
 
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
@@ -126,7 +123,7 @@ public class BounceBall : Ball
         if(other.gameObject.tag == "Paddle")
         {
             caught = true;
-            catchTimes[currentNote] = song.GetSongTime();
+            catchTimesBeats[currentNote] = song.GetSongTimeSeconds();
             paddle = other.gameObject.GetComponent<Paddle>();
         }
     }

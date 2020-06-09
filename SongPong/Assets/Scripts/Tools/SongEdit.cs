@@ -38,7 +38,7 @@ public class SongEdit : MonoBehaviour
         BallData bd = new BallData();
         NoteData nd = new NoteData();
         
-        nd.hitBeat = (int) songController.currentBeat;
+        nd.hitBeat = (int) songController.GetSongTimeBeats();
         saveNote(nd);
 
         bd.type = BallTypes.simple;

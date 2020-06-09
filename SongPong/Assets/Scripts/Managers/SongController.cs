@@ -38,20 +38,31 @@ public class SongController : MonoBehaviour
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    // SONG INFO
     public SongData songData;
-    //[HideInInspector]
-    public float currentBeat;
+    [HideInInspector]
+    public string songName;
     [HideInInspector]
     public float songTime;
-
     [HideInInspector]
     public int numBeats;
     [HideInInspector]
-    public float songLength;
+    public float songLengthSeconds;
 
-    private AudioSource source;
-    private BallDropper ballDropper;
+    // OTHER
     private int startTime;
+
+    // BOOLS
+    [HideInInspector]
+    public bool isLoaded = false;
+    [HideInInspector]
+    public bool isPlaying;
+
+    // COMPONENTS
+    private AudioSource source;
+
+    // REFERENCES
+    private BallDropper ballDropper;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * STATIC FUNCTIONS
@@ -73,18 +84,31 @@ public class SongController : MonoBehaviour
 
     public void LoadSong(SongData newSongData)
     {
+        // INITIALIZE COMPONENTS
+        source = GetComponent<AudioSource>();
+
+        // SONG INFO
         songData = newSongData;
-        source.clip = songData.song;
-        songLength = source.clip.length;
-        numBeats = (int)((songLength / 60.0f) * songData.bpm);
+        songName = songData.songName;
+        source.clip = songData.song; // which audio file
+        songLengthSeconds = source.clip.length; // how long the song is
+        numBeats = (int)((songLengthSeconds / 60.0f) * songData.bpm);
         startTime = newSongData.startBeat;
 
-        ballDropper.ballMapName = newSongData.songName;
+        isLoaded = true;
     }
 
-    public void Play(){source.Play();}
+    public void Play()
+    {
+        isPlaying = true;
+        source.Play();
+    }
     
-    public void Pause(){source.Pause();}
+    public void Pause()
+    {
+        isPlaying = false;
+        source.Pause();
+    }
 
     public void UpdateSongTime()
     {
@@ -113,9 +137,14 @@ public class SongController : MonoBehaviour
         goToTime(songData.endBeat);
     }
 
-    public float GetSongTime()
+    public float GetSongTimeSeconds()
     {
         return source.time;
+    }
+
+    public float GetSongTimeBeats()
+    {
+        return ToBeat(source.time);
     }
 
 
@@ -134,24 +163,10 @@ public class SongController : MonoBehaviour
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    void Awake()
-    {
-        source = GetComponent<AudioSource>();
-        ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        source.clip = songData.song;
-        songLength = source.clip.length;
-        numBeats = (int)((songLength / 60.0f) * songData.bpm);
-    }
-
     void Start()
     {
         LoadSong(songData);
         JumpToStart();
     }
 
-    void Update()
-    {
-        currentBeat = ToBeat(songTime);
-        songTime = source.time;
-    }
 }

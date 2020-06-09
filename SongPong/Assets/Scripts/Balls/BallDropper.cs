@@ -23,11 +23,8 @@ public class BallDropper : MonoBehaviour
     //___________References______________
     private SongController song;
     private AxisManager axisManager;
-    private Axis axis;
     private SpawnInfo spawner;
-    //private PlayerInputHandler paddleManager;
     private Paddle paddle;
-    private float paddleAxis;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -45,14 +42,17 @@ public class BallDropper : MonoBehaviour
     private GameObject bounceBall;
 
     //___________Move Behaviors__________
-    public float fallTime;
+    private float fallTimeBeats;
 
     //___________Loader__________________
-    public string dataLocation = "SongData/data/";
+    public static string dataLocation = "SongData/data/";
     public string ballMapName; // name of the current song
 
     //___________State___________________
     private bool isFinished = false; // any balls left to update
+
+    //___________Debug___________________
+    public bool printLoadedBalls = false;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
@@ -63,7 +63,6 @@ public class BallDropper : MonoBehaviour
         song = FindObjectOfType<SongController>();
         //paddleManager = FindObjectOfType<PlayerInputHandler>();
         axisManager = FindObjectOfType<AxisManager>();
-        axis = axisManager.gameAxis;
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
 
@@ -71,24 +70,18 @@ public class BallDropper : MonoBehaviour
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
     }
 
-    private void Start()
-    {
-        LoadBalls();
-        CalcMoveTimes();
-    }
-
     private void CalcMoveTimes()
     {
         Vector2 spawnAxis = spawner.spawnAxis;
-        //Vector2 paddleAxis = paddleManager.GetPaddleAxis();
-        Vector2 paddleAxis = GameObject.Find("Game").GetComponent<AxisManager>().GetPaddleAxis();
+
+        Vector2 paddleAxis = FindObjectOfType<PaddleMover>().GetPaddleTopAxis();
+
         Vector2 axisVector;
-        if(axis == Axis.y) {axisVector = new Vector2(0,1);}
+        if(axisManager.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
         else{axisVector = new Vector2(1,0);}
 
-        fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, 0.0f, 3.0f);
-        fallTime = song.ToBeat(fallTime);
-        Debug.Log("FALL TIME: " + fallTime);
+        float fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, 0.0f, 3.0f);
+        fallTimeBeats = song.ToBeat(fallTime);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -139,8 +132,8 @@ public class BallDropper : MonoBehaviour
             // TODO change this to just look at the first note, but need to sort first
             foreach(NoteData note in ballData.notes)
             {
-                float dropBeat = note.hitBeat - fallTime;
-                if(!isFinished && dropBeat <= song.currentBeat)
+                float dropBeat = note.hitBeat - fallTimeBeats;
+                if(!isFinished && dropBeat <= song.GetSongTimeBeats())
                 {
                     spawnedBalls.Add(ballData);
 
@@ -177,8 +170,6 @@ public class BallDropper : MonoBehaviour
 
             // Add to list of balls
             activeBallList.Add(ball);
-
-            Debug.Log("DROP BALL " + ball.name + "at beat " + song.currentBeat);
 
             return ball;
         }
@@ -217,7 +208,8 @@ public class BallDropper : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public List<Ball> getActiveBalls(){return activeBallList;}
+    public List<Ball> GetActiveBalls(){return activeBallList;}
+    public float GetFallTimeBeats(){return fallTimeBeats;}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * LOADER
@@ -225,6 +217,9 @@ public class BallDropper : MonoBehaviour
 
     public void LoadBalls()
     {
+        // check if was given a name
+        if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
+
         string path = dataLocation + ballMapName + "/Balls/";
         BallData[] ballData = Resources.LoadAll<BallData>(path);
 
@@ -242,6 +237,26 @@ public class BallDropper : MonoBehaviour
  * PUBLIC ACCESSORS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void Activate(){LoadBalls();}
+    public void Activate()
+    {
+        LoadBalls();
+        if(printLoadedBalls) DebugLoadedBalls();
+        CalcMoveTimes();
+    }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * DEBUG
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
+    public void DebugLoadedBalls()
+    {
+        if(ballDataList.Count == 0)
+        {
+            Debug.LogWarning("NO BALLS WERE LOADED.");
+        }
+        foreach(BallData ballData in ballDataList)
+        {
+            Debug.Log(ballData.name);
+        }
+    }
 }
