@@ -159,7 +159,9 @@ public class BallFinder : EditorWindow
         List<Ball> activeBalls =  dropper.getActiveBalls();
         
         GUILayout.BeginArea(viewSection);
-            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(viewSection.width), GUILayout.Height(viewSection.height - 75));
+            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition,
+                                        GUILayout.Width(viewSection.width),
+                                        GUILayout.Height(viewSection.height - 75));
                 DrawBallDataList(dropper.getAllBallData(), Color.blue);
             GUILayout.EndScrollView();
         GUILayout.EndArea();
@@ -173,6 +175,8 @@ public class BallFinder : EditorWindow
 
         foreach(BallData ball in balls)
         {
+            Color oldColor = GUI.color;
+            CheckBallActivity(ball, oldColor, Color.blue);
             GUILayout.BeginHorizontal();
                 ball.name = EditorGUILayout.TextField("", ball.name, s, w);                
                 ball.type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
@@ -185,14 +189,23 @@ public class BallFinder : EditorWindow
                     GUILayout.Space( 50.0f );
                     note.name = EditorGUILayout.TextField("", note.name, s, w);
                     note.hitPosition = EditorGUILayout.IntField("", note.hitPosition, s, w); 
-                    note.hitTime = EditorGUILayout.FloatField("", note.hitTime, s, w);                
+                    note.hitBeat = EditorGUILayout.FloatField("", note.hitBeat, s, w);                
                     note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, w);
                 GUILayout.EndHorizontal();
             }
-
+            GUI.color = oldColor;
             GUILayout.Label("----");
         }
         
+    }
+
+    void CheckBallActivity(BallData ball, Color oldColor, Color setColor)
+    {
+        if (ball.activity > 0)
+        {
+            GUI.color = oldColor + (setColor * (ball.activity / 100));
+            ball.activity -= 21.0f * Time.deltaTime;
+        }
     }
 
     public void Update()

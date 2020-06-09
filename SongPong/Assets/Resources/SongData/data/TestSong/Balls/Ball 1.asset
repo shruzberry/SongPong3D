@@ -18,3 +18,5 @@ MonoBehaviour:
   notes:
   - {fileID: 11400000, guid: 3c75ae02bef0b42ec9fce62f3b98afd7, type: 2}
   prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}
+  active: 0
+  instance: {fileID: 0}

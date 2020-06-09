@@ -145,6 +145,8 @@ public class BallDropper : MonoBehaviour
                     spawnedBalls.Add(ballData);
 
                     Ball ball = SpawnBall(ballData);
+
+                    ballData.PulseActive();
                 }
             }
         }

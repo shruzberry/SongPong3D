@@ -16,8 +16,9 @@ public class BallData : ScriptableObject
     public NoteData[] notes;
     [HideInInspector]
     public GameObject prefab;
+
     [HideInInspector]
-    public bool active;
+    public float activity;
 
     public delegate void OnBallValidate();
     public event OnBallValidate onBallValidate;
@@ -52,7 +53,7 @@ public class BallData : ScriptableObject
             default:
                 break;
         }
-    }
+    } 
 
     /**
      * Sort this balls' notes according to their hit time
@@ -88,5 +89,10 @@ public class BallData : ScriptableObject
     public static int CompareBallsBySpawnTime(BallData a, BallData b)
     {
         return a.notes[0].hitTime.CompareTo(b.notes[0].hitTime);
+    }
+
+    public void PulseActive()
+    {
+        activity = 100.0f;
     }
 }

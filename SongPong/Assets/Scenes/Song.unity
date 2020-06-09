@@ -792,11 +792,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1492843242582942966, guid: 826d9436a67ab482c8f1875a17dbf645,
-        type: 3}
-      propertyPath: ballMapName
-      value: Paradise
-      objectReference: {fileID: 0}
     - target: {fileID: 1492843242582942967, guid: 826d9436a67ab482c8f1875a17dbf645,
         type: 3}
       propertyPath: m_Name
