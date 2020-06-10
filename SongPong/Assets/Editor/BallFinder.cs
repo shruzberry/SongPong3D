@@ -66,7 +66,7 @@ public class BallFinder : EditorWindow
     static void OpenWindow()
     {
         BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Ball Finder");
-        window.minSize = new Vector2(375, 375);
+        window.minSize = new Vector2(450, 400);
         window.Show();
     }
 
@@ -81,7 +81,7 @@ public class BallFinder : EditorWindow
             DrawRowLayouts();
             DrawNavSettings();
             DrawBallData();
-            songData = songController.songData;
+            //songData = songController.songData;
         }
         else
         {
@@ -110,6 +110,7 @@ public class BallFinder : EditorWindow
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+            HandleSongDataPath();
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
@@ -157,21 +158,34 @@ public class BallFinder : EditorWindow
 
     void DrawBallData()
     {
+        GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         List<Ball> activeBalls =  dropper.getActiveBalls();
         
         GUILayout.BeginArea(viewSection);
+            Color oldColor = GUI.color;
+            GUI.color = Color.green;
+            if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(390)))
+            {
+                SongEdit.CreateSimple("NewBall");
+            }
+            GUI.color = oldColor;
+            
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition,
                                         GUILayout.Width(viewSection.width),
                                         GUILayout.Height(viewSection.height - 75));
-                DrawBallDataList(dropper.getAllBallData(), Color.blue);
+                GUILayout.Label("Ball Data");
+                
+                
+
+                GUILayout.Space(10.0f);
+                DrawBallDataList(dropper.getAllBallData(), Color.blue);  
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
 
     void DrawBallDataList(BallData[] balls, Color color)
     {
-        GUILayout.Label("Ball Data");
         GUIStyle s = new GUIStyle(GUI.skin.button);
         GUIStyle b = new GUIStyle(GUI.skin.button);
         s.alignment = TextAnchor.MiddleLeft;
@@ -255,6 +269,12 @@ public class BallFinder : EditorWindow
             GUI.color = oldColor + (setColor * (ball.activity / 100));
             ball.activity -= 21.0f * Time.deltaTime;
         }
+    }
+
+    void HandleSongDataPath()
+    {
+        BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
+        dropper.ballMapName = songData.name;        
     }
 
     public void Update()
