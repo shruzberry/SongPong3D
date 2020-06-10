@@ -138,9 +138,12 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
         
-        foreach(NoteData nd in ball.notes)
+        if(ball.notes.Count >= 1)
         {
-            AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + nd.name + ".asset");
+            foreach(NoteData nd in ball.notes)
+            {
+                AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + nd.name + ".asset");
+            }
         }
 
         AssetDatabase.DeleteAsset(songData.dataPath + "/Balls/" + ball.name + ".asset");
