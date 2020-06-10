@@ -16,6 +16,7 @@ TODO
  +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
 using UnityEngine;
+using System.Collections.Generic;
 using Types;
 
 public abstract class Ball : MonoBehaviour
@@ -57,7 +58,7 @@ public abstract class Ball : MonoBehaviour
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected NoteData[] notes;
+    public List<NoteData> notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -115,7 +116,7 @@ public abstract class Ball : MonoBehaviour
         // NOTES
         this.notes = data.notes;
         currentNote = 0;
-        numNotes = notes.Length;
+        numNotes = notes.Count;
 
         // INDEXING
         catchTimesBeats = new float[numNotes + 1];
@@ -251,6 +252,6 @@ public abstract class Ball : MonoBehaviour
 
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public NoteData[] getNotes(){return notes;}
+    public List<NoteData> getNotes(){return notes;}
 
 }
