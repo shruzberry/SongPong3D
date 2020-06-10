@@ -335,6 +335,21 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: e8b5d1c9-7ee3-48a7-8253-a27e5814bd33
     m_ActionName: NoteListener/MousePos[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 591601933}
+        m_MethodName: ToggleDebug
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: afea4c5d-4f28-4d68-b173-9561875c0e90
+    m_ActionName: Debugger/ToggleDebugLines[/Keyboard/p]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Paddle
@@ -445,6 +460,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &591601933 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9146009305604118117, guid: 826d9436a67ab482c8f1875a17dbf645,
+    type: 3}
+  m_PrefabInstance: {fileID: 1426267143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed88dde90ac18436996f5a6d85e8fa78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &652607408
@@ -801,6 +828,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9146009305604118117, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: printDebug
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 826d9436a67ab482c8f1875a17dbf645, type: 3}
