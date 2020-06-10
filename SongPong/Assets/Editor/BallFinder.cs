@@ -66,7 +66,8 @@ public class BallFinder : EditorWindow
     static void OpenWindow()
     {
         BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Song Builder");
-        window.minSize = new Vector2(485, 400);
+        window.minSize = new Vector2(510, 420);
+        window.maxSize = new Vector2(510, 420);
         window.Show();
     }
 
@@ -92,7 +93,7 @@ public class BallFinder : EditorWindow
     {
         fullWindow = new Rect(0, 0, Screen.width, Screen.height);
 
-        navBarSection.x = 0;
+        /*navBarSection.x = 0;
         navBarSection.y = 0;
         navBarSection.width = Screen.width;
         navBarSection.height = Screen.height * navBarSectionSize;
@@ -100,7 +101,17 @@ public class BallFinder : EditorWindow
         viewSection.x = 0;
         viewSection.y = navBarSection.height;
         viewSection.width = Screen.width;
-        viewSection.height = Screen.height - navBarSection.height;
+        viewSection.height = Screen.height - navBarSection.height;*/
+
+        navBarSection.x = 0;
+        navBarSection.y = 0;
+        navBarSection.width = 500;
+        navBarSection.height = 60;
+
+        viewSection.x = 0;
+        viewSection.y = 60;
+        viewSection.width = 500;
+        viewSection.height = 400;
     }
 
     void DrawNavSettings()
@@ -160,10 +171,9 @@ public class BallFinder : EditorWindow
         GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         List<Ball> activeBalls =  dropper.getActiveBalls();
-        
-        GUILayout.Space(10.0f);
 
         GUILayout.BeginArea(viewSection);
+            GUILayout.Space(10.0f);
             Color oldColor = GUI.color;
             GUI.color = Color.green;
             if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
