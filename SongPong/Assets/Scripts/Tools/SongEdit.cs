@@ -108,7 +108,7 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Balls/" + type.name + ".asset");
+        AssetDatabase.CreateAsset(type, songData.dataPath + "/Balls/" + GetDataName("Ball") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
@@ -119,9 +119,37 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + type.name + ".asset");
+        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + GetDataName("Note") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
+    }
+
+    public static void DeleteNote(BallData ball, NoteData note)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        SongData songData = songController.songData;
+
+        AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + note.name + ".asset");
+        Array.Resize( ref ball.notes, ball.notes.Length - 1);
+    }
+
+    public static void DeleteBall(BallData ball)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        SongData songData = songController.songData;
+
+        foreach(NoteData nd in ball.notes)
+        {
+            DeleteNote(ball, nd);
+        }
+        
+        AssetDatabase.DeleteAsset(songData.dataPath + "/Balls/" + ball.name + ".asset");
+        //Array.Resize( ref ball.notes, ball.notes.Length - 1);
+    }
+
+    private static string GetDataName(string s)
+    {
+        return(s + "_" + Time.time);
     }
 }

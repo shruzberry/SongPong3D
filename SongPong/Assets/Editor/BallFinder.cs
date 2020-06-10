@@ -36,6 +36,8 @@ public class BallFinder : EditorWindow
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    List<NoteData> deleteNoteList = new List<NoteData>();
+
     SongController songController;
     SongData songData;
     SongData lastSong;
@@ -189,14 +191,22 @@ public class BallFinder : EditorWindow
                     bd.enabled = true;
                     bd.name = "NewBall";
                     NoteData nd = new NoteData();
+                    nd.noteDirection = Direction.negative;
                     nd.hitPosition = 0;
                     nd.hitBeat = 0;
                     nd.name = "NewNote";
                     SongEdit.CreateSimple("NewBall", nd);
                 }
-                GUI.color = oldColor;
+                GUI.color = oldColor;  
 
-                ball.name = EditorGUILayout.TextField("", ball.name, s, w);                
+                GUI.color = Color.red;
+                if (GUILayout.Button("-", b, GUILayout.Width(25)))
+                {
+                    SongEdit.DeleteBall(ball);
+                }
+                GUI.color = oldColor; 
+
+                //ball.name = EditorGUILayout.TextField("", ball.name, s, w);                
                 ball.type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
                 ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
             GUILayout.EndHorizontal();
@@ -204,7 +214,7 @@ public class BallFinder : EditorWindow
             foreach(NoteData note in ball.notes)
             {
                 GUILayout.BeginHorizontal();
-                    GUILayout.Space( 40.0f );
+                    GUILayout.Space(31.0f);
                     //add Note Button
                     GUI.color = Color.green;
                     if (GUILayout.Button("+", b, GUILayout.Width(25)))
@@ -212,15 +222,25 @@ public class BallFinder : EditorWindow
                         NoteData nd = new NoteData();
                         nd.hitPosition = 0;
                         nd.hitBeat = 0;
+                        nd.noteDirection = Direction.negative;
                         nd.name = "NewNote";
+                        SongEdit.saveNote(nd);
                         SongEdit.AppendToBall(ball, nd);
                     }
                     GUI.color = oldColor;
 
-                    note.name = EditorGUILayout.TextField("", note.name, s, w);
+                    GUI.color = Color.red;
+                    if (GUILayout.Button("-", b, GUILayout.Width(25)))
+                    {
+                        SongEdit.DeleteNote(ball, note);
+                    }
+                    GUI.color = oldColor;
+
+                    //note.name = EditorGUILayout.TextField("", note.name, s, w);
                     note.hitPosition = EditorGUILayout.IntField("", note.hitPosition, s, w); 
                     note.hitBeat = EditorGUILayout.FloatField("", note.hitBeat, s, w);                
                     note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, w);
+
                 GUILayout.EndHorizontal();
             }
             GUI.color = oldColor;
