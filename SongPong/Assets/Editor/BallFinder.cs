@@ -116,7 +116,7 @@ public class BallFinder : EditorWindow
 
     void DrawNavSettings()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        songController = FindObjectOfType<SongController>();
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));

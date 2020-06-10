@@ -223,7 +223,7 @@ public class BallDropper : MonoBehaviour
         BallData[] ballData = Resources.LoadAll<BallData>(path);
         return ballData;
     }
-    public List<Ball> getActiveBalls(){return activeBallList;}
+    public List<Ball> GetActiveBalls(){return activeBallList;}
     public List<Ball> getFinishedBalls(){return finishedBallList;}
     public float GetFallTimeBeats(){return fallTimeBeats;}
 

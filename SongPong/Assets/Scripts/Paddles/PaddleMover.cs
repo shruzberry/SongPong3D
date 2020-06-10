@@ -11,7 +11,7 @@ public class PaddleMover : MonoBehaviour
 
     public float speed = 10.0f;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Vector2 paddleAxis;
 
     private Vector2 _movement;

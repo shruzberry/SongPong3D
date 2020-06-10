@@ -45,7 +45,7 @@ public class SongEdit : MonoBehaviour
         bd.type = BallTypes.simple;
         bd.name = name;
         bd.notes = new List<NoteData>();
-        bd.notes[0] = nd;
+        bd.notes.Add(nd);
         saveBall(bd);        
     }
 
@@ -61,7 +61,7 @@ public class SongEdit : MonoBehaviour
         bd.type = BallTypes.simple;
         bd.name = name;
         bd.notes = new List<NoteData>();
-        bd.notes[0] = nd;
+        bd.notes.Add(nd);
         saveBall(bd);        
     }
 
@@ -95,8 +95,7 @@ public class SongEdit : MonoBehaviour
 
     public static void AppendToBall(BallData ball, NoteData note)
     {
-        Array.Resize( ref ball.notes, ball.notes.Length + 1);
-        ball.notes[ball.notes.Length - 1] = note;
+        ball.notes.Add(note);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -131,21 +130,21 @@ public class SongEdit : MonoBehaviour
         SongData songData = songController.songData;
 
         AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + note.name + ".asset");
-        Array.Resize( ref ball.notes, ball.notes.Length - 1);
+        ball.notes.Remove(note);
     }
 
     public static void DeleteBall(BallData ball)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
-
+        
         foreach(NoteData nd in ball.notes)
         {
-            DeleteNote(ball, nd);
+            AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + nd.name + ".asset");
         }
-        
+
         AssetDatabase.DeleteAsset(songData.dataPath + "/Balls/" + ball.name + ".asset");
-        //Array.Resize( ref ball.notes, ball.notes.Length - 1);
+
     }
 
     private static string GetDataName(string s)

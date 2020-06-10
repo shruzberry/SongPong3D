@@ -59,7 +59,7 @@ public class SongController : MonoBehaviour
     public bool isPlaying;
 
     // COMPONENTS
-    private AudioSource source;
+    public AudioSource source;
 
     // REFERENCES
     private BallDropper ballDropper;
@@ -84,7 +84,6 @@ public class SongController : MonoBehaviour
 
     public void LoadSong(SongData newSongData)
     {
-        // INITIALIZE COMPONENTS
         source = GetComponent<AudioSource>();
 
         // SONG INFO
@@ -167,6 +166,12 @@ public class SongController : MonoBehaviour
     {
         LoadSong(songData);
         JumpToStart();
+    }
+
+    void OnEnable()
+    {
+        // INITIALIZE COMPONENTS
+        source = GetComponent<AudioSource>();
     }
 
 }
