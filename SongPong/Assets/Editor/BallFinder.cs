@@ -134,7 +134,7 @@ public class BallFinder : EditorWindow
                 // Go Back 8 beats
                 if (GUILayout.Button("<", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    songController.JumpToBeat(songController.currentBeat - 8);
+                    songController.JumpToBeat(songController.GetSongTimeBeats() - 8);
                 }
 
                 // Pause/Play
@@ -146,7 +146,7 @@ public class BallFinder : EditorWindow
                 // Go Forward 8 beats
                 if (GUILayout.Button(">", GUILayout.Height(navButtonHeight), GUILayout.Width(navButtonWidth)))
                 {
-                    songController.JumpToBeat(songController.currentBeat + 8);
+                    songController.JumpToBeat(songController.GetSongTimeBeats() + 8);
                 }
 
                 // Go to end of song
@@ -156,7 +156,7 @@ public class BallFinder : EditorWindow
                 }
                 
                 // Current Beat
-                GUILayout.Label("Beat: " + songController.currentBeat, GUILayout.Width(60));
+                GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
@@ -170,8 +170,8 @@ public class BallFinder : EditorWindow
     {
         GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        List<Ball> activeBalls =  dropper.getActiveBalls();
-
+        List<Ball> activeBalls =  dropper.GetActiveBalls();
+        
         GUILayout.BeginArea(viewSection);
             GUILayout.Space(10.0f);
             Color oldColor = GUI.color;

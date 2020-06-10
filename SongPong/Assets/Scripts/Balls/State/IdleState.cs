@@ -28,8 +28,7 @@ public class IdleState : BallState
     public override void OnStateExit()
     {
         ball.GetComponent<SpriteRenderer>().enabled = true;
-
-        ball.spawnTime = song.GetSongTime();
+        ball.OnIdleExit();
     }
 
 }

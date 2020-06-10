@@ -39,12 +39,12 @@ public class SongEdit : MonoBehaviour
         BallData bd = new BallData();
         NoteData nd = new NoteData();
         
-        nd.hitBeat = (int) songController.currentBeat;
+        nd.hitBeat = (int) songController.GetSongTimeBeats();
         saveNote(nd);
 
         bd.type = BallTypes.simple;
         bd.name = name;
-        bd.notes = new NoteData[1];
+        bd.notes = new List<NoteData>();
         bd.notes[0] = nd;
         saveBall(bd);        
     }
@@ -60,7 +60,7 @@ public class SongEdit : MonoBehaviour
 
         bd.type = BallTypes.simple;
         bd.name = name;
-        bd.notes = new NoteData[1];
+        bd.notes = new List<NoteData>();
         bd.notes[0] = nd;
         saveBall(bd);        
     }
@@ -78,7 +78,7 @@ public class SongEdit : MonoBehaviour
 
         bd.type = BallTypes.bounce;
         bd.name = name;
-        bd.notes = new NoteData[nd.Count];
+        bd.notes = new List<NoteData>();
         
         int i = 0;
         foreach (NoteData noteData in nd)

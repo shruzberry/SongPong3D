@@ -13,7 +13,8 @@ public class BallData : ScriptableObject
     public int id;
     public bool enabled = true;
     public BallTypes type;
-    public NoteData[] notes;
+    //public NoteData[] notes;
+    public List<NoteData> notes;
     [HideInInspector]
     public GameObject prefab;
 
@@ -58,11 +59,10 @@ public class BallData : ScriptableObject
     /**
      * Sort this balls' notes according to their hit time
      */
-    protected void SortNotes(NoteData[] notes)
+    protected void SortNotes(List<NoteData> notes)
     {
         try
         {
-            List<NoteData> noteList = new List<NoteData>();
             foreach(NoteData nd in notes)
             {
                 // If a note is null, don't need to keep sorting.
@@ -71,14 +71,12 @@ public class BallData : ScriptableObject
                     Debug.LogWarning("Ball \"" + name + "\" has null notes."); 
                     
                 }
-                noteList.Add(nd);
             }
 
-            if(noteList.Count > 0)
+            if(notes.Count > 0)
             {
-                noteList.Sort(NoteData.CompareNotesByHitTime);
+                notes.Sort(NoteData.CompareNotesByHitTime);
             }
-            this.notes = noteList.ToArray();
         }
         catch (Exception)
         {

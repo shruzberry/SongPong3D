@@ -17,7 +17,6 @@ TODO
 
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using Types;
 
 public abstract class Ball : MonoBehaviour
@@ -55,11 +54,11 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallReady(Ball ball);
     public event BallReady onBallReady;
 
-    public delegate void BallCaught(Ball ball, Paddle paddle);
+    public delegate void BallCaught(Ball ball);
     public event BallCaught onBallCaught;
 
     //___________DATA___________________
-    protected NoteData[] notes;
+    public List<NoteData> notes;
     [HideInInspector]
     public BallData ballData;
 
@@ -67,8 +66,8 @@ public abstract class Ball : MonoBehaviour
     public float negative;
 
     //___________TIME___________________
-    public float spawnTime;
-    public float[] catchTimes;
+    public float spawnTimeBeats;
+    public float[] catchTimesBeats;
 
     //___________INDEXING________________
     public int numNotes;
@@ -117,10 +116,10 @@ public abstract class Ball : MonoBehaviour
         // NOTES
         this.notes = data.notes;
         currentNote = 0;
-        numNotes = notes.Length;
+        numNotes = notes.Count;
 
         // INDEXING
-        catchTimes = new float[numNotes + 1];
+        catchTimesBeats = new float[numNotes + 1];
 
         // SET SPAWN LOCATION
         axis = axisManager.gameAxis; // set the ball's axis
@@ -152,13 +151,6 @@ public abstract class Ball : MonoBehaviour
         else if(axis == Axis.y && negative == -1.0f) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
         else if(axis == Axis.x && negative == 1.0f) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
         else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
-/*
-        Vector2 testVector = new Vector2(2.90917239817623f,3.0f);
-        Debug.Log("Test Vector: " + testVector);
-        Debug.Log("Axis Vector: " + axisVector);
-        float dotProduct = Vector2.Dot(testVector, axisVector);
-        Debug.Log("Dot Product: " + dotProduct);
-*/
     }
 
     public void SetDirection()
@@ -212,6 +204,15 @@ public abstract class Ball : MonoBehaviour
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * IDLE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public virtual void OnIdleExit()
+    {
+        spawnTimeBeats = song.GetSongTimeBeats();
+    }
+
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVING
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -224,7 +225,7 @@ public abstract class Ball : MonoBehaviour
 
     public virtual void CatchActions()
     {
-        if(onBallCaught != null) onBallCaught(this, paddle); // call the onBallCaught event, if there are subscribers
+        if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -251,6 +252,6 @@ public abstract class Ball : MonoBehaviour
 
     public float NextHitTime(){return notes[currentNote].hitTime;}
 
-    public NoteData[] getNotes(){return notes;}
+    public List<NoteData> getNotes(){return notes;}
 
 }
