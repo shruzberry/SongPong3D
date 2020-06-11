@@ -174,6 +174,33 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debugger"",
+            ""id"": ""460c110b-0ac4-48de-9559-5606e1d64fbe"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleDebugLines"",
+                    ""type"": ""Button"",
+                    ""id"": ""afea4c5d-4f28-4d68-b173-9561875c0e90"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3a710299-7100-4591-8fca-64b4f0447470"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleDebugLines"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -197,6 +224,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // NoteListener
         m_NoteListener = asset.FindActionMap("NoteListener", throwIfNotFound: true);
         m_NoteListener_MousePos = m_NoteListener.FindAction("MousePos", throwIfNotFound: true);
+        // Debugger
+        m_Debugger = asset.FindActionMap("Debugger", throwIfNotFound: true);
+        m_Debugger_ToggleDebugLines = m_Debugger.FindAction("ToggleDebugLines", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -316,6 +346,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public NoteListenerActions @NoteListener => new NoteListenerActions(this);
+
+    // Debugger
+    private readonly InputActionMap m_Debugger;
+    private IDebuggerActions m_DebuggerActionsCallbackInterface;
+    private readonly InputAction m_Debugger_ToggleDebugLines;
+    public struct DebuggerActions
+    {
+        private @InputMaster m_Wrapper;
+        public DebuggerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleDebugLines => m_Wrapper.m_Debugger_ToggleDebugLines;
+        public InputActionMap Get() { return m_Wrapper.m_Debugger; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebuggerActions set) { return set.Get(); }
+        public void SetCallbacks(IDebuggerActions instance)
+        {
+            if (m_Wrapper.m_DebuggerActionsCallbackInterface != null)
+            {
+                @ToggleDebugLines.started -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnToggleDebugLines;
+                @ToggleDebugLines.performed -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnToggleDebugLines;
+                @ToggleDebugLines.canceled -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnToggleDebugLines;
+            }
+            m_Wrapper.m_DebuggerActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ToggleDebugLines.started += instance.OnToggleDebugLines;
+                @ToggleDebugLines.performed += instance.OnToggleDebugLines;
+                @ToggleDebugLines.canceled += instance.OnToggleDebugLines;
+            }
+        }
+    }
+    public DebuggerActions @Debugger => new DebuggerActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -333,5 +396,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface INoteListenerActions
     {
         void OnMousePos(InputAction.CallbackContext context);
+    }
+    public interface IDebuggerActions
+    {
+        void OnToggleDebugLines(InputAction.CallbackContext context);
     }
 }

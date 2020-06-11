@@ -27,12 +27,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Types;
+
 
 public class BallFinder : EditorWindow
 {
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    List<NoteData> deleteNoteList = new List<NoteData>();
 
     SongController songController;
     SongData songData;
@@ -58,17 +62,13 @@ public class BallFinder : EditorWindow
 * STARTUP FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    [MenuItem("Window/Ball Finder")]
+    [MenuItem("Window/Song Builder")]
     static void OpenWindow()
     {
-        BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Ball Finder");
-        window.minSize = new Vector2(375, 375);
+        BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Song Builder");
+        window.minSize = new Vector2(510, 420);
+        window.maxSize = new Vector2(510, 420);
         window.Show();
-    }
-
-    void OnEnable()
-    {
-        //songController = GameObject.Find("SongController").GetComponent<SongController>();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -81,8 +81,7 @@ public class BallFinder : EditorWindow
         {
             DrawRowLayouts();
             DrawNavSettings();
-            DrawActiveBalls();
-            songData = songController.songData;
+            DrawBallData();
         }
         else
         {
@@ -94,7 +93,7 @@ public class BallFinder : EditorWindow
     {
         fullWindow = new Rect(0, 0, Screen.width, Screen.height);
 
-        navBarSection.x = 0;
+        /*navBarSection.x = 0;
         navBarSection.y = 0;
         navBarSection.width = Screen.width;
         navBarSection.height = Screen.height * navBarSectionSize;
@@ -102,15 +101,26 @@ public class BallFinder : EditorWindow
         viewSection.x = 0;
         viewSection.y = navBarSection.height;
         viewSection.width = Screen.width;
-        viewSection.height = Screen.height - navBarSection.height;
+        viewSection.height = Screen.height - navBarSection.height;*/
+
+        navBarSection.x = 0;
+        navBarSection.y = 0;
+        navBarSection.width = 500;
+        navBarSection.height = 60;
+
+        viewSection.x = 0;
+        viewSection.y = 60;
+        viewSection.width = 500;
+        viewSection.height = 400;
     }
 
     void DrawNavSettings()
     {
-        songController = GameObject.Find("SongController").GetComponent<SongController>();
+        songController = FindObjectOfType<SongController>();
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+            HandleSongDataPath();
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
@@ -156,28 +166,127 @@ public class BallFinder : EditorWindow
         GUILayout.EndArea();
     }
 
-    void DrawActiveBalls()
+    void DrawBallData()
     {
+        GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         List<Ball> activeBalls =  dropper.GetActiveBalls();
         
         GUILayout.BeginArea(viewSection);
-            GUILayout.Label("Active Balls");
+            GUILayout.Space(10.0f);
+            Color oldColor = GUI.color;
+            GUI.color = Color.green;
+            if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
+            {
+                SongEdit.CreateSimple("NewBall");
+            }
+            GUI.color = oldColor;
             
-            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition, GUILayout.Width(viewSection.width), GUILayout.Height(viewSection.height - 75));
-                foreach(Ball ball in activeBalls)
-                {
-                    EditorGUILayout.ObjectField(ball.ballData, typeof(Object), true);
-                    foreach(NoteData note in ball.getNotes())
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.Space( 20f );
-                        EditorGUILayout.ObjectField(note, typeof(Object), true);
-                        GUILayout.EndHorizontal();
-                    }
-                }
+            activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition,
+                                        GUILayout.Width(viewSection.width),
+                                        GUILayout.Height(viewSection.height - 75));
+                GUILayout.Space(10.0f);
+                DrawBallDataList(dropper.getAllBallData(), Color.blue);  
             GUILayout.EndScrollView();
         GUILayout.EndArea();
+    }
+
+    void DrawBallDataList(BallData[] balls, Color color)
+    {
+        GUIStyle s = new GUIStyle(GUI.skin.button);
+        GUIStyle b = new GUIStyle(GUI.skin.button);
+        s.alignment = TextAnchor.MiddleLeft;
+        b.alignment = TextAnchor.MiddleCenter;
+        var w = GUILayout.Width(100);
+
+        foreach(BallData ball in balls)
+        {
+            Color oldColor = GUI.color;
+            CheckBallActivity(ball, oldColor, Color.blue);
+            GUILayout.BeginHorizontal();
+                GUI.color = Color.green;
+                if (GUILayout.Button("+", b, GUILayout.Width(25)))
+                {
+                    BallData bd = new BallData();
+                    bd.type = BallTypes.simple;
+                    bd.enabled = true;
+                    bd.name = "NewBall";
+                    NoteData nd = new NoteData();
+                    nd.noteDirection = Direction.negative;
+                    nd.hitPosition = 0;
+                    nd.hitBeat = 0;
+                    nd.name = "NewNote";
+                    SongEdit.CreateSimple("NewBall", nd);
+                }
+                GUI.color = oldColor;  
+
+                GUI.color = Color.red;
+                if (GUILayout.Button("-", b, GUILayout.Width(25)))
+                {
+                    SongEdit.DeleteBall(ball);
+                }
+                GUI.color = oldColor; 
+
+                GUILayout.Label("type:", GUILayout.Width(40));                
+                ball.type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
+                ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+            GUILayout.EndHorizontal();
+
+            foreach(NoteData note in ball.notes)
+            {
+                GUILayout.BeginHorizontal();
+                    GUILayout.Space(31.0f);
+                    //add Note Button
+                    GUI.color = Color.green;
+                    if (GUILayout.Button("+", b, GUILayout.Width(25)))
+                    {
+                        NoteData nd = new NoteData();
+                        nd.hitPosition = 0;
+                        nd.hitBeat = 0;
+                        nd.noteDirection = Direction.negative;
+                        nd.name = "NewNote";
+                        SongEdit.saveNote(nd);
+                        SongEdit.AppendToBall(ball, nd);
+                    }
+                    GUI.color = oldColor;
+
+                    GUI.color = Color.red;
+                    if (GUILayout.Button("-", b, GUILayout.Width(25)))
+                    {
+                        SongEdit.DeleteNote(ball, note);
+                    }
+                    GUI.color = oldColor;
+
+                    GUILayout.Label("col:", GUILayout.Width(25));
+                    note.hitPosition = EditorGUILayout.IntField("", note.hitPosition, s, w); 
+                    GUILayout.Label("beat:", GUILayout.Width(32));
+                    note.hitBeat = EditorGUILayout.FloatField("", note.hitBeat, s, w);                
+                    note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, w);
+
+                GUILayout.EndHorizontal();
+            }
+            GUI.color = oldColor;
+        }
+        
+    }
+
+    void CheckBallActivity(BallData ball, Color oldColor, Color setColor)
+    {
+        if (ball.activity > 0)
+        {
+            GUI.color = oldColor + (setColor * (ball.activity / 100));
+            ball.activity -= 21.0f * Time.deltaTime;
+        }
+    }
+
+    void HandleSongDataPath()
+    {
+        BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
+        if(songData != null)
+            dropper.ballMapName = songData.name;
+        if(songController != null)
+            songController.songData = songData;
+       
     }
 
     public void Update()

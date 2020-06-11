@@ -11,15 +11,15 @@ public class SongData : ScriptableObject
     public float currentTime;
     public int bpm;
     public string songName;
-    [HideInInspector]
-    public string dataPath;
     public AudioClip song;
     public Axis axis;
     public int startBeat = 0;
     public int endBeat = 0;
     public float offset = 0;
-    [HideInInspector]
+    //[HideInInspector]
     public string myPath;
+    //[HideInInspector]
+    public string dataPath;
 
     public void OnEnable()
     {

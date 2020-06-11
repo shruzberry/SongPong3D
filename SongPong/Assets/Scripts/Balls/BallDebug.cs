@@ -46,4 +46,13 @@ public class BallDebug : MonoBehaviour
         Debug.Log("Caught " + ball.name + " at beat " + song.GetSongTimeBeats());
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
     }
+
+    public void ToggleDebug()
+    {
+        print("swapping");
+        if (printDebug)
+            printDebug = false;
+        else
+            printDebug = true;
+    }
 }

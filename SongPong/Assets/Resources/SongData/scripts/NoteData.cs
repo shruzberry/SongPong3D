@@ -10,7 +10,7 @@ public class NoteData : ScriptableObject
     public float hitBeat;
     [HideInInspector]
     public float hitTime;
-    public Direction noteDirection;
+    public Direction noteDirection = Direction.negative;
     private SongController songController;
     
     public static int CompareNotesByHitTime(NoteData a, NoteData b)

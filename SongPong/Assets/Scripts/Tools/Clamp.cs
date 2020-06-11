@@ -16,13 +16,14 @@ public class Clamp : MonoBehaviour
     public static Vector2 ClampToAxis(Vector2 position, float radius, Vector2 axisDir)
     {
         Vector3 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z)); // in world coords
-        Vector3 normalizedAxisVector = Abs(Vector3.Normalize(axisDir));
+        Vector3 normalizedAxisVector = Abs(Vector3.Normalize(axisDir)); // convert to a unit vector
         float axisShift = Vector2.Dot(normalizedAxisVector, axisDir);
         //Debug.Log("AXIS: " + axisDir);
         //Debug.Log("NORM: " + normalizedAxisVector);
 
+        // Y-AXIS
         // (0,1) moves sideways
-        if(normalizedAxisVector == Vector3.up || normalizedAxisVector == -Vector3.up)
+        if(normalizedAxisVector == Vector3.up)
         {
             if(axisShift > screenBounds.y)
             {
@@ -32,9 +33,10 @@ public class Clamp : MonoBehaviour
             position.x = Mathf.Clamp(position.x, -screenBounds.x + radius, screenBounds.x - radius);
             position.y = axisShift;
         }
+        // X-AXIS
         // (1,0) moves up/down
-        else if(axisDir == Vector2.right)
-        {
+        else if(normalizedAxisVector == Vector3.right)
+        {            
             if(axisShift > screenBounds.x)
             {
                 Debug.LogError("AXIS SHIFT EXCEEDS SCREEN BOUNDS");

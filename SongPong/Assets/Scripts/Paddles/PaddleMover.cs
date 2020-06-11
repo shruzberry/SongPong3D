@@ -11,7 +11,7 @@ public class PaddleMover : MonoBehaviour
 
     public float speed = 10.0f;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Vector2 paddleAxis;
 
     private Vector2 _movement;
@@ -19,6 +19,7 @@ public class PaddleMover : MonoBehaviour
 
     private void Awake() 
     {
+        radius = GetComponent<Collider2D>().bounds.size.x / 2;
         height = GetComponent<Collider2D>().bounds.size.y;
     }
 

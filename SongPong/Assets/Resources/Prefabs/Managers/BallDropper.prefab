@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fallTime: 0
   dataLocation: SongData/data/
-  ballMapName: paradise
+  ballMapName: TestSong
 --- !u!114 &9146009305604118117
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -61,7 +61,6 @@ public class BallDropper : MonoBehaviour
     private void Awake()
     {
         song = FindObjectOfType<SongController>();
-        //paddleManager = FindObjectOfType<PlayerInputHandler>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
@@ -138,6 +137,8 @@ public class BallDropper : MonoBehaviour
                     spawnedBalls.Add(ballData);
 
                     Ball ball = SpawnBall(ballData);
+
+                    ballData.PulseActive();
                 }
             }
         }
@@ -208,7 +209,15 @@ public class BallDropper : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    public List<BallData> getWaitingBalls(){return waitingBallDataList;}
+    public BallData[] getAllBallData()
+    {
+        string path = dataLocation + ballMapName + "/Balls/";
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        return ballData;
+    }
     public List<Ball> GetActiveBalls(){return activeBallList;}
+    public List<Ball> getFinishedBalls(){return finishedBallList;}
     public float GetFallTimeBeats(){return fallTimeBeats;}
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -241,6 +250,7 @@ public class BallDropper : MonoBehaviour
     {
         LoadBalls();
         if(printLoadedBalls) DebugLoadedBalls();
+        // balls not instantiated yet
         CalcMoveTimes();
     }
 

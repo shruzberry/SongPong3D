@@ -161,6 +161,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debugger",
+            "id": "460c110b-0ac4-48de-9559-5606e1d64fbe",
+            "actions": [
+                {
+                    "name": "ToggleDebugLines",
+                    "type": "Button",
+                    "id": "afea4c5d-4f28-4d68-b173-9561875c0e90",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3a710299-7100-4591-8fca-64b4f0447470",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "ToggleDebugLines",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

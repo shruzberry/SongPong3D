@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using System;
 
 public class SongEdit : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class SongEdit : MonoBehaviour
         bd.type = BallTypes.simple;
         bd.name = name;
         bd.notes = new List<NoteData>();
-        bd.notes[0] = nd;
+        bd.notes.Add(nd);
         saveBall(bd);        
     }
 
@@ -60,7 +61,7 @@ public class SongEdit : MonoBehaviour
         bd.type = BallTypes.simple;
         bd.name = name;
         bd.notes = new List<NoteData>();
-        bd.notes[0] = nd;
+        bd.notes.Add(nd);
         saveBall(bd);        
     }
 
@@ -92,6 +93,11 @@ public class SongEdit : MonoBehaviour
         saveBall(bd);        
     }
 
+    public static void AppendToBall(BallData ball, NoteData note)
+    {
+        ball.notes.Add(note);
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -101,7 +107,7 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Balls/" + type.name + ".asset");
+        AssetDatabase.CreateAsset(type, songData.dataPath + "/Balls/" + GetDataName("Ball") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
@@ -112,9 +118,40 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + type.name + ".asset");
+        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + GetDataName("Note") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
+    }
+
+    public static void DeleteNote(BallData ball, NoteData note)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        SongData songData = songController.songData;
+
+        AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + note.name + ".asset");
+        ball.notes.Remove(note);
+    }
+
+    public static void DeleteBall(BallData ball)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        SongData songData = songController.songData;
+        
+        if(ball.notes.Count >= 1)
+        {
+            foreach(NoteData nd in ball.notes)
+            {
+                AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + nd.name + ".asset");
+            }
+        }
+
+        AssetDatabase.DeleteAsset(songData.dataPath + "/Balls/" + ball.name + ".asset");
+
+    }
+
+    private static string GetDataName(string s)
+    {
+        return(s + "_" + Time.time);
     }
 }
