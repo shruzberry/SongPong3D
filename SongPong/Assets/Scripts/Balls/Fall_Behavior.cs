@@ -6,7 +6,11 @@ public class Fall_Behavior : MoveBehavior
 {
     public static float CalcMoveTime(GameObject ball, Vector2 pointA, Vector2 pointB, Vector2 axisVector, float speed, float gravity)
     {
+        //TODO Convert to Collider2D for more accuracy
         float radius = ball.GetComponent<SpriteRenderer>().bounds.size.y / 2;
+
+        if(radius == 0) Debug.LogError("Ball radius is null or zero. Move time will be inaccurate.");
+        Debug.Log("RAD: " + radius);
         // Calculate delta H
         // |(AB • axisVector)| - ballradius
         float delta = Mathf.Abs(Vector2.Dot(pointA - pointB, axisVector)) - (radius);
