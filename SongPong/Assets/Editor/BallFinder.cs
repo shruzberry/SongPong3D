@@ -283,7 +283,10 @@ public class BallFinder : EditorWindow
     {
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         if(songData != null)
-            dropper.ballMapName = songData.name;        
+            dropper.ballMapName = songData.name;
+        if(songController != null)
+            songController.songData = songData;
+       
     }
 
     public void Update()
