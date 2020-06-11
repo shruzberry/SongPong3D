@@ -65,6 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 353941582984348678}
+  song: {fileID: 11400000, guid: 0d5dc1cc383724979b269c3342e434a2, type: 2}
 --- !u!1 &353941583516194931
 GameObject:
   m_ObjectHideFlags: 0
