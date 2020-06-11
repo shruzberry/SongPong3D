@@ -819,6 +819,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1492843242582942966, guid: 826d9436a67ab482c8f1875a17dbf645,
+        type: 3}
+      propertyPath: printLoadedBalls
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1492843242582942967, guid: 826d9436a67ab482c8f1875a17dbf645,
         type: 3}
       propertyPath: m_Name
@@ -1193,6 +1198,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2801249904474146109, guid: 1a6cae9c5e99a884aa07b98ef2b6b162,
+        type: 3}
+      propertyPath: BypassListenerEffects
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2801249904474146110, guid: 1a6cae9c5e99a884aa07b98ef2b6b162,
         type: 3}
