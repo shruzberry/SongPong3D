@@ -39,7 +39,8 @@ public class SongController : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     // SONG INFO
-    public SongData songData;
+    [SerializeField]
+    private SongData songData;
     [HideInInspector]
     public string songName;
     [HideInInspector]
@@ -59,7 +60,7 @@ public class SongController : MonoBehaviour
     public bool isPlaying;
 
     // COMPONENTS
-    public AudioSource source;
+    private AudioSource source;
 
     // REFERENCES
     private BallDropper ballDropper;
@@ -146,6 +147,20 @@ public class SongController : MonoBehaviour
         return ToBeat(source.time);
     }
 
+    public string GetSongName()
+    {
+        return songName;
+    }
+
+    public string GetDataPath()
+    {
+        return songData.dataPath;
+    }
+
+    public SongData GetSongData()
+    {
+        return songData;
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
@@ -161,12 +176,6 @@ public class SongController : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    void Start()
-    {
-        LoadSong(songData);
-        JumpToStart();
-    }
 
     void OnEnable()
     {

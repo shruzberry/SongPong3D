@@ -28,5 +28,7 @@ Material:
     - Vector1_1E60789F: 100
     - Vector1_9D1DB6B0: 0.1
     - _Fade: 1
+    - _Outline: 0.1
+    - _Scale: 250
     m_Colors:
-    - _Color: {r: 3.698113, g: 0.2616589, b: 0.2616589, a: 0}
+    - _Color: {r: 2.9960785, g: 0.21960784, b: 0.3137255, a: 0}

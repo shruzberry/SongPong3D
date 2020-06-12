@@ -230,6 +230,7 @@ public class BallDropper : MonoBehaviour
         if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
 
         string path = dataLocation + ballMapName + "/Balls/";
+        Debug.Log(path);
         BallData[] ballData = Resources.LoadAll<BallData>(path);
 
         if(ballData != null)

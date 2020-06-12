@@ -285,8 +285,7 @@ public class BallFinder : EditorWindow
         if(songData != null)
             dropper.ballMapName = songData.name;
         if(songController != null)
-            songController.songData = songData;
-       
+            songController.LoadSong(songData);
     }
 
     public void Update()

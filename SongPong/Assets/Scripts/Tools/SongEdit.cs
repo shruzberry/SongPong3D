@@ -105,9 +105,8 @@ public class SongEdit : MonoBehaviour
     public static void saveBall(BallData type)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Balls/" + GetDataName("Ball") + ".asset");
+        AssetDatabase.CreateAsset(type, songController.GetDataPath() + "/Balls/" + GetDataName("Ball") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
@@ -116,9 +115,8 @@ public class SongEdit : MonoBehaviour
     public static void saveNote(NoteData type)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + GetDataName("Note") + ".asset");
+        AssetDatabase.CreateAsset(type, songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
         Selection.activeObject = type;
@@ -127,26 +125,24 @@ public class SongEdit : MonoBehaviour
     public static void DeleteNote(BallData ball, NoteData note)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        SongData songData = songController.songData;
 
-        AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + note.name + ".asset");
+        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + note.name + ".asset");
         ball.notes.Remove(note);
     }
 
     public static void DeleteBall(BallData ball)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        SongData songData = songController.songData;
         
         if(ball.notes.Count >= 1)
         {
             foreach(NoteData nd in ball.notes)
             {
-                AssetDatabase.DeleteAsset(songData.dataPath + "/Notes/" + nd.name + ".asset");
+                AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + nd.name + ".asset");
             }
         }
 
-        AssetDatabase.DeleteAsset(songData.dataPath + "/Balls/" + ball.name + ".asset");
+        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
 
     }
 

@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 96
-  name: School
-  dataPath: Assets/Resources/SongData/data/school
+  songName: School
   song: {fileID: 8300000, guid: ed444094b338b49a7b5aba3b2454e1d3, type: 3}
+  axis: 0
   startBeat: 0
   endBeat: 120
   offset: 3.3
   myPath: Assets/Resources/SongData/data/school/School.asset
+  dataPath: Assets/Resources/SongData/data/school

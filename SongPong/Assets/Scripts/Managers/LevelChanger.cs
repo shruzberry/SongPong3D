@@ -7,7 +7,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     public Animator animator;
-    public SongData song;
+    public SongData songData;
 
     private int levelToLoad;
 
@@ -48,7 +48,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void SetSong(SongData sd)
     {
-        song = sd;
+        songData = sd;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -63,7 +63,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
         // SONG
         SongController song = FindObjectOfType<SongController>();
-        song.LoadSong(this.song);
+        song.LoadSong(this.songData);
+        song.JumpToStart();
 
         // BALL DROPPER
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
