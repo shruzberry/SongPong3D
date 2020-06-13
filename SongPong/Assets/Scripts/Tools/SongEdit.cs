@@ -24,6 +24,7 @@ using UnityEngine;
 using UnityEditor;
 using Types;
 using System;
+using System.IO;
 
 public class SongEdit : MonoBehaviour
 {
@@ -54,7 +55,8 @@ public class SongEdit : MonoBehaviour
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        BallData bd = new BallData();
+        //BallData bd = new BallData();
+        BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
         
         saveNote(nd);
 
@@ -115,13 +117,20 @@ public class SongEdit : MonoBehaviour
 
     public static void saveNote(NoteData type)
     {
+        if(!Application.isPlaying)
+        {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
         SongData songData = songController.songData;
 
-        AssetDatabase.CreateAsset(type, songData.dataPath + "/Notes/" + GetDataName("Note") + ".asset");
-        AssetDatabase.SaveAssets ();
-        EditorUtility.FocusProjectWindow ();
+        string path = songData.dataPath + "/Notes/" + GetDataName("Note") + ".asset";
+        if(Directory.Exists(path))
+            Debug.Log("Already HERE");
+
+        AssetDatabase.CreateAsset(type, path);
+        AssetDatabase.SaveAssets();
+        EditorUtility.FocusProjectWindow();
         Selection.activeObject = type;
+        }
     }
 
     public static void DeleteNote(BallData ball, NoteData note)
@@ -152,6 +161,6 @@ public class SongEdit : MonoBehaviour
 
     private static string GetDataName(string s)
     {
-        return(s + "_" + Time.time);
+        return(s + "_" + System.DateTime.Now.ToString("yyyyMMddHHmmss"));
     }
 }
