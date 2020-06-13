@@ -35,7 +35,7 @@ public abstract class Ball : MonoBehaviour
 
     //___________REFERENCES_____________
     //protected PlayerInputHandler paddleManager;
-    protected Paddle paddle;
+    //protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
     

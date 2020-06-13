@@ -225,6 +225,9 @@ public class SongBuilder : EditorWindow
             // Note Field
             foreach(NoteData note in ball.notes)
             {
+                if (note == null)
+                    return;
+                    
                 GUILayout.BeginHorizontal();
                     GUILayout.Space(31.0f);
                     

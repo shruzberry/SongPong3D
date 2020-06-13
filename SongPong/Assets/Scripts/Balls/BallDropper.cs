@@ -24,7 +24,7 @@ public class BallDropper : MonoBehaviour
     private SongController song;
     private AxisManager axisManager;
     private SpawnInfo spawner;
-    private Paddle paddle;
+    //private Paddle paddle;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -63,7 +63,7 @@ public class BallDropper : MonoBehaviour
         song = FindObjectOfType<SongController>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
-        paddle = FindObjectOfType<Paddle>();
+        //paddle = FindObjectOfType<Paddle>();
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
