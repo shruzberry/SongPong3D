@@ -17,8 +17,8 @@ ________ PUBLIC ________
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Types;
+using TMPro;
 
 [ExecuteInEditMode]
 public class PlayerScore : MonoBehaviour
@@ -32,7 +32,7 @@ public class PlayerScore : MonoBehaviour
 
     private AxisManager axisManager;
     private BallDropper ballDropper;
-    private Text scoreText;
+    private TextMeshProUGUI scoreText;
     private List<Ball> activeBalls;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -48,7 +48,7 @@ public class PlayerScore : MonoBehaviour
         axisManager = FindObjectOfType<AxisManager>();
         ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.onBallSpawned += AddBallListener;
-        scoreText = GetComponentInChildren<Text>();
+        scoreText = GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
@@ -70,10 +70,10 @@ public class PlayerScore : MonoBehaviour
         switch (player)
         {
             case Paddles.P1:
-                scoreText.alignment = TextAnchor.LowerLeft;
+                //scoreText.alignment = TextAnchor.LowerLeft;
                 break;
             case Paddles.P2:
-                scoreText.alignment = TextAnchor.LowerRight;
+                //scoreText.alignment = TextAnchor.LowerRight;
                 break;
         }
     }

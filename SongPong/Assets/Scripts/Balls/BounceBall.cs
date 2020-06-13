@@ -35,9 +35,7 @@ public class BounceBall : Ball
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // ATTRIBUTES
-        Debug.Log("FIRST TEST");
         ball_renderer.material.SetColor("_Color", dissolveColor);
-        Debug.Log("SECOND TEST");
 
         // MOVEMENT
         velocity = speed * axisVector;
@@ -134,7 +132,6 @@ public class BounceBall : Ball
         {
             caught = true;
             catchTimesBeats[currentNote] = song.GetSongTimeSeconds();
-            //paddle = other.gameObject.GetComponent<Paddle>();
         }
     }
 
@@ -144,13 +141,13 @@ public class BounceBall : Ball
 
     public override void OnExitActions()
     {
-        //StartCoroutine(WaitThenDestroy());
         animator.SetTrigger("isFinished");
+        velocity = BounceVelocity(velocity);
     }
 
     public override void ExitActions()
     {
-
+        MoveActions();
     }
 
     public void OnAnimationFinish()
@@ -158,9 +155,18 @@ public class BounceBall : Ball
         exit = true;
     }
 
-    IEnumerator WaitThenDestroy()
+ /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * VELOCITY
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    /**
+     * Flips the direction of the velocity on the gravity axis
+     */
+    public Vector2 BounceVelocity(Vector2 velocity)
     {
-        yield return new WaitForSeconds(1.0f);
-        exit = true;
+        Vector2 newVel = Vector2.zero;
+        newVel -= axisVector * Vector2.Dot(axisVector, velocity);
+        newVel += otherAxisVector * Vector2.Dot(otherAxisVector, velocity);
+        return newVel;
     }
 }
