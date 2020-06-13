@@ -7,6 +7,9 @@ public class BounceBall : Ball
     //________ATTRIBUTES____________
     protected float radius;
 
+    [ColorUsage(true, true)]
+    public Color dissolveColor;
+
     //________MOVEMENT______________
     protected Vector2 velocity;
     public float speed = 0.0f;
@@ -15,6 +18,7 @@ public class BounceBall : Ball
     //________COMPONENTS____________
     Vector3 screenBounds;
     public Rigidbody2D rb;
+    public Animator animator;
 
     //________MOVEMENT______________
     private float deltaH;
@@ -27,7 +31,13 @@ public class BounceBall : Ball
     {
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+
+        // ATTRIBUTES
+        Debug.Log("FIRST TEST");
+        ball_renderer.material.SetColor("_Color", dissolveColor);
+        Debug.Log("SECOND TEST");
 
         // MOVEMENT
         velocity = speed * axisVector;
@@ -134,12 +144,18 @@ public class BounceBall : Ball
 
     public override void OnExitActions()
     {
-        StartCoroutine(WaitThenDestroy());
+        //StartCoroutine(WaitThenDestroy());
+        animator.SetTrigger("isFinished");
     }
 
     public override void ExitActions()
     {
 
+    }
+
+    public void OnAnimationFinish()
+    {
+        exit = true;
     }
 
     IEnumerator WaitThenDestroy()
