@@ -1,6 +1,6 @@
 ﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 ________ DEFENITION ________
-Class Name: BallFinder.cs
+Class Name: SongBuilder.cs
 Purpose: Controls the song and displays active balls in order to locate Note and Ball Data Files
 Associations: 
 
@@ -30,7 +30,7 @@ using UnityEngine.SceneManagement;
 using Types;
 
 
-public class BallFinder : EditorWindow
+public class SongBuilder : EditorWindow
 {
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
@@ -65,7 +65,7 @@ public class BallFinder : EditorWindow
     [MenuItem("Window/Song Builder")]
     static void OpenWindow()
     {
-        BallFinder window = (BallFinder)GetWindow(typeof(BallFinder), false, "Song Builder");
+        SongBuilder window = (SongBuilder)GetWindow(typeof(SongBuilder), false, "Song Builder");
         window.minSize = new Vector2(510, 420);
         window.maxSize = new Vector2(510, 420);
         window.Show();
@@ -93,16 +93,6 @@ public class BallFinder : EditorWindow
     {
         fullWindow = new Rect(0, 0, Screen.width, Screen.height);
 
-        /*navBarSection.x = 0;
-        navBarSection.y = 0;
-        navBarSection.width = Screen.width;
-        navBarSection.height = Screen.height * navBarSectionSize;
-
-        viewSection.x = 0;
-        viewSection.y = navBarSection.height;
-        viewSection.width = Screen.width;
-        viewSection.height = Screen.height - navBarSection.height;*/
-
         navBarSection.x = 0;
         navBarSection.y = 0;
         navBarSection.width = 500;
@@ -120,7 +110,7 @@ public class BallFinder : EditorWindow
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
             songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
-            HandleSongDataPath();
+            //HandleSongDataPath();
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
@@ -170,7 +160,7 @@ public class BallFinder : EditorWindow
     {
         GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        List<Ball> activeBalls =  dropper.GetActiveBalls();
+        //List<Ball> activeBalls =  dropper.GetActiveBalls();
         
         GUILayout.BeginArea(viewSection);
             GUILayout.Space(10.0f);
@@ -186,13 +176,16 @@ public class BallFinder : EditorWindow
                                         GUILayout.Width(viewSection.width),
                                         GUILayout.Height(viewSection.height - 75));
                 GUILayout.Space(10.0f);
-                DrawBallDataList(dropper.getAllBallData(), Color.blue);  
+                DrawBallDataList(songData.GetAllBallData(), Color.blue);  
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
 
     void DrawBallDataList(BallData[] balls, Color color)
     {
+        if(balls == null)
+            return;
+
         GUIStyle s = new GUIStyle(GUI.skin.button);
         GUIStyle b = new GUIStyle(GUI.skin.button);
         s.alignment = TextAnchor.MiddleLeft;

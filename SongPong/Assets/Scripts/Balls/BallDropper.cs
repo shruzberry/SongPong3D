@@ -61,19 +61,12 @@ public class BallDropper : MonoBehaviour
     private void Awake()
     {
         song = FindObjectOfType<SongController>();
-        //paddleManager = FindObjectOfType<PlayerInputHandler>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
         paddle = FindObjectOfType<Paddle>();
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
-    }
-
-    private void Start()
-    {
-        //LoadBalls();
-        CalcMoveTimes();
     }
 
     private void CalcMoveTimes()
@@ -257,6 +250,7 @@ public class BallDropper : MonoBehaviour
     {
         LoadBalls();
         if(printLoadedBalls) DebugLoadedBalls();
+        // balls not instantiated yet
         CalcMoveTimes();
     }
 

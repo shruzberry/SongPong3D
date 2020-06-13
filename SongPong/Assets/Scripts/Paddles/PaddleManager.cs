@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class PaddleManager : MonoBehaviour
 {
+    //__________AXIS__________________
+    [Header("AXIS")]
     public AxisManager axisManager;
+    [Range(0,45)]
+    [Tooltip("The percent(%) away from the edge of screen the paddle's axis is.")]
+    public int padding; // percent
+
+    //__________PADDLE________________
+    [Header("PADDLES")]
     public GameObject paddle1;
     public GameObject paddle2;
-
-    public float padding;
 
     public void Activate()
     {
@@ -23,7 +29,7 @@ public class PaddleManager : MonoBehaviour
         PaddleMover pm1 = paddle1.GetComponent<PaddleMover>();
         PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
 
-        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - (Screen.width * padding),0,0)).x;
+        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - (Screen.width * (padding/100.0f)),0,0)).x;
 
         pm1.paddleAxis = new Vector2(-1,0) * axisValue;
         pm2.paddleAxis = new Vector2(1,0) * axisValue;
@@ -37,7 +43,8 @@ public class PaddleManager : MonoBehaviour
 
     void InitAxisY()
     {
-        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height - (Screen.height * padding),0)).y;
+        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height - (Screen.height * (padding/100.0f)), 0)).y;
+        Debug.Log("AXIS VALUE: " + axisValue);
 
         // PADDLE 1
         PaddleMover pm1 = paddle1.GetComponent<PaddleMover>();
