@@ -124,6 +124,7 @@ public class BounceBall : Ball
         {
             caught = true;
             catchTimesBeats[currentNote] = song.GetSongTimeSeconds();
+            //paddle = other.gameObject.GetComponent<Paddle>();
         }
     }
 

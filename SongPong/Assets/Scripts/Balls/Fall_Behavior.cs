@@ -10,7 +10,7 @@ public class Fall_Behavior : MoveBehavior
         float radius = ball.GetComponent<SpriteRenderer>().bounds.size.y / 2;
 
         if(radius == 0) Debug.LogError("Ball radius is null or zero. Move time will be inaccurate.");
-        Debug.Log("RAD: " + radius);
+        //Debug.Log("RAD: " + radius);
         // Calculate delta H
         // |(AB • axisVector)| - ballradius
         float delta = Mathf.Abs(Vector2.Dot(pointA - pointB, axisVector)) - (radius);

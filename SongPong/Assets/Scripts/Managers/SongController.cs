@@ -66,7 +66,7 @@ public class SongController : MonoBehaviour
     private BallDropper ballDropper;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* STATIC FUNCTIONS
+* PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public float ToBeat(float time)
@@ -78,10 +78,6 @@ public class SongController : MonoBehaviour
     {
         return (60.0f / songData.bpm) * (beat);
     }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PUBLIC FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void LoadSong(SongData newSongData)
     {
@@ -163,17 +159,6 @@ public class SongController : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PRIVATE FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    private void goToTime(float time)
-    {
-        source.time = time;
-        songTime = source.time;
-        source.Play();
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -183,4 +168,14 @@ public class SongController : MonoBehaviour
         source = GetComponent<AudioSource>();
     }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PRIVATE FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void goToTime(float time)
+    {
+        source.time = time;
+        songTime = source.time;
+        source.Play();
+    }
 }

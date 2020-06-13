@@ -1,4 +1,24 @@
-﻿using UnityEngine;
+﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+________ DEFENITION ________
+Class Name: Level Changer
+Purpose: Loads the game into the Song scene set up for a specific song
+
+__________ USAGE ___________
+* Attach to GameObject
+* Load in songData
+* Transition to Song scene
+
+_________ PUBLIC ___________
++ FadeToNextLevel(): Fade to next scene index
+    - Song should index 1
++ FadeToLevel(int levelIndex): Fade to specific scene
++ SetSong(SongData sd): Set song data to be loaded in
+    - Call before you transition scene
+
++=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
@@ -22,10 +42,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         CheckForNonMenuPlay();
     }
 
-    private void Update()
-    {
-    }
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -39,11 +55,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     {
         levelToLoad = levelIndex;
         animator.SetTrigger("FadeOut");
-    }
-
-    public void OnFadeComplete()
-    {
-        SceneManager.LoadScene(levelToLoad);
     }
 
     public void SetSong(SongData sd)
@@ -81,5 +92,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         {
             InitSong();
         }
+    }
+
+    private void OnFadeComplete()
+    {
+        SceneManager.LoadScene(levelToLoad);
     }
 }

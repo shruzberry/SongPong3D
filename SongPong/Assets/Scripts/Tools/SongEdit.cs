@@ -24,6 +24,7 @@ using UnityEngine;
 using UnityEditor;
 using Types;
 using System;
+using System.IO;
 
 public class SongEdit : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class SongEdit : MonoBehaviour
 
         BallData bd = new BallData();
         NoteData nd = new NoteData();
-        
+
         nd.hitBeat = (int) songController.GetSongTimeBeats();
         saveNote(nd);
 
@@ -46,7 +47,7 @@ public class SongEdit : MonoBehaviour
         bd.name = name;
         bd.notes = new List<NoteData>();
         bd.notes.Add(nd);
-        saveBall(bd);        
+        saveBall(bd);
     }
 
     //[MenuItem("SongEdit/Create Simple + Note Listener")]
@@ -54,15 +55,16 @@ public class SongEdit : MonoBehaviour
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        BallData bd = new BallData();
-        
+        //BallData bd = new BallData();
+        BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
+
         saveNote(nd);
 
         bd.type = BallTypes.simple;
         bd.name = name;
         bd.notes = new List<NoteData>();
         bd.notes.Add(nd);
-        saveBall(bd);        
+        saveBall(bd);
     }
 
     public static void CreateBounce(string name, List<NoteData> nd)
@@ -70,27 +72,27 @@ public class SongEdit : MonoBehaviour
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
         BallData bd = new BallData();
-        
+
         foreach (NoteData noteData in nd)
         {
-            
+
         }
 
         bd.type = BallTypes.bounce;
         bd.name = name;
         bd.notes = new List<NoteData>();
-        
+
         int i = 0;
         foreach (NoteData noteData in nd)
         {
             noteData.name = name + "_" + i;
             bd.notes[i] = noteData;
             saveNote(noteData);
-            
+
             i++;
         }
 
-        saveBall(bd);        
+        saveBall(bd);
     }
 
     public static void AppendToBall(BallData ball, NoteData note)
@@ -114,12 +116,19 @@ public class SongEdit : MonoBehaviour
 
     public static void saveNote(NoteData type)
     {
+        if(!Application.isPlaying)
+        {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        AssetDatabase.CreateAsset(type, songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset");
-        AssetDatabase.SaveAssets ();
-        EditorUtility.FocusProjectWindow ();
+        string path = songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset";
+        if(Directory.Exists(path))
+            Debug.Log("Already HERE");
+
+        AssetDatabase.CreateAsset(type, path);
+        AssetDatabase.SaveAssets();
+        EditorUtility.FocusProjectWindow();
         Selection.activeObject = type;
+        }
     }
 
     public static void DeleteNote(BallData ball, NoteData note)
@@ -133,7 +142,7 @@ public class SongEdit : MonoBehaviour
     public static void DeleteBall(BallData ball)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-        
+
         if(ball.notes.Count >= 1)
         {
             foreach(NoteData nd in ball.notes)
@@ -148,6 +157,6 @@ public class SongEdit : MonoBehaviour
 
     private static string GetDataName(string s)
     {
-        return(s + "_" + Time.time);
+        return(s + "_" + System.DateTime.Now.ToString("yyyyMMddHHmmss"));
     }
 }

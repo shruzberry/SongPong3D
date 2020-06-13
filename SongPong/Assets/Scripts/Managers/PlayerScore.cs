@@ -1,4 +1,5 @@
 ﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+
 ________ DEFENITION ________
 Class Name: PlayerScore.cs
 Purpose: Subscribes to ball events and modifies a UI based on public parameters
@@ -7,17 +8,11 @@ ________ USAGE ________
 * Attach to gameobject
 * Select player to subscribe to
 
-________ ATTRIBUTES ________
-+ Axis axis
-
-________ FUNCTIONS ________
-
+________ PUBLIC ________
++ int Score: The score of the player
++ (enum)Paddles player: The paddle that the Player score is listening to
 
 +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* DEPENDENCIES
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
 using System.Collections;
 using System.Collections.Generic;
@@ -90,10 +85,6 @@ public class PlayerScore : MonoBehaviour
 
     private void Score(Ball ball)
     {
-        //print("scoring" + paddle.paddleNum);
-        //if(paddle.paddleNum == player)
-        {
-            score += 1;
-        }
+        score += 1;
     }
 }

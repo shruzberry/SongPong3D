@@ -96,6 +96,7 @@ public class SimpleBall : Ball
    private void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.tag == "Paddle"){
+            //paddle = other.gameObject.GetComponent<Paddle>();
             caught = true;
             catchTimesBeats[currentNote] = song.GetSongTimeBeats();
         }

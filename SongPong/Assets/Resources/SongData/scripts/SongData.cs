@@ -16,10 +16,17 @@ public class SongData : ScriptableObject
     public int startBeat = 0;
     public int endBeat = 0;
     public float offset = 0;
-    //[HideInInspector]
+    [HideInInspector]
     public string myPath;
     //[HideInInspector]
     public string dataPath;
+
+    public BallData[] GetAllBallData()
+    {
+        string path = "SongData/data/" + songName + "/Balls/";
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        return ballData;
+    }
 
     public void OnEnable()
     {

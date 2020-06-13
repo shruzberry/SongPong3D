@@ -35,9 +35,10 @@ public abstract class Ball : MonoBehaviour
 
     //___________REFERENCES_____________
     //protected PlayerInputHandler paddleManager;
+    //protected Paddle paddle;
     protected SpawnInfo spawnInfo;
     public SongController song;
-    
+
     //___________COMPONENTS_____________
     protected SpriteRenderer ball_renderer;
 
@@ -145,7 +146,7 @@ public abstract class Ball : MonoBehaviour
     public virtual void SetAxisVectors()
     {
         negative = (notes[currentNote].noteDirection == Direction.negative) ? -1.0f : 1.0f;
-        
+
         if(axis == Axis.y && negative == 1.0f) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
         else if(axis == Axis.y && negative == -1.0f) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
         else if(axis == Axis.x && negative == 1.0f) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}

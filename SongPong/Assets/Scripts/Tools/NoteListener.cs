@@ -76,7 +76,7 @@ public class NoteListener : MonoBehaviour
     void Update()
     {
         Keyboard kb = InputSystem.GetDevice<Keyboard>();
-        if(kb.spaceKey.wasPressedThisFrame)
+        if(kb.spaceKey.wasPressedThisFrame && active)
         {
             NoteData nd = new NoteData();
             
