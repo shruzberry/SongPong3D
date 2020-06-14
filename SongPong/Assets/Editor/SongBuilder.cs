@@ -58,6 +58,7 @@ public class SongBuilder : EditorWindow
     Vector2 activeBallsScrollPosition;
 
     Color defaultColor;
+    Color oldColor;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * STARTUP FUNCTIONS
@@ -110,7 +111,8 @@ public class SongBuilder : EditorWindow
         songController = FindObjectOfType<SongController>();
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
-            songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+            songData = songController.GetSongData();
+            EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
@@ -165,10 +167,6 @@ public class SongBuilder : EditorWindow
             GUILayout.Space(10.0f);
 
             GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Save Data", b, GUILayout.Width(100)))
-                {
-
-                }
                 ChangeColor(Color.green);
                 if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
                 {
@@ -296,8 +294,6 @@ public class SongBuilder : EditorWindow
 
     void AppendNote(BallData ball)
     {
-        if (!Application.isPlaying)
-        {
             //NoteData nd = new NoteData();
             NoteData nd = (NoteData)ScriptableObject.CreateInstance("NoteData");
             //nd.hitPosition = 0;
@@ -306,7 +302,6 @@ public class SongBuilder : EditorWindow
             nd.name = "NewNote";
             SongEdit.saveNote(nd);
             SongEdit.AppendToBall(ball, nd);
-        }
     }
 
     void ChangeColor(Color color)
@@ -323,5 +318,10 @@ public class SongBuilder : EditorWindow
     public void Update()
     {
         Repaint();
+    }
+
+    public void OnEnable()
+    {
+        oldColor = GUI.color;
     }
 }

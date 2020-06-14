@@ -140,6 +140,7 @@ public class SongController : MonoBehaviour
 
     public float GetSongTimeBeats()
     {
+        source = GetComponent<AudioSource>();
         return ToBeat(source.time);
     }
 

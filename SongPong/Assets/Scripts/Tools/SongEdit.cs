@@ -116,8 +116,7 @@ public class SongEdit : MonoBehaviour
 
     public static void saveNote(NoteData type)
     {
-        if(!Application.isPlaying)
-        {
+       
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
         string path = songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset";
@@ -128,7 +127,7 @@ public class SongEdit : MonoBehaviour
         AssetDatabase.SaveAssets();
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = type;
-        }
+    
     }
 
     public static void DeleteNote(BallData ball, NoteData note)
