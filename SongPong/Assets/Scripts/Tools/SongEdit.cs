@@ -108,6 +108,10 @@ public class SongEdit : MonoBehaviour
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
+        string path = songController.GetDataPath() + "/Balls/";
+        if(!Directory.Exists(path))
+            System.IO.Directory.CreateDirectory(path);
+
         AssetDatabase.CreateAsset(type, songController.GetDataPath() + "/Balls/" + GetDataName("Ball") + ".asset");
         AssetDatabase.SaveAssets ();
         EditorUtility.FocusProjectWindow ();
@@ -118,6 +122,10 @@ public class SongEdit : MonoBehaviour
     {
        
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+
+        string dpath = songController.GetDataPath() + "/Notes/";
+        if(!Directory.Exists(dpath))
+            System.IO.Directory.CreateDirectory(dpath);
 
         string path = songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset";
         if(Directory.Exists(path))
