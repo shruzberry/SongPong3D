@@ -29,7 +29,7 @@ using UnityEditor;
 using UnityEngine.SceneManagement;
 using Types;
 
-
+[ExecuteInEditMode]
 public class SongBuilder : EditorWindow
 {
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -37,10 +37,10 @@ public class SongBuilder : EditorWindow
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     List<NoteData> deleteNoteList = new List<NoteData>();
-
     SongController songController;
     SongData songData;
     SongData lastSong;
+    List<BallData> ballList = new List<BallData>();
 
     //float navBarSectionSize = .15f;
 
@@ -167,6 +167,12 @@ public class SongBuilder : EditorWindow
             GUILayout.Space(10.0f);
 
             GUILayout.BeginHorizontal();
+                ChangeColor(oldColor);
+                if (GUILayout.Button("Reset Window", b, GUILayout.Width(100)))
+                {
+                    ForceUnityRecompile();
+                }ResetColor();
+
                 ChangeColor(Color.green);
                 if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
                 {
@@ -178,12 +184,12 @@ public class SongBuilder : EditorWindow
                                         GUILayout.Width(viewSection.width),
                                         GUILayout.Height(viewSection.height - 75));
                 GUILayout.Space(10.0f);
-                DrawBallDataList(songData.GetAllBallData(), Color.blue);
+                DrawBallDataList(ballList, Color.blue);
             GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
 
-    void DrawBallDataList(BallData[] balls, Color color)
+    void DrawBallDataList(List<BallData> balls, Color color)
     {
         if(balls == null)
             return;
@@ -197,6 +203,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in balls)
         {
+            EditorUtility.SetDirty(ball);
             //CheckBallActivity(ball, oldColor, Color.blue);
             GUILayout.BeginHorizontal();
 
@@ -259,7 +266,6 @@ public class SongBuilder : EditorWindow
                 EditorUtility.SetDirty(note);
             }
             ResetColor();
-            EditorUtility.SetDirty(ball);
         }
     }
 
@@ -276,17 +282,12 @@ public class SongBuilder : EditorWindow
     {
         if (Application.isEditor)
         {
-            //BallData bd = new BallData();
             BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
             bd.type = BallTypes.simple;
             bd.enabled = true;
             bd.name = "NewBall";
-
-            //NoteData nd = new NoteData();
             NoteData nd = (NoteData)ScriptableObject.CreateInstance("NoteData");
             nd.noteDirection = Direction.negative;
-            //nd.hitPosition = 0;
-            //nd.hitBeat = 0;
             nd.name = "NewNote";
             SongEdit.CreateSimple("NewBall", nd);
         }
@@ -294,10 +295,7 @@ public class SongBuilder : EditorWindow
 
     void AppendNote(BallData ball)
     {
-            //NoteData nd = new NoteData();
             NoteData nd = (NoteData)ScriptableObject.CreateInstance("NoteData");
-            //nd.hitPosition = 0;
-            //nd.hitBeat = 0;
             nd.noteDirection = Direction.negative;
             nd.name = "NewNote";
             SongEdit.saveNote(nd);
@@ -317,6 +315,7 @@ public class SongBuilder : EditorWindow
 
     public void Update()
     {
+        ballList = songData.GetAllBallData();
         Repaint();
     }
 
@@ -324,4 +323,9 @@ public class SongBuilder : EditorWindow
     {
         oldColor = GUI.color;
     }
+
+    private static void ForceUnityRecompile()
+    {   
+        
+    }  
 }
