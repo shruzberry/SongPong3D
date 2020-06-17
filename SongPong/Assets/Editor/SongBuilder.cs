@@ -43,8 +43,6 @@ public class SongBuilder : EditorWindow
     SongData lastSong;
     List<BallData> ballList = new List<BallData>();
 
-    //float navBarSectionSize = .15f;
-
     // for navigation bar
     int navButtonHeight = 20;
     int navButtonWidth = 35;
@@ -204,7 +202,7 @@ public class SongBuilder : EditorWindow
         foreach(BallData ball in balls)
         {
             EditorUtility.SetDirty(ball);
-            //CheckBallActivity(ball, oldColor, Color.blue);
+            CheckBallActivity(ball, oldColor, Color.blue);
             GUILayout.BeginHorizontal();
 
                 ChangeColor(Color.green);
@@ -270,11 +268,13 @@ public class SongBuilder : EditorWindow
 
     void CheckBallActivity(BallData ball, Color oldColor, Color setColor)
     {
-        if (ball.activity > 0)
-        {
-            GUI.color = oldColor + (setColor * (ball.activity / 100));
-            ball.activity -= 21.0f * Time.deltaTime;
-        }
+        float timeDifference = Mathf.Abs(ball.notes[0].hitBeat - songController.GetSongTimeBeats());
+        if (timeDifference == 0.0f)
+            timeDifference = 0.001f;
+        if (timeDifference < 8.0f)
+            GUI.backgroundColor = oldColor + (setColor/(timeDifference));
+        else
+            GUI.backgroundColor = oldColor;
     }
 
     void CreateBlankBall()
@@ -338,9 +338,4 @@ public class SongBuilder : EditorWindow
     {
         oldColor = GUI.color;
     }
-
-    private static void ForceUnityRecompile()
-    {   
-        
-    }  
 }

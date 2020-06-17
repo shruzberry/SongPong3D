@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 557be81cdf982bd45a1ea1f37e9b4080, type: 3}
-  m_Name: Ball_20200614100107
+  m_Name: Ball_20200617105434
   m_EditorClassIdentifier: 
   id: 0
   enabled: 1
   type: 0
   notes:
-  - {fileID: 11400000, guid: 6a8fcc060ee3e4bf381e6ce0c560ec2f, type: 2}
+  - {fileID: 11400000, guid: fd7683356ba78440bb40ccba18f2f1a9, type: 2}
   prefab: {fileID: 4100339267235431660, guid: b8e9c5ceb35ac438b85ee840bb99dbd5, type: 3}
-  activity: -0.56626725
+  activity: 0
