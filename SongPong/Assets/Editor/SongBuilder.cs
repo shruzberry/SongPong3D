@@ -38,6 +38,7 @@ public class SongBuilder : EditorWindow
 
     List<NoteData> deleteNoteList = new List<NoteData>();
     SongController songController;
+    ActiveSongData activeSongData;
     SongData songData;
     SongData lastSong;
     List<BallData> ballList = new List<BallData>();
@@ -109,10 +110,15 @@ public class SongBuilder : EditorWindow
     void DrawNavSettings()
     {
         songController = FindObjectOfType<SongController>();
+        activeSongData = FindObjectOfType<ActiveSongData>();
+
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
-            songData = songController.GetSongData();
-            EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+            GUILayout.BeginHorizontal();
+                songData = activeSongData.editingSong;
+                EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+                GUILayout.Label("Scene > Settings > Editor > Active Song Data > Editing Song");
+            GUILayout.EndHorizontal();
             if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
@@ -167,12 +173,6 @@ public class SongBuilder : EditorWindow
             GUILayout.Space(10.0f);
 
             GUILayout.BeginHorizontal();
-                ChangeColor(oldColor);
-                if (GUILayout.Button("Reset Window", b, GUILayout.Width(100)))
-                {
-                    ForceUnityRecompile();
-                }ResetColor();
-
                 ChangeColor(Color.green);
                 if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
                 {
