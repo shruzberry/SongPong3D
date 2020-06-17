@@ -31,6 +31,7 @@ ________ FUNCTIONS ________
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SongController : MonoBehaviour
 {
@@ -44,26 +45,28 @@ public class SongController : MonoBehaviour
     [HideInInspector]
     public string songName;
     [HideInInspector]
-    public float songTime;
-    [HideInInspector]
     public int numBeats; // total number of beats in this song
     [HideInInspector]
     public float songLengthSeconds;
 
     // OTHER
     private int startTime;
+    [Tooltip("The number of seconds to fast-forward or rewind")]
+    public float skipIncrement = 1;
 
     // BOOLS
     [HideInInspector]
     public bool isLoaded = false;
     [HideInInspector]
     public bool isPlaying;
+    private bool songEndReached;
 
     // COMPONENTS
     private AudioSource source;
 
     // REFERENCES
     private BallDropper ballDropper;
+    private InputMaster input;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
@@ -90,6 +93,7 @@ public class SongController : MonoBehaviour
         songLengthSeconds = source.clip.length; // how long the song is
         numBeats = (int)((songLengthSeconds / 60.0f) * songData.bpm);
         startTime = newSongData.startBeat;
+        songEndReached = false;
 
         isLoaded = true;
     }
@@ -160,6 +164,51 @@ public class SongController : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* SONG CONTROLS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void SkipForward(InputAction.CallbackContext context)
+    {
+        FastForward(skipIncrement);
+    }
+
+    private void SkipBackward(InputAction.CallbackContext context)
+    {
+        Rewind(skipIncrement);
+    }
+
+    private void FastForward(float sec)
+    {
+        Skip(sec);
+    }
+
+    private void Rewind(float sec)
+    {
+        Skip(-sec);
+    }
+
+    private void Skip(float sec)
+    {
+        if(source.time + sec < 0) 
+        {
+            Debug.LogWarning("Attempted to rewind too far." + source.time + sec);
+            source.time = 0;
+        }
+        else if(source.time + sec > songLengthSeconds)
+        {
+            Debug.LogWarning("Attempted to fast-forward too far." + source.time + sec);
+            source.time = songLengthSeconds - 1.0f;
+            source.Pause();
+        }
+        else
+        {
+            source.time += sec;
+            source.Play();
+        }
+    }
+
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -169,6 +218,13 @@ public class SongController : MonoBehaviour
         source = GetComponent<AudioSource>();
     }
 
+    private void Start() 
+    {
+        input = FindObjectOfType<InputHandler>().inputMaster;
+        input.Song.FastForward.performed += SkipForward;
+        input.Song.Rewind.performed += SkipBackward;
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -176,7 +232,6 @@ public class SongController : MonoBehaviour
     private void goToTime(float time)
     {
         source.time = time;
-        songTime = source.time;
         source.Play();
     }
 }
