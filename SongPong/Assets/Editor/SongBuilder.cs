@@ -240,7 +240,7 @@ public class SongBuilder : EditorWindow
                     ChangeColor(Color.green);
                     if (GUILayout.Button("+", b, GUILayout.Width(25)))
                     {
-                        AppendNote(ball);
+                        AppendNote(ball, note);
                     }
                     ResetColor();
 
@@ -259,7 +259,6 @@ public class SongBuilder : EditorWindow
                     GUILayout.Label("beat:", GUILayout.Width(32));
                     note.hitBeat = EditorGUILayout.FloatField("", note.hitBeat, s, w);
                     note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, w);
-
 
                 GUILayout.EndHorizontal();
 
@@ -280,24 +279,40 @@ public class SongBuilder : EditorWindow
 
     void CreateBlankBall()
     {
-        if (Application.isEditor)
-        {
+
             BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
             bd.type = BallTypes.simple;
             bd.enabled = true;
             bd.name = "NewBall";
+
             NoteData nd = (NoteData)ScriptableObject.CreateInstance("NoteData");
             nd.noteDirection = Direction.negative;
             nd.name = "NewNote";
             SongEdit.CreateSimple("NewBall", nd);
+    }
+
+    void CopyBall(BallData ball)
+    {
+        BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
+        bd.type = ball.type;
+        bd.enabled = ball.enabled;
+        bd.name = "NewBall";
+        
+        SongEdit.CreateSimple("NewBall");
+
+        foreach(NoteData note in ball.notes)
+        {
+            AppendNote(bd, note);
         }
     }
 
-    void AppendNote(BallData ball)
+    void AppendNote(BallData ball, NoteData note)
     {
             NoteData nd = (NoteData)ScriptableObject.CreateInstance("NoteData");
             nd.noteDirection = Direction.negative;
             nd.name = "NewNote";
+            nd.hitPosition = note.hitPosition;
+            nd.hitBeat = note.hitBeat;
             SongEdit.saveNote(nd);
             SongEdit.AppendToBall(ball, nd);
     }
