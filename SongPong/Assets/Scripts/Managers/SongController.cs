@@ -61,6 +61,13 @@ public class SongController : MonoBehaviour
     public bool isPlaying;
     private bool songEndReached;
 
+    // EVENTS
+    public delegate void OnSongFastForward();
+    public event OnSongFastForward onSongFastForward;
+    
+    public delegate void OnSongRewind();
+    public event OnSongRewind onSongRewind;
+
     // COMPONENTS
     private AudioSource source;
 
@@ -179,31 +186,40 @@ public class SongController : MonoBehaviour
 
     private void FastForward(float sec)
     {
-        Skip(sec);
+        bool success = Skip(sec);
+        if(success && onSongFastForward != null) onSongFastForward();
     }
 
     private void Rewind(float sec)
     {
-        Skip(-sec);
+        bool success = Skip(-sec);
+        if(success && onSongRewind != null) onSongRewind();
     }
 
-    private void Skip(float sec)
+    /**
+     * Atempts to skip by sec seconds. If it fails, returns false.
+     * Otherwise returns true
+     **/
+    private bool Skip(float sec)
     {
         if(source.time + sec < 0) 
         {
-            Debug.LogWarning("Attempted to rewind too far." + source.time + sec);
+            Debug.LogWarning("Reached start of song.");
             source.time = 0;
+            return false;
         }
         else if(source.time + sec > songLengthSeconds)
         {
-            Debug.LogWarning("Attempted to fast-forward too far." + source.time + sec);
+            Debug.LogWarning("Reached end of song.");
             source.time = songLengthSeconds - 1.0f;
             source.Pause();
+            return false;
         }
         else
         {
             source.time += sec;
             source.Play();
+            return true;
         }
     }
 

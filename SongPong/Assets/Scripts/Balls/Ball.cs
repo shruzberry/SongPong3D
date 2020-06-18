@@ -243,9 +243,9 @@ public abstract class Ball : MonoBehaviour
 
     public abstract void ExitActions();
 
-    public void DeleteBall()
+    public void DestroyBall()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

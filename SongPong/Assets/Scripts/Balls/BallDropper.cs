@@ -24,7 +24,6 @@ public class BallDropper : MonoBehaviour
     private SongController song;
     private AxisManager axisManager;
     private SpawnInfo spawner;
-    //private Paddle paddle;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -32,10 +31,10 @@ public class BallDropper : MonoBehaviour
 
     //___________Balls___________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
-    private List<BallData> waitingBallDataList = new List<BallData>(); // all ball data that hasn't been used yet
+        private int numBalls; // total number of balls in ballDataList
+        private int currentBallIndex; // pointer that keeps track of where we are in ballDataList
 
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
-    private List<Ball> finishedBallList = new List<Ball>(); // all balls that have exited-
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -63,10 +62,16 @@ public class BallDropper : MonoBehaviour
         song = FindObjectOfType<SongController>();
         axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
-        //paddle = FindObjectOfType<Paddle>();
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
+
+        // EVENTS
+        song.onSongFastForward += FastForwardBalls;
+        song.onSongRewind += RewindBalls;
+
+        // POINTERS
+        currentBallIndex = 0;
     }
 
     private void CalcMoveTimes()
@@ -93,7 +98,16 @@ public class BallDropper : MonoBehaviour
 
         CheckSpawn();
 
-        RemoveFinishedBalls();
+        CheckActiveBallsForDestroy();
+    }
+
+    private void UpdateActiveBalls()
+    {
+        // Update all active balls
+        foreach(Ball ball in activeBallList)
+        {
+            ball.UpdateBall();
+        }
     }
 
     private void FixedUpdate()
@@ -103,15 +117,34 @@ public class BallDropper : MonoBehaviour
         }
     }
 
-    private void UpdateActiveBalls()
-    {
-        // Update all active balls
-        foreach(Ball ball in activeBallList){
-            ball.UpdateBall();
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * FAST-FORWARD / REWIND
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-            if(ball.exit) {
-				finishedBallList.Add(ball);
-			}
+    public void FastForwardBalls()
+    {
+        ClearActiveBalls();
+
+        BallData checkBall = ballDataList[currentBallIndex];
+        float newSongTime = song.GetSongTimeBeats();
+        while(!isFinished && checkBall.notes[0].hitBeat - fallTimeBeats < newSongTime)
+        {
+            NextBall();
+            checkBall = ballDataList[currentBallIndex];
+        }
+    }
+
+    public void RewindBalls()
+    {
+        ClearActiveBalls();
+
+        BallData checkBall = ballDataList[currentBallIndex];
+        float newSongTime = song.GetSongTimeBeats();
+        while(checkBall.notes[0].hitBeat - fallTimeBeats > newSongTime)
+        {
+            PreviousBall();
+            if(currentBallIndex == 0) break;
+            checkBall = ballDataList[currentBallIndex];
         }
     }
 
@@ -119,40 +152,39 @@ public class BallDropper : MonoBehaviour
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    /**
+     * Checks the next ball in the ballDataList to see if it is ready to drop
+     * If it is, it spawns the ball and any others ready to spawn
+     * 
+     * NOTE: This function assumes the ballDataList is PRE-SORTED
+     **/
     public void CheckSpawn()
     {
-        List<BallData> spawnedBalls = new List<BallData>();
+        bool spawning = false;
+        BallData checkBall = ballDataList[currentBallIndex];
+        float dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
 
-        // check every ballData
-        // TODO change this to just look at the first ball, but need to sort first
-        foreach(BallData ballData in waitingBallDataList)
+        // Check first ball for spawn
+        if(!isFinished && dropBeat <= song.GetSongTimeBeats())
         {
-            // check every note
-            // TODO change this to just look at the first note, but need to sort first
-            foreach(NoteData note in ballData.notes)
+            spawning = true;
+            // Check other balls for spawn 
+            // Because we want balls with same hit time to spawn in same Update loop so their motions are synced
+            while(spawning)
             {
-                float dropBeat = note.hitBeat - fallTimeBeats;
-                if(!isFinished && dropBeat <= song.GetSongTimeBeats())
+                Ball ball = SpawnBall(checkBall);
+                checkBall.PulseActive();
+
+                // if there are no balls left, exit the loop
+                if(isFinished){ spawning = false; break;}
+                else
                 {
-                    spawnedBalls.Add(ballData);
-
-                    Ball ball = SpawnBall(ballData);
-
-                    ballData.PulseActive();
+                    checkBall = ballDataList[currentBallIndex];
+                    dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
+                    // If the next ball isn't ready to drop, continue
+                    if(!(dropBeat <= song.GetSongTimeBeats())){ spawning = false; }
                 }
             }
-        }
-        RemoveBallsFromWaiting(spawnedBalls);
-        spawnedBalls.Clear();
-    }
-
-    private void RemoveBallsFromWaiting(List<BallData> spawnedBalls)
-    {
-        // remove any balls that dropped from the waiting pool
-        // (this action must occur outside of the foreach loop)
-        foreach(BallData ball in spawnedBalls)
-        {
-            waitingBallDataList.Remove(ball);
         }
     }
 
@@ -164,13 +196,15 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
 
-            ball.InitializeBall(data, axisManager, spawner, /*paddleManager,*/ song);
+            ball.InitializeBall(data, axisManager, spawner, song);
 
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
 
             // Add to list of balls
             activeBallList.Add(ball);
+
+            NextBall();
 
             return ball;
         }
@@ -180,67 +214,49 @@ public class BallDropper : MonoBehaviour
         }
     }
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * RESET
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void ResetBalls()
+    /**
+     * Updates the currentBallIndex to the next location, if possible
+     **/
+    private void NextBall()
     {
-        activeBallList = new List<Ball>();
-        waitingBallDataList = ballDataList;
+        if(currentBallIndex < numBalls - 1){ currentBallIndex++; }
+        else { isFinished = true; }
+    }
+
+    private void PreviousBall()
+    {
+        if(currentBallIndex > 0) { currentBallIndex--; isFinished = false;}
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * REMOVE
+ * DESTROY
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void RemoveFinishedBalls()
+    private void CheckActiveBallsForDestroy()
     {
-        // Destroy any balls that are caught or missed
-		foreach(Ball rmBall in finishedBallList)
+        List<Ball> destroyBalls = new List<Ball>();
+
+        foreach(Ball ball in activeBallList)
         {
-			activeBallList.Remove(rmBall);
-            rmBall.DeleteBall();
-		}
-        finishedBallList.Clear();
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * GETTERS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public List<BallData> getWaitingBalls(){return waitingBallDataList;}
-    public BallData[] getAllBallData()
-    {
-        string path = dataLocation + ballMapName + "/Balls/";
-        BallData[] ballData = Resources.LoadAll<BallData>(path);
-        return ballData;
-    }
-    public List<Ball> GetActiveBalls(){return activeBallList;}
-    public List<Ball> getFinishedBalls(){return finishedBallList;}
-    public float GetFallTimeBeats(){return fallTimeBeats;}
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * LOADER
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void LoadBalls()
-    {
-        // check if was given a name
-        if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
-
-        string path = dataLocation + ballMapName + "/Balls/";
-        Debug.Log(path);
-        BallData[] ballData = Resources.LoadAll<BallData>(path);
-
-        if(ballData != null)
-        {
-            foreach(BallData data in ballData)
+            if(ball.exit)
             {
-                ballDataList.Add(data);
-            }
+				destroyBalls.Add(ball);
+			}
         }
-        waitingBallDataList = ballDataList;
+        foreach(Ball rmBall in destroyBalls)
+        {
+            activeBallList.Remove(rmBall);
+            rmBall.DestroyBall();
+        }
+    }
+
+    private void ClearActiveBalls()
+    {
+        foreach(Ball ball in activeBallList)
+        {
+            ball.DestroyBall();
+        }
+        activeBallList.Clear();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -253,6 +269,31 @@ public class BallDropper : MonoBehaviour
         if(printLoadedBalls) DebugLoadedBalls();
         // balls not instantiated yet
         CalcMoveTimes();
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * LOADER
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    /**
+     * Creates a list of BallData from the resources folder for the active song
+     **/
+    public void LoadBalls()
+    {
+        // check if was given a name
+        if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
+
+        string path = dataLocation + ballMapName + "/Balls/";
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+
+        if(ballData != null)
+        {
+            foreach(BallData data in ballData)
+            {
+                ballDataList.Add(data);
+            }
+        }
+        numBalls = ballDataList.Count;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -270,4 +311,18 @@ public class BallDropper : MonoBehaviour
             Debug.Log(ballData.name);
         }
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * GETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public BallData[] GetAllBallData()
+    {
+        string path = dataLocation + ballMapName + "/Balls/";
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        return ballData;
+    }
+    public List<Ball> GetActiveBalls(){return activeBallList;}
+    public float GetFallTimeBeats(){return fallTimeBeats;}
+
 }
