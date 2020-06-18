@@ -21,11 +21,22 @@ public class SongData : ScriptableObject
     //[HideInInspector]
     public string dataPath;
 
-    public BallData[] GetAllBallData()
+    public List<BallData> GetAllBallData()
     {
         string path = "SongData/data/" + songName + "/Balls/";
         BallData[] ballData = Resources.LoadAll<BallData>(path);
-        return ballData;
+        List<BallData> ballList = new List<BallData>();
+
+        int i=0;
+        foreach(BallData bd in ballData)
+        {
+            ballList.Add(ballData[i]);
+            i++;
+        }
+
+        ballList.Sort(BallData.CompareBallsBySpawnTime);
+
+        return ballList;
     }
 
     public void OnEnable()

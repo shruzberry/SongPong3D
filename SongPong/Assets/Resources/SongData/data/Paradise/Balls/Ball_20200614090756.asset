@@ -19,4 +19,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b5e4a01c3cb043d5adee99469e27a27, type: 2}
   - {fileID: 11400000, guid: dabd492e2627a4ee1ae0060d7a6ad2d6, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
-  activity: 100
+  activity: -0.7438478
