@@ -11,11 +11,15 @@ public class PaddleMover : MonoBehaviour
 
     public float speed = 10.0f;
 
+    public float sprint;
+
     //[HideInInspector]
     public Vector2 paddleAxis;
 
     private Vector2 _movement;
     private Vector2 paddlePos;
+
+    private float sprintTriggerTime;
 
     private void Awake() 
     {
@@ -28,9 +32,14 @@ public class PaddleMover : MonoBehaviour
         _movement = context.ReadValue<Vector2>();
     }
 
+    public void Sprint(CallbackContext context)
+    {
+        sprint = context.ReadValue<float>() * 5.0f;
+    }
+
     void Update()
     {
-        paddlePos += _movement * speed * Time.deltaTime;
+        paddlePos += _movement * (speed + sprint) * Time.deltaTime;
         paddlePos = Clamp.ClampToAxis(paddlePos, radius, paddleAxis);
         transform.position = paddlePos;
     }

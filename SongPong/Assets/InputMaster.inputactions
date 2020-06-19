@@ -20,6 +20,22 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "SprintP1",
+                    "type": "PassThrough",
+                    "id": "89614321-4d5b-40f1-b2c6-8109c01dc3f8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SprintP2",
+                    "type": "Button",
+                    "id": "e03bef3c-ef3b-4b91-ae16-24772eaa8755",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -132,6 +148,72 @@
                     "action": "MoveP2",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "c115dec1-be1e-4205-b6b0-0a6dd47bf096",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP1",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "209143ad-972d-4b79-938e-4ff4be5af59c",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP1",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "50407153-92fc-4845-aae2-e934126ae132",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP1",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "23482bfa-6f03-4885-afd3-2530a244d42d",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP2",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "7a6e943d-0170-4b5e-9ebf-4ba7987f3030",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP2",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "55ff6a84-dedf-489f-aef0-21858de62796",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SprintP2",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
@@ -184,52 +266,6 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "ToggleDebugLines",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Song",
-            "id": "6bc802b8-a5de-4a58-b82e-b226224a45c2",
-            "actions": [
-                {
-                    "name": "Fast Forward",
-                    "type": "Button",
-                    "id": "daca6112-f15f-46d5-bf33-1be50fbe0ab8",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Rewind",
-                    "type": "Button",
-                    "id": "67eb1951-c240-40c7-9b2b-cec25d89c3cf",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "3644cc87-570e-496f-be2e-ffedf70cbb95",
-                    "path": "<Keyboard>/period",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Fast Forward",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "94b50c51-b30a-4b4a-aad6-a543be45eeaf",
-                    "path": "<Keyboard>/comma",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Rewind",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

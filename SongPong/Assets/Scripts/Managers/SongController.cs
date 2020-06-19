@@ -237,8 +237,8 @@ public class SongController : MonoBehaviour
     private void Start() 
     {
         input = FindObjectOfType<InputHandler>().inputMaster;
-        input.Song.FastForward.performed += SkipForward;
-        input.Song.Rewind.performed += SkipBackward;
+        //input.Song.FastForward.performed += SkipForward;
+        //input.Song.Rewind.performed += SkipBackward;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

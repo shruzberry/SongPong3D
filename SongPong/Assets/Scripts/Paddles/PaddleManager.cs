@@ -46,11 +46,11 @@ public class PaddleManager : MonoBehaviour
         float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height - (Screen.height * (padding/100.0f)), 0)).y;
         Debug.Log("AXIS VALUE: " + axisValue);
 
-        // PADDLE 1
-        PaddleMover pm1 = paddle1.GetComponent<PaddleMover>();
-        pm1.paddleAxis = new Vector2(0,-1) * axisValue;
-        
         // PADDLE 2
-        paddle2.SetActive(false);
+        PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
+        pm2.paddleAxis = new Vector2(0,-1) * axisValue;
+        
+        // PADDLE 1
+        paddle1.SetActive(false);
     }
 }
