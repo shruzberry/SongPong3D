@@ -993,7 +993,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 335334683, guid: 1c783558b9dc24b80a22c3b3b27b3077, type: 3}
       propertyPath: gameAxis
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1338863237352836497, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
@@ -1946,21 +1946,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
-    - target: {fileID: 6951196518251095644, guid: c36e828128271402bab83050efe00f68,
-        type: 3}
-      propertyPath: speed
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 6951196518428667456, guid: c36e828128271402bab83050efe00f68,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
-    - target: {fileID: 6951196518428667467, guid: c36e828128271402bab83050efe00f68,
-        type: 3}
-      propertyPath: speed
-      value: 9
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c36e828128271402bab83050efe00f68, type: 3}
 --- !u!1001 &8532456550293976274
