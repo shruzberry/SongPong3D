@@ -993,7 +993,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 335334683, guid: 1c783558b9dc24b80a22c3b3b27b3077, type: 3}
       propertyPath: gameAxis
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1338863237352836497, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
