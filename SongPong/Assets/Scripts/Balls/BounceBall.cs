@@ -15,6 +15,8 @@ public class BounceBall : Ball
     public float speed = 0.0f;
     public float gravity = 3.0f;
 
+    public float bounceHeightMod = 3.0f;
+
     //________COMPONENTS____________
     Vector3 screenBounds;
     public Rigidbody2D rb;
@@ -49,7 +51,7 @@ public class BounceBall : Ball
 
         // same note more than once
 
-        // notes have different directionss
+        // notes have different directions
 
         return error;
     }
@@ -60,13 +62,14 @@ public class BounceBall : Ball
 
     /**
      * Returns the needed to hit on the next notes' time.
-     * TODO change to song time?
      */
     private float CalcBounceTime()
     {
         // Calculate time to hit the next note (this is returned)
-        // TODO convert to beats
-        float deltaT = notes[currentNote].hitTime - song.GetSongTimeSeconds();
+        float deltaT = notes[currentNote].hitBeat - song.GetSongTimeBeats();
+
+        // Convert to time
+        deltaT = song.ToTime(deltaT);
 
         // Check if notes are out of order
         if(deltaT < 0){Debug.LogError("NOTES ARE OUT OF ORDER ON " + type + " BALL " + id);}
