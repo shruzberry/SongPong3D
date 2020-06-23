@@ -93,12 +93,18 @@ public class BounceBall : Ball
         // Get distance between the current column and the next
         Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
 
+        bounceHeightMod = moveTime;
+        Debug.Log(bounceHeightMod);
+        gravity = gravity * bounceHeightMod;
+
         // Calculate the velocity needed to hit at new deltaT.
         // Comes from the kinematic equation v = v0 + at solved for v0
         // v0 = -at
         // we calculate only time to reach the peak, so (t/2)
         velocity = Vector2.zero;
         velocity += axisVector * -gravity * (moveTime / 2);
+
+        // Move along the other axis
         velocity += otherAxisVector * (deltaD / moveTime);
     }
 
@@ -134,7 +140,7 @@ public class BounceBall : Ball
         if(other.gameObject.tag == "Paddle")
         {
             caught = true;
-            catchTimesBeats[currentNote] = song.GetSongTimeSeconds();
+            catchTimesBeats[currentNote] = song.GetSongTimeBeats();
         }
     }
 

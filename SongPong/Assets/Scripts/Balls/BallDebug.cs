@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BallDebug : MonoBehaviour
 {
-    public bool printDebug;
+    public bool printCatchDebug;
+    public bool detailed;
 
-    BallDropper ballDropper;
-    SongController song;
+    private BallDropper ballDropper;
+    private SongController song;
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,7 +25,7 @@ public class BallDebug : MonoBehaviour
 
     public void DebugCatch(Ball ball)
     {
-        if(!printDebug){return;}
+        if(!printCatchDebug){return;}
 
         int currentNote = ball.currentNote;
         float catchTimeBeats = 0;
@@ -32,27 +33,29 @@ public class BallDebug : MonoBehaviour
         // for the first drop, use the spawn time in deltaT
         if(currentNote == 0)
         {
-            catchTimeBeats = ball.catchTimesBeats[0] - ball.spawnTimeBeats;
+            //Debug.Log("SPAWN TIME: " + ball.spawnTimeBeats);
+            //Debug.Log("CATCH TIME: " + ball.catchTimesBeats[currentNote]);
+            catchTimeBeats = ball.catchTimesBeats[currentNote] - ball.spawnTimeBeats;
         }
         // for bounces, etc. use the last catch time
         else
         {
-            Debug.Log("FIX ME");
+            //Debug.Log("CATCH TIME 1: " + ball.catchTimesBeats[currentNote - 1]);
+            //Debug.Log("CATCH TIME 2: " + ball.catchTimesBeats[currentNote]);
             catchTimeBeats = ball.catchTimesBeats[currentNote] - ball.catchTimesBeats[currentNote - 1];
         }
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
-        Debug.Log("Expected Move Time (Beats) – " + ballDropper.GetFallTimeBeats());
-        Debug.Log("Actual Move Time (Beats) – " + catchTimeBeats);
-        Debug.Log("Caught " + ball.name + " at beat " + song.GetSongTimeBeats());
+        if(detailed)
+        {
+            Debug.Log("Expected Move Time (Beats): " + ballDropper.GetFallTimeBeats());
+            Debug.Log("Actual Move Time (Beats): " + catchTimeBeats);
+        }
+        Debug.Log("Caught " + ball.name + " at beat " + ball.catchTimesBeats[currentNote]);
         Debug.Log("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
     }
 
     public void ToggleDebug()
     {
-        print("swapping");
-        if (printDebug)
-            printDebug = false;
-        else
-            printDebug = true;
+        printCatchDebug = (printCatchDebug) ? !printCatchDebug : printCatchDebug;
     }
 }

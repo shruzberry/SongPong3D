@@ -28,142 +28,219 @@ using System.IO;
 
 public class SongEdit : MonoBehaviour
 {
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PUBLIC FUNCTIONS
+* CREATE BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static void CreateSimple(string name)
+    public static BallData CreateSimple(List<NoteData> notes = null)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        BallData bd = new BallData();
-        NoteData nd = new NoteData();
+        SimpleBallData new_ball = (SimpleBallData)ScriptableObject.CreateInstance(typeof(SimpleBallData));
+        new_ball.Initialize("NewSimple");
 
-        nd.hitBeat = (int) songController.GetSongTimeBeats();
-        saveNote(nd);
-
-        bd.type = BallTypes.simple;
-        bd.name = name;
-        bd.notes = new List<NoteData>();
-        bd.notes.Add(nd);
-        saveBall(bd);
-    }
-
-    //[MenuItem("SongEdit/Create Simple + Note Listener")]
-    public static void CreateSimple(string name, NoteData nd)
-    {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-
-        //BallData bd = new BallData();
-        BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
-
-        saveNote(nd);
-
-        bd.type = BallTypes.simple;
-        bd.name = name;
-        bd.notes = new List<NoteData>();
-        bd.notes.Add(nd);
-        saveBall(bd);
-    }
-
-    public static void CreateBounce(string name, List<NoteData> nd)
-    {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-
-        BallData bd = new BallData();
-
-        foreach (NoteData noteData in nd)
+        if(notes == null)
         {
-
+            NoteData note = CreateNote();
+            note.hitBeat = 0;
+            new_ball.notes.Add(note);
+            SaveNote(note);
+        }
+        else
+        {
+            new_ball.notes.Add(CreateNote(notes[0]));
+            SaveNotes(new_ball.notes);
         }
 
-        bd.type = BallTypes.bounce;
-        bd.name = name;
-        bd.notes = new List<NoteData>();
+        SaveBall(new_ball);
 
-        int i = 0;
-        foreach (NoteData noteData in nd)
-        {
-            noteData.name = name + "_" + i;
-            bd.notes[i] = noteData;
-            saveNote(noteData);
-
-            i++;
-        }
-
-        saveBall(bd);
+        return new_ball;
     }
 
-    public static void AppendToBall(BallData ball, NoteData note)
+    public static BallData CreateBounce(List<NoteData> notes = null)
     {
-        ball.notes.Add(note);
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+
+        BounceBallData new_ball = (BounceBallData)ScriptableObject.CreateInstance(typeof(BounceBallData));
+        new_ball.Initialize("NewBounce");
+
+        if(notes == null)
+        {
+            new_ball.notes.Add(CreateNote()); // NOTE: Creating two notes at the same time gives them the same name
+            new_ball.notes.Add(CreateNote());
+            SaveNotes(new_ball.notes);
+        }
+        else
+        {
+            foreach(NoteData note in notes)
+            {
+                new_ball.notes.Add(CreateNote(note));
+            }
+            if(new_ball.notes.Count < 2)
+            {
+                new_ball.notes.Add(CreateNote());
+            }
+            SaveNotes(new_ball.notes);
+        }
+
+        SaveBall(new_ball);
+
+        return new_ball;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PRIVATE FUNCTIONS
+* EDIT BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static void saveBall(BallData type)
+    public static void SaveBall(BallData type)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        string path = songController.GetDataPath() + "/Balls/";
-        if(!Directory.Exists(path))
-            System.IO.Directory.CreateDirectory(path);
-
-        AssetDatabase.CreateAsset(type, songController.GetDataPath() + "/Balls/" + GetDataName("Ball") + ".asset");
-        AssetDatabase.SaveAssets ();
-        EditorUtility.FocusProjectWindow ();
-        Selection.activeObject = type;
-    }
-
-    public static void saveNote(NoteData type)
-    {
-       
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-
-        string dpath = songController.GetDataPath() + "/Notes/";
+        string dpath = songController.GetDataPath() + "/Balls/";
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 
-        string path = songController.GetDataPath() + "/Notes/" + GetDataName("Note") + ".asset";
-        if(Directory.Exists(path))
-            Debug.Log("Already HERE");
-
+        string path = GetDataName(dpath, "Ball", ".asset");
         AssetDatabase.CreateAsset(type, path);
         AssetDatabase.SaveAssets();
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = type;
-    
     }
 
-    public static void DeleteNote(BallData ball, NoteData note)
+    public static BallData CreateBall(BallTypes type, List<NoteData> notes = null)
+    {
+        BallData newBall;
+        switch(type)
+        {
+            case BallTypes.simple:
+                newBall = CreateSimple(notes);
+                break;
+            case BallTypes.bounce:
+                newBall = CreateBounce(notes);
+                break;
+            default:
+                Debug.LogError("THIS BALL TYPE HAS NOT BEEN ADDED YET.");
+                return null;
+        }
+        return newBall;
+    }
+
+    public static void DeleteBallAndNotes(BallData ball)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
-        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + note.name + ".asset");
-        ball.notes.Remove(note);
-    }
-
-    public static void DeleteBall(BallData ball)
-    {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
-
-        if(ball.notes.Count >= 1)
+        if(ball.notes.Count > 0)
         {
             foreach(NoteData nd in ball.notes)
             {
                 AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + nd.name + ".asset");
             }
         }
-
-        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
-
+        DeleteBall(ball);
     }
 
-    private static string GetDataName(string s)
+    public static void DeleteBall(BallData ball)
     {
-        return(s + "_" + System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        
+        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
+    }
+
+    public static BallData ChangeBallType(BallData ball, BallTypes type)
+    {
+        BallData newBall = CreateBall(type, ball.notes);
+
+        return newBall;
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* EDIT NOTES
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public static void AppendNote(BallData ball, NoteData note)
+    {
+        NoteData new_note = (NoteData)ScriptableObject.CreateInstance("NoteData");
+
+        new_note.noteDirection = Direction.negative;
+        new_note.name = "NewNote";
+        new_note.hitPosition = note.hitPosition;
+        new_note.hitBeat = note.hitBeat;
+
+        bool success = SaveNote(new_note);
+
+        // if the note was successfully created, add it to the list
+        if(success) ball.notes.Add(new_note);
+    }
+
+    public static NoteData CreateNote()
+    {
+        return (NoteData)ScriptableObject.CreateInstance(typeof(NoteData));
+    }
+
+    // Create a new note with the info from a previous note
+    public static NoteData CreateNote(NoteData note)
+    {
+        NoteData new_note = CreateNote();
+        new_note.hitBeat = note.hitBeat;
+        new_note.hitPosition = note.hitPosition;
+        new_note.noteDirection = note.noteDirection;
+
+        return new_note;
+    }
+
+    public static void SaveNotes(List<NoteData> notes)
+    {
+        foreach (NoteData noteData in notes)
+        {
+            SaveNote(noteData);
+        }
+    }
+
+    public static bool SaveNote(NoteData note)
+    {
+        SongController songController = FindObjectOfType<SongController>();
+
+        string dpath = songController.GetDataPath() + "/Notes/";
+        if(!Directory.Exists(dpath))
+            System.IO.Directory.CreateDirectory(dpath);
+
+        string path = GetDataName(dpath, "Note", ".asset");
+        if(File.Exists(path))
+        {
+            Debug.LogWarning("Note with this name already exists. Skipped. Or stop clicking so f***ing fast.");
+            return false;
+        }
+        AssetDatabase.CreateAsset(note, path);
+        AssetDatabase.SaveAssets();
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = note;
+        return true;
+    }
+
+    public static void DeleteNote(BallData ball, NoteData note)
+    {
+        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+
+        ball.notes.Remove(note);
+        
+        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + note.name + ".asset");
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* GETTERS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private static string GetDataName(string root_path, string obj_name, string obj_type)
+    {        
+        string name = root_path + obj_name + "_" + System.DateTime.Now.ToString("yyyyMMddHHmmss") + obj_type;
+        int duplicateNum = 0;
+
+        while(File.Exists(name))
+        {
+            name = root_path + obj_name + "_" + System.DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + duplicateNum.ToString() + obj_type;
+            duplicateNum++;
+        }
+
+        return name;
     }
 }

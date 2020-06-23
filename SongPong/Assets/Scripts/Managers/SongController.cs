@@ -59,7 +59,6 @@ public class SongController : MonoBehaviour
     public bool isLoaded = false;
     [HideInInspector]
     public bool isPlaying;
-    private bool songEndReached;
 
     // EVENTS
     public delegate void OnSongFastForward();
@@ -100,7 +99,6 @@ public class SongController : MonoBehaviour
         songLengthSeconds = source.clip.length; // how long the song is
         numBeats = (int)((songLengthSeconds / 60.0f) * songData.bpm);
         startTime = newSongData.startBeat;
-        songEndReached = false;
 
         isLoaded = true;
     }

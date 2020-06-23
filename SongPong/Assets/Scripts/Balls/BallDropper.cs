@@ -294,6 +294,7 @@ public class BallDropper : MonoBehaviour
             }
         }
         numBalls = ballDataList.Count;
+        Debug.Log(numBalls);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

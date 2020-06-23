@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Events;
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
-public class BallData : ScriptableObject
+public abstract class BallData : ScriptableObject
 {
     [HideInInspector]
     public int id;
@@ -29,6 +29,8 @@ public class BallData : ScriptableObject
         SetPrefab();
     }
 
+    public abstract void Initialize(string name);
+
     public void SetName()
     {
         this.name = type + "Ball" + id;
@@ -41,20 +43,7 @@ public class BallData : ScriptableObject
         if(onBallValidate != null) onBallValidate();
     }
 
-    private void SetPrefab()
-    {
-        switch(type)
-        {
-            case BallTypes.simple:
-                prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
-                break;
-            case BallTypes.bounce:
-                prefab = Resources.Load("Prefabs/BounceBall") as GameObject;
-                break;
-            default:
-                break;
-        }
-    } 
+    protected abstract void SetPrefab();
 
     /**
      * Sort this balls' notes according to their hit time
