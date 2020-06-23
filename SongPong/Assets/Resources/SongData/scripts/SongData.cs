@@ -21,9 +21,9 @@ public class SongData : ScriptableObject
     //[HideInInspector]
     public string dataPath;
 
-    public List<BallData> ballList = new List<BallData>();
+    public List<BallDataNew> ballList = new List<BallDataNew>();
 
-    public List<BallData> GetAllBallData()
+    public List<BallDataNew> GetAllBallData()
     {
         return ballList;
     }
@@ -39,10 +39,10 @@ public class SongData : ScriptableObject
     public void UpdateBallData()
     {
         string path = "SongData/data/" + songName + "/Balls/";
-        BallData[] ballData = Resources.LoadAll<BallData>(path);
-        ballList = new List<BallData>();
+        BallDataNew[] ballData = Resources.LoadAll<BallDataNew>(path);
+        ballList = new List<BallDataNew>();
 
-        foreach(BallData bd in ballData)
+        foreach(BallDataNew bd in ballData)
         {
             ballList.Add(bd);
         }

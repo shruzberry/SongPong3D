@@ -41,7 +41,7 @@ public class SongBuilder : EditorWindow
     ActiveSongData activeSongData;
     SongData songData;
     SongData lastSong;
-    List<BallData> ballList = new List<BallData>();
+    List<BallDataNew> ballList = new List<BallDataNew>();
 
     // Navigation bar
     int navButtonHeight = 20;
@@ -82,6 +82,7 @@ public class SongBuilder : EditorWindow
         {
             DrawRowLayouts();
             DrawNavSettings();
+            ConvertOldBallDataToNew();
             DrawBallData();
         }
         else
@@ -210,12 +211,12 @@ public class SongBuilder : EditorWindow
         b.alignment = TextAnchor.MiddleCenter;
         var w = GUILayout.Width(100);
 
-        List<BallData> newBalls = new List<BallData>();
-        List<BallData> deleteBalls = new List<BallData>();
-        List<BallData> typeChangeBalls = new List<BallData>();
+        List<BallDataNew> newBalls = new List<BallDataNew>();
+        List<BallDataNew> deleteBalls = new List<BallDataNew>();
+        List<BallDataNew> typeChangeBalls = new List<BallDataNew>();
 
         //Ball Field
-        foreach(BallData ball in ballList)
+        foreach(BallDataNew ball in ballList)
         {
             EditorUtility.SetDirty(ball);
             GUILayout.BeginHorizontal();
@@ -311,12 +312,12 @@ public class SongBuilder : EditorWindow
         }
         // --------- END BALL ITERATION --------------------------
 
-        foreach(BallData ball in newBalls)
+        foreach(BallDataNew ball in newBalls)
         {
             ballList.Add(ball);
         }
 
-        foreach(BallData ball in deleteBalls)
+        foreach(BallDataNew ball in deleteBalls)
         {
             ballList.Remove(ball);
             SongEdit.DeleteBallAndNotes(ball);
@@ -326,7 +327,39 @@ public class SongBuilder : EditorWindow
         songData.UpdateBallData();
     }
 
-    void CheckBallActivity(BallData ball, Color oldColor, Color setColor)
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void ConvertOldBallDataToNew()
+    {
+        string path = "SongData/data/" + songData.songName + "/Balls/";
+        Debug.Log(path);
+        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        List<BallData> ballList = new List<BallData>();
+        foreach(BallData bd in ballData)
+        {
+            Debug.Log("HELLO");
+            ballList.Add(bd);
+        }
+
+        List<BallData> deleteBalls = new List<BallData>();
+
+        foreach(BallData ball in ballList)
+        {
+            BallTypes type = ball.type;
+
+            SongEdit.CreateBall(type,ball.notes);
+            deleteBalls.Add(ball);
+        }
+
+        foreach(BallData ball in deleteBalls)
+        {
+            AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
+        }
+    }
+
+    void CheckBallActivity(BallDataNew ball, Color oldColor, Color setColor)
     {
         float timeDifference = Mathf.Abs(ball.notes[0].hitBeat - songController.GetSongTimeBeats());
         if (timeDifference == 0.0f)
@@ -337,9 +370,9 @@ public class SongBuilder : EditorWindow
             GUI.backgroundColor = oldColor;
     }
 
-    void CopyBall(BallData ball)
+    void CopyBall(BallDataNew ball)
     {
-        BallData bd = (BallData)ScriptableObject.CreateInstance("BallData");
+        BallDataNew bd = (BallDataNew)ScriptableObject.CreateInstance("BallDataNew");
         bd.type = ball.type;
         bd.enabled = ball.enabled;
         bd.name = "NewBall";

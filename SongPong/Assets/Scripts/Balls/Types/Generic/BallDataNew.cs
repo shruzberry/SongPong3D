@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Events;
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
-public class BallData : ScriptableObject
+public abstract class BallDataNew : ScriptableObject
 {
     [HideInInspector]
     public int id;
@@ -29,10 +29,7 @@ public class BallData : ScriptableObject
         SetPrefab();
     }
 
-    public void Initialize(string name)
-    {
-
-    }
+    public abstract void Initialize(string name);
 
     public void SetName()
     {
@@ -46,10 +43,7 @@ public class BallData : ScriptableObject
         if(onBallValidate != null) onBallValidate();
     }
 
-    protected void SetPrefab()
-    {
-
-    }
+    protected abstract void SetPrefab();
 
     /**
      * Sort this balls' notes according to their hit time

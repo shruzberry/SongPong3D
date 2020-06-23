@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
-public class BounceBallData : BallData
+public class BounceBallData : BallDataNew
 {
     public override void Initialize(string name)
     {
