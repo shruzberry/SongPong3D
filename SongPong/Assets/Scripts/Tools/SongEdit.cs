@@ -94,9 +94,9 @@ public class SongEdit : MonoBehaviour
 
     public static void SaveBall(BallDataNew type)
     {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        ActiveSongData songController = FindObjectOfType<ActiveSongData>();
 
-        string dpath = songController.GetDataPath() + "/Balls/";
+        string dpath = songController.editingSong.dataPath + "/Balls/";
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 
@@ -198,9 +198,10 @@ public class SongEdit : MonoBehaviour
 
     public static bool SaveNote(NoteData note)
     {
-        SongController songController = FindObjectOfType<SongController>();
+        ActiveSongData songController = FindObjectOfType<ActiveSongData>();
 
-        string dpath = songController.GetDataPath() + "/Notes/";
+        string dpath = songController.editingSong.dataPath + "/Notes/";
+        Debug.Log("DPATH: " + dpath);
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 

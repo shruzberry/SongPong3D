@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f905abfb95f4aa7afc9cc870ec5e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  editingSong: {fileID: 11400000, guid: 0d5dc1cc383724979b269c3342e434a2, type: 2}
+  editingSong: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
   syncWithRuntime: 1
 --- !u!4 &1034025203 stripped
 Transform:
@@ -740,7 +740,7 @@ PrefabInstance:
         type: 3}
       propertyPath: songData
       value: 
-      objectReference: {fileID: 11400000, guid: 0d5dc1cc383724979b269c3342e434a2,
+      objectReference: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ea64c75d62f04b599de28581d0a3c86, type: 3}

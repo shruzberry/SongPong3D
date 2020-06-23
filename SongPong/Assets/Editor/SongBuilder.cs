@@ -82,7 +82,7 @@ public class SongBuilder : EditorWindow
         {
             DrawRowLayouts();
             DrawNavSettings();
-            ConvertOldBallDataToNew();
+            //ConvertOldBallDataToNew();
             DrawBallData();
         }
         else
@@ -333,29 +333,41 @@ public class SongBuilder : EditorWindow
 
     private void ConvertOldBallDataToNew()
     {
-        string path = "SongData/data/" + songData.songName + "/Balls/";
-        Debug.Log(path);
-        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        // Path ( Relative to Resources/ )
+        string path = "SongData/data/" + songData.name;
+        string ball_path = path + "/Balls/";
+        string note_path = path + "/Notes/";
+        
+        // Load Balls
+        BallData[] ballData = Resources.LoadAll<BallData>(ball_path);
         List<BallData> ballList = new List<BallData>();
-        foreach(BallData bd in ballData)
-        {
-            Debug.Log("HELLO");
-            ballList.Add(bd);
-        }
+        foreach(BallData bd in ballData){ballList.Add(bd);}
+        Debug.Log(ballList.Count + " outdated balls found.");
 
+        // Copy over old BallData to new version
         List<BallData> deleteBalls = new List<BallData>();
-
+        List<NoteData> deleteNotes = new List<NoteData>();
         foreach(BallData ball in ballList)
         {
             BallTypes type = ball.type;
-
-            SongEdit.CreateBall(type,ball.notes);
+            SongEdit.CreateBall(type, ball.notes);
             deleteBalls.Add(ball);
+            deleteNotes.AddRange(ball.notes);
         }
 
+        // Delete old BallData
+        // Currently accesses through active song data
         foreach(BallData ball in deleteBalls)
         {
-            AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
+            Debug.Log("BP: " + activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset");
+            AssetDatabase.DeleteAsset(activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset");
+        }
+
+        // Delete old Notes (they're copied, don't worry!)
+        Debug.Log(deleteNotes.Count + " outdated notes found.");
+        foreach(NoteData note in deleteNotes)
+        {
+            AssetDatabase.DeleteAsset(activeSongData.editingSong.dataPath + "/Notes/" + note.name + ".asset");
         }
     }
 
