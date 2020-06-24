@@ -69,7 +69,7 @@ public abstract class BallDataNew : ScriptableObject
         }
         catch (Exception)
         {
-            Debug.LogError("Ball \"" + name + "\" has one or more invalid notes.");
+            Debug.LogWarning("Ball \"" + name + "\" has one or more invalid notes.");
         }
     }
 

@@ -94,9 +94,9 @@ public class SongEdit : MonoBehaviour
 
     public static void SaveBall(BallDataNew type)
     {
-        ActiveSongData songController = FindObjectOfType<ActiveSongData>();
+        ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
 
-        string dpath = songController.editingSong.dataPath + "/Balls/";
+        string dpath = activeSongData.editingSong.dataPath + "/Balls/";
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 
@@ -151,7 +151,6 @@ public class SongEdit : MonoBehaviour
     public static BallDataNew ChangeBallType(BallDataNew ball, BallTypes type)
     {
         BallDataNew newBall = CreateBall(type, ball.notes);
-
         return newBall;
     }
 

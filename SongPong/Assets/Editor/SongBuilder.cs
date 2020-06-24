@@ -82,7 +82,6 @@ public class SongBuilder : EditorWindow
         {
             DrawRowLayouts();
             DrawNavSettings();
-            //ConvertOldBallDataToNew();
             DrawBallData();
         }
         else
@@ -198,6 +197,7 @@ public class SongBuilder : EditorWindow
                 GUILayout.Space(10.0f);
                 DrawBallDataList(Color.blue);
             GUILayout.EndScrollView();
+
         GUILayout.EndArea();
     }
 
@@ -229,7 +229,7 @@ public class SongBuilder : EditorWindow
                 ChangeColor(Color.green);
                 if (GUILayout.Button("+", b, GUILayout.Width(25)))
                 {
-                    SongEdit.CreateBall(BallTypes.simple);
+                    newBalls.Add(ball);
                 }
                 ResetColor();
 
@@ -238,7 +238,6 @@ public class SongBuilder : EditorWindow
                 if (GUILayout.Button("-", b, GUILayout.Width(25)))
                 {
                     deleteBalls.Add(ball);
-                    continue;
                 }
                 ResetColor();
 
@@ -248,8 +247,7 @@ public class SongBuilder : EditorWindow
                 if(ball_type != ball.type)
                 {
                     ball.type = ball_type; // if new type selected, set equal to type
-                    newBalls.Add(SongEdit.ChangeBallType(ball, ball_type)); // create new ball and copy info
-                    deleteBalls.Add(ball);
+                    typeChangeBalls.Add(ball);
                 }
 
                 //________Enabled / Disabled Field___________________
@@ -281,7 +279,6 @@ public class SongBuilder : EditorWindow
                     if (GUILayout.Button("-", b, GUILayout.Width(25)))
                     {
                         deleteNotes.Add(note); // Mark note to be deleted after iteration
-                        continue;
                     }
                     ResetColor();
 
@@ -314,12 +311,17 @@ public class SongBuilder : EditorWindow
 
         foreach(BallDataNew ball in newBalls)
         {
-            ballList.Add(ball);
+            SongEdit.CreateBall(BallTypes.simple);
         }
 
         foreach(BallDataNew ball in deleteBalls)
         {
-            ballList.Remove(ball);
+            SongEdit.DeleteBallAndNotes(ball);
+        }
+
+        foreach(BallDataNew ball in typeChangeBalls)
+        {
+            SongEdit.ChangeBallType(ball, ball.type); // create new ball and copy info
             SongEdit.DeleteBallAndNotes(ball);
         }
 

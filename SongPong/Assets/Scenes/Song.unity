@@ -440,7 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   editingSong: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
-  syncWithRuntime: 1
+  syncWithRuntime: 0
 --- !u!4 &1034025203 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1338863237352836499, guid: 1c783558b9dc24b80a22c3b3b27b3077,
