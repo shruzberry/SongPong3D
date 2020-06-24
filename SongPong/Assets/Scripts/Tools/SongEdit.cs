@@ -127,13 +127,13 @@ public class SongEdit : MonoBehaviour
 
     public static void DeleteBallAndNotes(BallDataNew ball)
     {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
 
         if(ball.notes.Count > 0)
         {
             foreach(NoteData nd in ball.notes)
             {
-                AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Notes/" + nd.name + ".asset");
+                AssetDatabase.DeleteAsset(activeSongData.editingSong.dataPath + "/Notes/" + nd.name + ".asset");
             }
         }
         DeleteBall(ball);
@@ -141,9 +141,11 @@ public class SongEdit : MonoBehaviour
 
     public static void DeleteBall(BallDataNew ball)
     {
-        SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
+        ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
+        string path = activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset";
+        Debug.Log(path);
         
-        AssetDatabase.DeleteAsset(songController.GetDataPath() + "/Balls/" + ball.name + ".asset");
+        AssetDatabase.DeleteAsset(path);
     }
 
     public static BallDataNew ChangeBallType(BallDataNew ball, BallTypes type)

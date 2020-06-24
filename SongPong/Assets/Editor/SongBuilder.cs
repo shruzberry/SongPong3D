@@ -237,8 +237,8 @@ public class SongBuilder : EditorWindow
                 ChangeColor(Color.red);
                 if (GUILayout.Button("-", b, GUILayout.Width(25)))
                 {
-                    SongEdit.DeleteBallAndNotes(ball);
-                    break;
+                    deleteBalls.Add(ball);
+                    continue;
                 }
                 ResetColor();
 
@@ -359,7 +359,6 @@ public class SongBuilder : EditorWindow
         // Currently accesses through active song data
         foreach(BallData ball in deleteBalls)
         {
-            Debug.Log("BP: " + activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset");
             AssetDatabase.DeleteAsset(activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset");
         }
 
