@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Events;
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
-public class BallData : ScriptableObject
+public abstract class BallData : ScriptableObject
 {
     [HideInInspector]
     public int id;
@@ -25,14 +25,11 @@ public class BallData : ScriptableObject
     public event OnBallValidate onBallValidate;
     
     public void OnEnable()
-    {
+    { 
         SetPrefab();
     }
 
-    public void Initialize(string name)
-    {
-
-    }
+    public abstract void Initialize(string name);
 
     public void SetName()
     {
@@ -46,10 +43,7 @@ public class BallData : ScriptableObject
         if(onBallValidate != null) onBallValidate();
     }
 
-    protected void SetPrefab()
-    {
-
-    }
+    protected abstract void SetPrefab();
 
     /**
      * Sort this balls' notes according to their hit time
@@ -75,7 +69,7 @@ public class BallData : ScriptableObject
         }
         catch (Exception)
         {
-            Debug.LogError("Ball \"" + name + "\" has one or more invalid notes.");
+            Debug.LogWarning("Ball \"" + name + "\" has one or more invalid notes.");
         }
     }
 

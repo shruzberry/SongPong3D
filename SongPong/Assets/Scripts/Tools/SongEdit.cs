@@ -32,7 +32,7 @@ public class SongEdit : MonoBehaviour
 * CREATE BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static BallDataNew CreateSimple(List<NoteData> notes = null)
+    public static BallData CreateSimple(List<NoteData> notes = null)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
@@ -57,7 +57,7 @@ public class SongEdit : MonoBehaviour
         return new_ball;
     }
 
-    public static BallDataNew CreateBounce(List<NoteData> notes = null)
+    public static BallData CreateBounce(List<NoteData> notes = null)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
@@ -92,7 +92,7 @@ public class SongEdit : MonoBehaviour
 * EDIT BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static void SaveBall(BallDataNew type)
+    public static void SaveBall(BallData type)
     {
         ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
 
@@ -107,9 +107,9 @@ public class SongEdit : MonoBehaviour
         Selection.activeObject = type;
     }
 
-    public static BallDataNew CreateBall(BallTypes type, List<NoteData> notes = null)
+    public static BallData CreateBall(BallTypes type, List<NoteData> notes = null)
     {
-        BallDataNew newBall;
+        BallData newBall;
         switch(type)
         {
             case BallTypes.simple:
@@ -125,7 +125,7 @@ public class SongEdit : MonoBehaviour
         return newBall;
     }
 
-    public static void DeleteBallAndNotes(BallDataNew ball)
+    public static void DeleteBallAndNotes(BallData ball)
     {
         ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
 
@@ -139,7 +139,7 @@ public class SongEdit : MonoBehaviour
         DeleteBall(ball);
     }
 
-    public static void DeleteBall(BallDataNew ball)
+    public static void DeleteBall(BallData ball)
     {
         ActiveSongData activeSongData = FindObjectOfType<ActiveSongData>();
         string path = activeSongData.editingSong.dataPath + "/Balls/" + ball.name + ".asset";
@@ -148,9 +148,9 @@ public class SongEdit : MonoBehaviour
         AssetDatabase.DeleteAsset(path);
     }
 
-    public static BallDataNew ChangeBallType(BallDataNew ball, BallTypes type)
+    public static BallData ChangeBallType(BallData ball, BallTypes type)
     {
-        BallDataNew newBall = CreateBall(type, ball.notes);
+        BallData newBall = CreateBall(type, ball.notes);
         return newBall;
     }
 
@@ -158,7 +158,7 @@ public class SongEdit : MonoBehaviour
 * EDIT NOTES
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static void AppendNote(BallDataNew ball, NoteData note)
+    public static void AppendNote(BallData ball, NoteData note)
     {
         NoteData new_note = (NoteData)ScriptableObject.CreateInstance("NoteData");
 
@@ -219,7 +219,7 @@ public class SongEdit : MonoBehaviour
         return true;
     }
 
-    public static void DeleteNote(BallDataNew ball, NoteData note)
+    public static void DeleteNote(BallData ball, NoteData note)
     {
         SongController songController = GameObject.Find("SongController").GetComponent<SongController>();
 
