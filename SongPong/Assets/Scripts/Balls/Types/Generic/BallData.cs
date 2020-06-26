@@ -34,7 +34,19 @@ public abstract class BallData : ScriptableObject
     public void SetName()
     {
         this.name = type + "Ball" + id;
-        AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), name);
+    }
+
+    public virtual bool CheckValid()
+    {
+        bool valid = true;
+
+        foreach(NoteData note in notes)
+        {
+            valid = note.CheckValid();
+        }
+        if(prefab == null) valid = false;
+
+        return valid;
     }
 
     private void OnValidate() 

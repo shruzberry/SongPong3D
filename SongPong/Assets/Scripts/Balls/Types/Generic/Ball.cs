@@ -94,7 +94,7 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, AxisManager axisManager, SpawnInfo spawner,/* PlayerInputHandler paddleManager,*/ SongController song)
+    public void InitializeBall(BallData data, Axis axis, SpawnInfo spawner,/* PlayerInputHandler paddleManager,*/ SongController song)
     {
         // REFERENCES
         //this.paddleManager = paddleManager;
@@ -103,6 +103,7 @@ public abstract class Ball : MonoBehaviour
 
         // COMPONENTS
         this.ball_renderer = GetComponent<SpriteRenderer>();
+        this.axis = axis;
 
         // INITIALIZE ID AND NOTES
         this.ballData = data;
@@ -122,7 +123,6 @@ public abstract class Ball : MonoBehaviour
         catchTimesBeats = new float[numNotes + 1];
 
         // SET SPAWN LOCATION
-        axis = axisManager.gameAxis; // set the ball's axis
         spawnLoc = GetNotePosition(currentNote);
 //        Debug.Log("SPAWN: " + spawnLoc);
         transform.position = spawnLoc;

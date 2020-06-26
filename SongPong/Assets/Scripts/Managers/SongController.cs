@@ -40,8 +40,7 @@ public class SongController : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     // SONG INFO
-    [SerializeField]
-    private SongData songData;
+    public SongData songData;
     [HideInInspector]
     public string songName;
     [HideInInspector]
@@ -94,6 +93,8 @@ public class SongController : MonoBehaviour
 
         // SONG INFO
         songData = newSongData;
+        //songData.ballList.Sort(BallData.CompareBallsBySpawnTime);
+
         songName = songData.songName;
         source.clip = songData.song; // which audio file
         songLengthSeconds = source.clip.length; // how long the song is
@@ -161,11 +162,6 @@ public class SongController : MonoBehaviour
     public string GetDataPath()
     {
         return songData.dataPath;
-    }
-
-    public SongData GetSongData()
-    {
-        return songData;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

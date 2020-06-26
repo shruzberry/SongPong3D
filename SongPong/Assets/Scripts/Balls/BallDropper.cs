@@ -21,8 +21,8 @@ using System;
 public class BallDropper : MonoBehaviour
 {
     //___________References______________
+    private Game game;
     private SongController song;
-    private AxisManager axisManager;
     private SpawnInfo spawner;
 
     //___________Events__________________
@@ -59,8 +59,8 @@ public class BallDropper : MonoBehaviour
 
     private void Awake()
     {
+        game = FindObjectOfType<Game>();
         song = FindObjectOfType<SongController>();
-        axisManager = FindObjectOfType<AxisManager>();
         spawner = FindObjectOfType<SpawnInfo>();
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
@@ -81,7 +81,7 @@ public class BallDropper : MonoBehaviour
         Vector2 paddleAxis = FindObjectOfType<PaddleMover>().GetPaddleTopAxis();
 
         Vector2 axisVector;
-        if(axisManager.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
+        if(game.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
         else{axisVector = new Vector2(1,0);}
 
         float fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, 0.0f, 3.0f);
@@ -164,6 +164,13 @@ public class BallDropper : MonoBehaviour
         BallData checkBall = ballDataList[currentBallIndex];
         float dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
 
+        // If ball has negative time (usually if hitBeat = 0) 
+        if(dropBeat < 0) 
+        {
+            Debug.LogWarning("Ball " + checkBall.name + " has invalid hitBeat.");
+            NextBall();
+        }
+
         // Check first ball for spawn
         if(!isFinished && dropBeat <= song.GetSongTimeBeats())
         {
@@ -196,7 +203,7 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper gameobject to parent
 
-            ball.InitializeBall(data, axisManager, spawner, song);
+            ball.InitializeBall(data, game.gameAxis, spawner, song);
 
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
@@ -283,18 +290,21 @@ public class BallDropper : MonoBehaviour
         // check if was given a name
         if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
 
-        string path = dataLocation + ballMapName + "/Balls/";
-        BallData[] ballData = Resources.LoadAll<BallData>(path);
+        List<BallData> ballData = game.GetBallData();
+        //ballList.Sort(BallData.CompareBallsBySpawnTime);
 
         if(ballData != null)
         {
-            foreach(BallData data in ballData)
+            foreach(BallData ball in ballData)
             {
-                ballDataList.Add(data);
+                if(ball.CheckValid())
+                    ballDataList.Add(ball);
+                else
+                    Debug.LogWarning(ball.name + " won't spawn because it has invalid data.");
             }
         }
+
         numBalls = ballDataList.Count;
-        Debug.Log(numBalls);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

@@ -6,7 +6,7 @@ public enum Axis {x,y};
 
 public class SpawnInfo : MonoBehaviour
 {
-    private AxisManager axisManager;
+    private Game game;
     private Axis gameAxis;
     public Vector2 spawnAxis; // in world coordinates the line that spawns appear along
     private Vector2 screenBounds;
@@ -42,8 +42,8 @@ public class SpawnInfo : MonoBehaviour
     // Start is called before the first frame update
     private void Awake() 
     {
-        axisManager = FindObjectOfType<AxisManager>();
-        gameAxis = axisManager.gameAxis;
+        game = FindObjectOfType<Game>();
+        gameAxis = game.gameAxis;
 
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         ballDropHeight = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height + ballHeightMod)).y;

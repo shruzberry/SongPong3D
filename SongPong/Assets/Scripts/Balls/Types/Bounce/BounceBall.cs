@@ -94,7 +94,7 @@ public class BounceBall : Ball
         Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
 
         bounceHeightMod = moveTime;
-        Debug.Log(bounceHeightMod);
+        Debug.Log("BOUNCE HEIGHT MOD: " + bounceHeightMod);
         gravity = gravity * bounceHeightMod;
 
         // Calculate the velocity needed to hit at new deltaT.

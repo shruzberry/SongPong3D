@@ -26,8 +26,11 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    // REFERENCES
     public Animator animator;
     public SongData songData;
+    private Game game;
 
     private int levelToLoad;
 
@@ -38,7 +41,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public override void Awake()
     {
         base.Awake();
+
         animator = this.GetComponent<Animator>();
+        game = FindObjectOfType<Game>();
+
         CheckForNonMenuPlay();
     }
 
@@ -66,31 +72,18 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void InitSong()
-    {
-        // PADDLES
-        PaddleManager paddleManager = FindObjectOfType<PaddleManager>();
-        paddleManager.Activate();
-
-        // SONG
-        SongController song = FindObjectOfType<SongController>();
-        song.LoadSong(this.songData);
-        song.JumpToStart();
-
-        // BALL DROPPER
-        BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
-        ballDropper.Activate();
-        ballDropper.ballMapName = song.songName;
-
-        song.Play();
-    }
-
     private void CheckForNonMenuPlay()
     {
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            InitSong();
+            Debug.Log("STARTING EDITOR SONG.");
+            game.InitializeEditor();
+        }
+        else
+        {
+            Debug.Log("STARTING NEW SONG \"" + songData.name + "\".");
+            game.Initialize(songData);
         }
     }
 

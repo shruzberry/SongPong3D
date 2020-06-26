@@ -24,7 +24,6 @@ ________ FUNCTIONS ________
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using Types;
@@ -37,10 +36,11 @@ public class SongBuilder : EditorWindow
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     List<NoteData> deleteNoteList = new List<NoteData>();
-    SongController songController;
-    ActiveSongData activeSongData;
+
+    // References
+    Game game;
     SongData songData;
-    SongData lastSong;
+    SongController songController;
     List<BallData> ballList = new List<BallData>();
 
     // Navigation bar
@@ -48,6 +48,11 @@ public class SongBuilder : EditorWindow
     int navButtonWidth = 35;
     //int ballButtonWidth = 100;
 
+    // EVENTS
+    public delegate void OnBallDataUpdate();
+    public event OnBallDataUpdate onBallDataUpdate;
+
+    // SONG
     int jumpToTime;
 
     Rect fullWindow;
@@ -70,6 +75,12 @@ public class SongBuilder : EditorWindow
         window.minSize = new Vector2(510, 420);
         window.maxSize = new Vector2(510, 420);
         window.Show();
+    }
+    
+    public void OnEnable()
+    {
+        game = FindObjectOfType<Game>();
+        oldColor = GUI.color;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -112,15 +123,13 @@ public class SongBuilder : EditorWindow
     void DrawNavSettings()
     {
         songController = FindObjectOfType<SongController>();
-        activeSongData = FindObjectOfType<ActiveSongData>();
 
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
 
             GUILayout.BeginHorizontal();
-                songData = activeSongData.editingSong;
-                EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
-                GUILayout.Label("Scene > Settings > Editor > Active Song Data > Editing Song");
+                songData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
+                game.editorSong = songData;
             GUILayout.EndHorizontal();
 
             if(songData != null)
@@ -174,6 +183,7 @@ public class SongBuilder : EditorWindow
 
     void DrawBallData()
     {
+        if(songData == null) return;
         GUIStyle b = new GUIStyle(GUI.skin.button);
         BallDropper dropper = FindObjectOfType<BallDropper>();
 
@@ -183,10 +193,11 @@ public class SongBuilder : EditorWindow
             // CREATE SIMPLE BALL
             GUILayout.BeginHorizontal();
                 ChangeColor(Color.green);
-                if (GUILayout.Button("Add Simple Ball and Note", b, GUILayout.Width(200)))
+                if (GUILayout.Button("+ Simple Ball", b, GUILayout.Width(100)))
                 {
                     SongEdit.CreateBall(BallTypes.simple);
                 }
+
                 ResetColor();
             GUILayout.EndHorizontal();
 
@@ -203,7 +214,7 @@ public class SongBuilder : EditorWindow
 
     void DrawBallDataList(Color color)
     {
-        ballList = songData.GetAllBallData();
+        ballList = game.GetBallData();
 
         GUIStyle s = new GUIStyle(GUI.skin.button);
         GUIStyle b = new GUIStyle(GUI.skin.button);
@@ -326,12 +337,17 @@ public class SongBuilder : EditorWindow
         }
 
         // UPDATE SONG DATA
-        songData.UpdateBallData();
+        game.ReloadBallData();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void UpdateBallData()
+    {
+        if(onBallDataUpdate != null) onBallDataUpdate();
+    }
 
     void CheckBallActivity(BallData ball, Color oldColor, Color setColor)
     {
@@ -373,11 +389,6 @@ public class SongBuilder : EditorWindow
     public void Update()
     {
         Repaint();
-    }
-
-    public void OnEnable()
-    {
-        oldColor = GUI.color;
     }
 
     /*

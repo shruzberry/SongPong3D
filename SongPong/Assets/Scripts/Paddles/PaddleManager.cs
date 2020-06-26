@@ -6,7 +6,7 @@ public class PaddleManager : MonoBehaviour
 {
     //__________AXIS__________________
     [Header("AXIS")]
-    public AxisManager axisManager;
+    public Game game;
     [Range(0,45)]
     [Tooltip("The percent(%) away from the edge of screen the paddle's axis is.")]
     public int padding; // percent
@@ -18,10 +18,9 @@ public class PaddleManager : MonoBehaviour
 
     public void Activate()
     {
-        axisManager = FindObjectOfType<AxisManager>();
-
-        if(axisManager.gameAxis == Axis.x) InitAxisX();
-        else if(axisManager.gameAxis == Axis.y) InitAxisY();
+        game = FindObjectOfType<Game>();
+        if(game.gameAxis == Axis.x) InitAxisX();
+        else if(game.gameAxis == Axis.y) InitAxisY();
     }
 
     void InitAxisX()

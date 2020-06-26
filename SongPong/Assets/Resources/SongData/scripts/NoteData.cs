@@ -19,12 +19,22 @@ public class NoteData : ScriptableObject
         return a.hitTime.CompareTo(b.hitTime);
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (GameObject.Find("SongController"))
         {
             songController = GameObject.Find("SongController").GetComponent<SongController>();
             hitTime = songController.ToTime(hitBeat);
         }
+    }
+
+    public bool CheckValid()
+    {
+        bool valid = true;
+
+        if(hitBeat == 0) valid = false;
+        if(hitPosition < 0) valid = false;
+
+        return valid;
     }
 }

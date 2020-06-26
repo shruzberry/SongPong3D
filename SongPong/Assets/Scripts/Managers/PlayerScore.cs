@@ -30,7 +30,6 @@ public class PlayerScore : MonoBehaviour
     public Paddles player;
     public int score = 0;
 
-    private AxisManager axisManager;
     private BallDropper ballDropper;
     private TextMeshProUGUI scoreText;
     private List<Ball> activeBalls;
@@ -45,7 +44,6 @@ public class PlayerScore : MonoBehaviour
 
     void OnEnable()
     {
-        axisManager = FindObjectOfType<AxisManager>();
         ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.onBallSpawned += AddBallListener;
         scoreText = GetComponent<TextMeshProUGUI>();
