@@ -136,6 +136,11 @@ public class SongEdit : MonoBehaviour
 
     public static void AppendNote(BallData ball, NoteData note)
     {
+        if(ball.notes.Count >= ball.MaxNotes)
+        {
+            Debug.LogWarning("Reached maximum number of notes for this ball type.");
+            return;
+        }
         NoteData new_note = (NoteData)ScriptableObject.CreateInstance("NoteData");
 
         new_note.noteDirection = Direction.negative;
