@@ -73,6 +73,9 @@ public abstract class Ball : MonoBehaviour
     public int numNotes;
     public int currentNote;
 
+    //___________OPTIONS_________________
+    public List<BallOption> options;
+
     #endregion Variables
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -94,7 +97,7 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, Axis axis, SpawnInfo spawner,/* PlayerInputHandler paddleManager,*/ SongController song)
+    public void InitializeBall(BallData data, Axis axis, SpawnInfo spawner, SongController song)
     {
         // REFERENCES
         //this.paddleManager = paddleManager;
@@ -121,6 +124,9 @@ public abstract class Ball : MonoBehaviour
 
         // INDEXING
         catchTimesBeats = new float[numNotes + 1];
+
+        // OPTIONS
+        options = data.options;
 
         // SET SPAWN LOCATION
         spawnLoc = GetNotePosition(currentNote);

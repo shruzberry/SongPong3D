@@ -5,10 +5,24 @@ using Types;
 
 public class BounceBallData : BallData
 {
+    // CONSTANTS
     private const int minNotes = 2;
     private const int maxNotes = int.MaxValue;
+
+    // OPTIONS
+    private BounceHeight bounceHeight;
+
+    // PROPERTIES
     public override int MinNotes {get{return minNotes;}}
     public override int MaxNotes {get{return maxNotes;}}
+
+    private void OnEnable() {
+        base.OnEnable();
+        Debug.Log("TESST");
+        options = new List<BallOption>();
+        bounceHeight = new BounceHeight(1.0f);
+        options.Add(bounceHeight);
+    }
 
     public override void Initialize(string name)
     {

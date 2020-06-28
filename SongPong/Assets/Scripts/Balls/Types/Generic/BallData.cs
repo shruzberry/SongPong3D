@@ -13,10 +13,11 @@ public abstract class BallData : ScriptableObject
     public int id;
     public bool enabled = true;
     public BallTypes type;
-    //public NoteData[] notes;
     public List<NoteData> notes;
     [HideInInspector]
     public GameObject prefab;
+
+    public List<BallOption> options;
 
     public abstract int MinNotes{get;}
     public abstract int MaxNotes{get;}
@@ -28,7 +29,7 @@ public abstract class BallData : ScriptableObject
     public event OnBallValidate onBallValidate;
     
     public void OnEnable()
-    { 
+    {
         SetPrefab();
     }
 
