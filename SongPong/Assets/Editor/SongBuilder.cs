@@ -21,6 +21,7 @@ ________ FUNCTIONS ________
 * DEPENDENCIES
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -195,7 +196,7 @@ public class SongBuilder : EditorWindow
                 ChangeColor(Color.green);
                 if (GUILayout.Button("+ Simple Ball", b, GUILayout.Width(100)))
                 {
-                    SongEdit.CreateBall(BallTypes.simple);
+                    SongEdit.CreateBall(typeof(SimpleBallData));
                 }
 
                 ResetColor();
@@ -322,7 +323,7 @@ public class SongBuilder : EditorWindow
 
         foreach(BallData ball in newBalls)
         {
-            SongEdit.CreateBall(BallTypes.simple);
+            SongEdit.CreateBall(typeof(SimpleBallData));
         }
 
         foreach(BallData ball in deleteBalls)
@@ -362,17 +363,7 @@ public class SongBuilder : EditorWindow
 
     void CopyBall(BallData ball)
     {
-        BallData bd = (BallData)ScriptableObject.CreateInstance("BallDataNew");
-        bd.type = ball.type;
-        bd.enabled = ball.enabled;
-        bd.name = "NewBall";
-        
-        SongEdit.CreateSimple();
-
-        foreach(NoteData note in ball.notes)
-        {
-            SongEdit.AppendNote(bd, note);
-        }
+        SongEdit.CreateBall(ball.GetType(), ball.notes);
     }
 
     void ChangeColor(Color color)

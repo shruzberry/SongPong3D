@@ -5,6 +5,11 @@ using Types;
 
 public class SimpleBallData : BallData
 {
+    private const int minNotes = 1;
+    private const int maxNotes = 1;
+    public override int MinNotes {get{return minNotes;}}
+    public override int MaxNotes {get{return maxNotes;}}
+
     public override void Initialize(string name)
     {
         this.name = name;

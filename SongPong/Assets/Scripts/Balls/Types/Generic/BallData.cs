@@ -18,6 +18,9 @@ public abstract class BallData : ScriptableObject
     [HideInInspector]
     public GameObject prefab;
 
+    public abstract int MinNotes{get;}
+    public abstract int MaxNotes{get;}
+
     //[HideInInspector]
     public float activity;
 

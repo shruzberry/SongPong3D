@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 
 namespace Types
 {
@@ -11,7 +9,8 @@ namespace Types
 
     public enum BallTypes
     {
-        simple, bounce
+        simple,
+        bounce
     }
 
     public enum Paddles

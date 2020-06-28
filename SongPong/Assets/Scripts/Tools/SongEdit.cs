@@ -32,54 +32,43 @@ public class SongEdit : MonoBehaviour
 * CREATE BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static BallData CreateSimple(List<NoteData> notes = null)
+    public static BallData CreateBall(Type type, List<NoteData> notes = null)
     {
-        SimpleBallData new_ball = (SimpleBallData)ScriptableObject.CreateInstance(typeof(SimpleBallData));
-        new_ball.Initialize("NewSimple");
+        BallData new_ball = (BallData)ScriptableObject.CreateInstance(type);
+        new_ball.Initialize("Generic");
 
+        // If notes were not passed in as a parameter
+        // Create new notes up to the min notes of the ball type
         if(notes == null)
         {
-            NoteData note = CreateNote();
-            new_ball.notes.Add(note);
-            SaveNote(note);
-        }
-        else
-        {
-            new_ball.notes.Add(CreateNote(notes[0]));
-            SaveNotes(new_ball.notes);
-        }
-
-        SaveBall(new_ball);
-
-        return new_ball;
-    }
-
-    public static BallData CreateBounce(List<NoteData> notes = null)
-    {
-        BounceBallData new_ball = (BounceBallData)ScriptableObject.CreateInstance(typeof(BounceBallData));
-        new_ball.Initialize("NewBounce");
-
-        if(notes == null)
-        {
-            new_ball.notes.Add(CreateNote()); // NOTE: Creating two notes at the same time gives them the same name
-            new_ball.notes.Add(CreateNote());
-            SaveNotes(new_ball.notes);
-        }
-        else
-        {
-            foreach(NoteData note in notes)
-            {
-                new_ball.notes.Add(CreateNote(note));
-            }
-            if(new_ball.notes.Count < 2)
+            for(int i = 0; i < new_ball.MinNotes; i++)
             {
                 new_ball.notes.Add(CreateNote());
             }
             SaveNotes(new_ball.notes);
         }
-
+        // If notes were passed as parameter,
+        // Create new notes, copied from the notes parameter.
+        else
+        {
+            // Copy notes over as long as it doesn't go over the MaxNotes property of the new ball type
+            for(int i = 0; i < notes.Count; i++)
+            {
+                if(new_ball.notes.Count < new_ball.MaxNotes)
+                {
+                    new_ball.notes.Add(CreateNote(notes[i]));
+                }
+                else{break;}
+            }
+            // If ball still needs more notes after copy
+            // (Ex. SimpleBall --> BounceBall)
+            // Create the rest of the notes
+            if(new_ball.notes.Count < new_ball.MinNotes)
+            {
+                new_ball.notes.Add(CreateNote());
+            }
+        }
         SaveBall(new_ball);
-
         return new_ball;
     }
 
@@ -100,24 +89,6 @@ public class SongEdit : MonoBehaviour
         AssetDatabase.SaveAssets();
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = type;
-    }
-
-    public static BallData CreateBall(BallTypes type, List<NoteData> notes = null)
-    {
-        BallData newBall;
-        switch(type)
-        {
-            case BallTypes.simple:
-                newBall = CreateSimple(notes);
-                break;
-            case BallTypes.bounce:
-                newBall = CreateBounce(notes);
-                break;
-            default:
-                Debug.LogError("THIS BALL TYPE HAS NOT BEEN ADDED YET.");
-                return null;
-        }
-        return newBall;
     }
 
     public static void DeleteBallAndNotes(BallData ball)
@@ -143,8 +114,20 @@ public class SongEdit : MonoBehaviour
 
     public static BallData ChangeBallType(BallData ball, BallTypes type)
     {
-        BallData newBall = CreateBall(type, ball.notes);
-        return newBall;
+        BallData new_ball = null;
+        switch(type)
+        {
+            case BallTypes.simple:
+                new_ball = CreateBall(typeof(SimpleBallData), ball.notes);
+                break;
+            case BallTypes.bounce:
+                new_ball = CreateBall(typeof(BounceBallData), ball.notes);
+                break;
+            default:
+                Debug.LogError("That ball type has not been created yet.");
+                break;
+        }
+        return new_ball;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

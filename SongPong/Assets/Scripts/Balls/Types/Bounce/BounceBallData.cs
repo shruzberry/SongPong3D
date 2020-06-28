@@ -5,6 +5,11 @@ using Types;
 
 public class BounceBallData : BallData
 {
+    private const int minNotes = 2;
+    private const int maxNotes = int.MaxValue;
+    public override int MinNotes {get{return minNotes;}}
+    public override int MaxNotes {get{return maxNotes;}}
+
     public override void Initialize(string name)
     {
         this.name = name;
