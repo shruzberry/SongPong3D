@@ -16,13 +16,16 @@ MonoBehaviour:
   enabled: 1
   type: 1
   notes:
-  - {fileID: 11400000, guid: 53ce3a117ed41449b820b8233e5b3e71, type: 2}
-  - {fileID: 11400000, guid: 5656b45a627264366b13ebb6772c0a24, type: 2}
-  - {fileID: 11400000, guid: 5656b45a627264366b13ebb6772c0a24, type: 2}
-  - {fileID: 11400000, guid: 7bc752f23829d4fd1a15b14848e34b5e, type: 2}
-  - {fileID: 11400000, guid: 1386765da097e462abfcc81a214f49b6, type: 2}
-  - {fileID: 11400000, guid: 3521eda39995442898585fdef36c06ee, type: 2}
   - {fileID: 11400000, guid: 3f0e164a669e540909531cca35066a9e, type: 2}
   - {fileID: 11400000, guid: 712a03df9d6194b4996fabe8a9dcfe14, type: 2}
+  - {fileID: 11400000, guid: 7bc752f23829d4fd1a15b14848e34b5e, type: 2}
+  - {fileID: 11400000, guid: a1c407d5e5f594cd0b17bad220b02aa6, type: 2}
+  - {fileID: 11400000, guid: 53ce3a117ed41449b820b8233e5b3e71, type: 2}
+  - {fileID: 11400000, guid: 36f655145699d4b6087e6a3391453a35, type: 2}
+  - {fileID: 11400000, guid: 5eb700a95eaab4bf0b3cc62dd2358713, type: 2}
+  - {fileID: 11400000, guid: 011d387db5ce84e48b9450a83dbf21a7, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
+  options:
+  - opt_name: Bounce Height
+    value: 1
   activity: 100

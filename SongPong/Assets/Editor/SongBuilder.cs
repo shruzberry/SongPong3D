@@ -200,15 +200,7 @@ public class SongBuilder : EditorWindow
         GUILayout.BeginArea(viewSection);
             GUILayout.Space(10.0f);
 
-            // CREATE SIMPLE BALL
-            GUILayout.BeginHorizontal();
-                ChangeColor(Color.green);
-                if (GUILayout.Button("+ Simple Ball", b, GUILayout.Width(100)))
-                {
-                    SongEdit.CreateBall(typeof(SimpleBallData));
-                }
-                ResetColor();
-            GUILayout.EndHorizontal();
+            DrawToolBar();
 
             // DRAW BALLS IN SONG
             activeBallsScrollPosition = GUILayout.BeginScrollView(activeBallsScrollPosition,
@@ -219,6 +211,39 @@ public class SongBuilder : EditorWindow
             GUILayout.EndScrollView();
 
         GUILayout.EndArea();
+    }
+
+    void DrawToolBar()
+    {
+        GUIStyle b = new GUIStyle(GUI.skin.button);
+
+        GUILayout.BeginHorizontal();
+
+            // Create Simple Ball
+            ChangeColor(Color.green);
+            if (GUILayout.Button("+ Simple Ball", b, GUILayout.Width(100)))
+            {
+                SongEdit.CreateBall(typeof(SimpleBallData));
+            }
+            ResetColor();
+
+            // Sort Balls
+            ChangeColor(new Color(0.909f, 0.635f, 0.066f));
+            if (GUILayout.Button("Sort Balls", b, GUILayout.Width(80)))
+            {
+                game.SortBalls();
+            }
+            ResetColor();
+
+            // Sort Notes
+            ChangeColor(new Color(0.717f, 0.262f, 0.937f));
+            if (GUILayout.Button("Sort Notes", b, GUILayout.Width(80)))
+            {
+                game.SortNotes();
+            }
+            ResetColor();
+
+        GUILayout.EndHorizontal();
     }
 
     void DrawBallDataList(Color color)
@@ -276,23 +301,9 @@ public class SongBuilder : EditorWindow
 
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
-                GUILayout.Space(31.0f);
-                if(ball.options != null)
-                {
-                    foreach(BallOption option in ball.options)
-                    {
-                        GUIContent option_label = new GUIContent(option.name + ":");
-                        GUIStyle style = GUI.skin.box;
-                        Vector2 size = style.CalcSize(option_label);
+            DrawOptions(ball);
 
-                        GUILayout.Label(option_label, GUILayout.Width(size.x));
-                        EditorGUILayout.FloatField("", option.value, s, GUILayout.Width(25));
-                    }
-                }
-            GUILayout.EndHorizontal();
-
-            DrawNotes(ball);
+            if(ball.notes != null) DrawNotes(ball);
         }
         // --------- END BALL ITERATION --------------------------
 
@@ -312,8 +323,29 @@ public class SongBuilder : EditorWindow
             SongEdit.DeleteBallAndNotes(ball);
         }
 
-        // UPDATE SONG DATA
-        game.ReloadBallData();
+    }
+
+    void DrawOptions(BallData ball)
+    {
+        GUIStyle s = new GUIStyle(GUI.skin.button);
+        s.alignment = TextAnchor.MiddleLeft;
+
+        GUILayout.BeginHorizontal();
+            GUILayout.Space(31.0f);
+            if(ball.options != null)
+            {
+                foreach(BallOption option in ball.options)
+                {
+                    GUIContent option_label = new GUIContent(option.opt_name + ":");
+                    GUIStyle style = GUI.skin.box;
+                    Vector2 size = style.CalcSize(option_label);
+
+                    GUILayout.Label(option_label, GUILayout.Width(size.x));
+
+                    option.value = EditorGUILayout.FloatField("", option.value, s, GUILayout.Width(25));
+                }
+            }
+        GUILayout.EndHorizontal();
     }
 
     void DrawNotes(BallData ball)
@@ -335,6 +367,11 @@ public class SongBuilder : EditorWindow
         // --------- BEGIN NOTES ITERATION --------------------------
         foreach(NoteData note in ball.notes)
         {
+            if(note == null)
+            {
+                deleteNotes.Add(note);
+                break;
+            }
             EditorUtility.SetDirty(note);
 
             GUILayout.BeginHorizontal();
@@ -360,10 +397,13 @@ public class SongBuilder : EditorWindow
                 ResetColor();
 
                 //________Edit Note Data___________________
-                GUILayout.Label("col:", GUILayout.Width(25));
+                GUILayout.Label("Col:", GUILayout.Width(25));
                 note.hitPosition = EditorGUILayout.IntField("", note.hitPosition, s, col_field_width);
-                GUILayout.Label("beat:", GUILayout.Width(32));
+
+                GUILayout.Label("Beat:", GUILayout.Width(32));
                 note.hitBeat = EditorGUILayout.FloatField("", note.hitBeat, s, beat_field_width);
+
+                GUILayout.Label("Direction:", GUILayout.Width(56));
                 note.noteDirection = (Direction)EditorGUILayout.EnumPopup("", note.noteDirection, s, dir_field_width);
 
             GUILayout.EndHorizontal();
@@ -379,7 +419,7 @@ public class SongBuilder : EditorWindow
         // Add all notes marked to be added
         foreach(NoteData note in newNotes)
         {
-            SongEdit.AppendNote(ball, note);
+            SongEdit.InsertNote(ball, note, ball.notes.IndexOf(note));
         }
 
         ResetColor();

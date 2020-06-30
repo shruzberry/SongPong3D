@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
   m_Name: Note_20200622224403_4
   m_EditorClassIdentifier: 
-  hitPosition: 10
-  hitBeat: 152
-  hitTime: 91.2
+  hitPosition: 11
+  hitBeat: 104
   noteDirection: 1

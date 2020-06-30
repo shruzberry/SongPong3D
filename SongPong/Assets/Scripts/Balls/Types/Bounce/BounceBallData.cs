@@ -10,25 +10,26 @@ public class BounceBallData : BallData
     private const int maxNotes = int.MaxValue;
 
     // OPTIONS
-    private BounceHeight bounceHeight;
+    private float deafultBounceHeight = 1.0f;
 
     // PROPERTIES
     public override int MinNotes {get{return minNotes;}}
     public override int MaxNotes {get{return maxNotes;}}
 
-    private void OnEnable() {
+    public override void OnEnable() 
+    {
         base.OnEnable();
-        Debug.Log("TESST");
-        options = new List<BallOption>();
-        bounceHeight = new BounceHeight(1.0f);
-        options.Add(bounceHeight);
+        Initialize(this.name);
     }
 
     public override void Initialize(string name)
     {
         this.name = name;
         type = BallTypes.bounce;
-        notes = new List<NoteData>();
+        if(notes == null) notes = new List<NoteData>();
+
+        if(options == null)InitializeOptions();
+        InitializeOption(deafultBounceHeight, "Bounce Height");
     }
 
     protected override void SetPrefab()

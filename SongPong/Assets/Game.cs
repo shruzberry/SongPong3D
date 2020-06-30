@@ -25,6 +25,9 @@ public class Game : MonoBehaviour
         ReloadBallData();
     }
 
+    /**
+     * Called when the Game starts
+     */
     public void Initialize(SongData song)
     {
         // SONG
@@ -39,6 +42,7 @@ public class Game : MonoBehaviour
 
         // BALLS
         balls = LoadBallData(song.name);
+        SortBalls();
         BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.Activate();
         ballDropper.ballMapName = song.songName;
@@ -46,6 +50,9 @@ public class Game : MonoBehaviour
         songController.Play();
     }
 
+    /**
+     * Called when game is being initialized through the editor
+     **/
     public void InitializeEditor()
     {
         Initialize(editorSong);
@@ -54,7 +61,6 @@ public class Game : MonoBehaviour
     public void ReloadBallData()
     {
         balls = LoadBallData(editorSong.name);
-        SortBalls();
     }
 
     public List<BallData> LoadBallData(string songName)
@@ -68,7 +74,6 @@ public class Game : MonoBehaviour
         {
             balls.Add(bd);
         }
-
         return balls;
     }
 
@@ -77,8 +82,17 @@ public class Game : MonoBehaviour
         balls.Sort(BallData.CompareBallsBySpawnTime);
     }
 
+    public void SortNotes()
+    {
+        foreach(BallData ball in balls)
+        {
+            ball.SortNotes();
+        }
+    }
+
     public List<BallData> GetBallData()
     {
         return balls;
     }
+
 }

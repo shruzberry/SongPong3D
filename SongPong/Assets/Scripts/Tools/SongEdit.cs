@@ -45,7 +45,6 @@ public class SongEdit : MonoBehaviour
             {
                 new_ball.notes.Add(CreateNote());
             }
-            SaveNotes(new_ball.notes);
         }
         // If notes were passed as parameter,
         // Create new notes, copied from the notes parameter.
@@ -68,6 +67,7 @@ public class SongEdit : MonoBehaviour
                 new_ball.notes.Add(CreateNote());
             }
         }
+        SaveNotes(new_ball.notes);
         SaveBall(new_ball);
         return new_ball;
     }
@@ -141,12 +141,7 @@ public class SongEdit : MonoBehaviour
             Debug.LogWarning("Reached maximum number of notes for this ball type.");
             return;
         }
-        NoteData new_note = (NoteData)ScriptableObject.CreateInstance("NoteData");
-
-        new_note.noteDirection = Direction.negative;
-        new_note.name = "NewNote";
-        new_note.hitPosition = note.hitPosition;
-        new_note.hitBeat = note.hitBeat;
+        NoteData new_note = CreateNote(note);
 
         bool success = SaveNote(new_note);
 
@@ -154,6 +149,21 @@ public class SongEdit : MonoBehaviour
         if(success) ball.notes.Add(new_note);
     }
 
+    // Create a note into a certain index
+    public static void InsertNote(BallData ball, NoteData note , int index)
+    {
+        if(ball.notes.Count >= ball.MaxNotes)
+        {
+            Debug.LogWarning("Reached maximum number of notes for this ball type.");
+            return;
+        }
+        NoteData new_note = CreateNote(note);
+        bool success = SaveNote(new_note);
+
+        if(success) ball.notes.Insert(index, new_note);
+    }
+
+    // Create a new note
     public static NoteData CreateNote()
     {
         return (NoteData)ScriptableObject.CreateInstance(typeof(NoteData));

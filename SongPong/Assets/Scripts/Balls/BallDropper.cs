@@ -201,7 +201,7 @@ public class BallDropper : MonoBehaviour
 
         try{
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
-            ball.transform.parent = transform; // set BallDropper gameobject to parent
+            ball.transform.parent = transform; // set BallDropper object to parent
 
             ball.InitializeBall(data, game.gameAxis, spawner, song);
 
@@ -291,7 +291,6 @@ public class BallDropper : MonoBehaviour
         if(String.IsNullOrEmpty(ballMapName)) Debug.LogError("Ball Map Name is null or empty.");
 
         List<BallData> ballData = game.GetBallData();
-        //ballList.Sort(BallData.CompareBallsBySpawnTime);
 
         if(ballData != null)
         {

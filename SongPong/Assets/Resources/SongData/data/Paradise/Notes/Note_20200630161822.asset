@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d515c4a3c8c3964ab2ac63514785865, type: 3}
-  m_Name: Note_20200622224404_0
+  m_Name: Note_20200630161822
   m_EditorClassIdentifier: 
-  hitPosition: 12
-  hitBeat: 124
-  hitTime: 74.4
+  hitPosition: 7
+  hitBeat: 144
   noteDirection: 1

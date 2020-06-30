@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitPosition: 10
   hitBeat: 78
-  hitTime: 46.8
   noteDirection: 1

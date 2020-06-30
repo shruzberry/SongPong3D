@@ -17,6 +17,7 @@ public abstract class BallData : ScriptableObject
     [HideInInspector]
     public GameObject prefab;
 
+    [SerializeField]
     public List<BallOption> options;
 
     public abstract int MinNotes{get;}
@@ -24,11 +25,8 @@ public abstract class BallData : ScriptableObject
 
     //[HideInInspector]
     public float activity;
-
-    public delegate void OnBallValidate();
-    public event OnBallValidate onBallValidate;
     
-    public void OnEnable()
+    public virtual void OnEnable()
     {
         SetPrefab();
     }
@@ -53,10 +51,9 @@ public abstract class BallData : ScriptableObject
         return valid;
     }
 
-    private void OnValidate() 
+    public void OnValidate() 
     {
-        SortNotes(notes);
-        if(onBallValidate != null) onBallValidate();
+        SortNotes();
     }
 
     protected abstract void SetPrefab();
@@ -64,20 +61,10 @@ public abstract class BallData : ScriptableObject
     /**
      * Sort this balls' notes according to their hit time
      */
-    protected void SortNotes(List<NoteData> notes)
+    public void SortNotes()
     {
         try
         {
-            foreach(NoteData nd in notes)
-            {
-                // If a note is null, don't need to keep sorting.
-                if(nd == null)
-                {
-                    Debug.LogWarning("Ball \"" + name + "\" has null notes."); 
-                    
-                }
-            }
-
             if(notes.Count > 0)
             {
                 notes.Sort(NoteData.CompareNotesByHitTime);
@@ -91,7 +78,24 @@ public abstract class BallData : ScriptableObject
 
     public static int CompareBallsBySpawnTime(BallData a, BallData b)
     {
-        return a.notes[0].hitTime.CompareTo(b.notes[0].hitTime);
+        //if(a.notes.Count <= 0 || b.notes.Count <= 0) return 0;
+        return a.notes[0].hitBeat.CompareTo(b.notes[0].hitBeat);
+    }
+
+    protected void InitializeOptions()
+    {
+        if(options == null)
+        {
+            options = new List<BallOption>();
+        }
+    }
+
+    protected void InitializeOption(float value, string name)
+    {
+        if(!options.Exists(x => x.opt_name == name))
+        {
+            options.Add(new BallOption(value, name));
+        }
     }
 
     public void PulseActive()

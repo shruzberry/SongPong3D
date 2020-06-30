@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class BallOption
+[Serializable]
+public class BallOption
 {
-    public string name;
+    public string opt_name;
     public float value;
+
+    public BallOption(float value, string name)
+    {
+        this.value = value;
+        this.opt_name = name;
+    }
 }
 

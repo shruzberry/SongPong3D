@@ -15,7 +15,7 @@ public class BounceBall : Ball
     public float speed = 0.0f;
     public float gravity = 3.0f;
 
-    public float bounceHeightMod = 3.0f;
+    public float bounceHeight;
 
     //________COMPONENTS____________
     Vector3 screenBounds;
@@ -29,8 +29,11 @@ public class BounceBall : Ball
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBallSpecific()
+    public override void InitializeBallSpecific(BallData data)
     {
+        // downcast data to specific type
+        BounceBallData d = (data as BounceBallData);
+
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -41,6 +44,9 @@ public class BounceBall : Ball
 
         // MOVEMENT
         velocity = speed * axisVector;
+
+        // OPTIONS
+        bounceHeight = d.options.Find(x => x.opt_name == "Bounce Height").value;
     }
 
     protected override bool CheckForInvalid()
@@ -93,10 +99,35 @@ public class BounceBall : Ball
         // Get distance between the current column and the next
         Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
 
+/*
+        // deltaX = v0t + 0.5at^2
+        // known: t, deltaX (bounceHeight), v0 = v
+        // 2(deltaX - v0t) / t^2 = a
+
+        // i want to move bounceHeight units in halfTime seconds with velocity = -hit velocity
+        float halfTime = moveTime;
+        float delta = bounceHeight;
+
+        Debug.Log("POS: " + transform.position);
+        Debug.Log("DELTA: " + delta);
+        Debug.Log("SEC: " + halfTime);
+        
+        gravity = (2 * (delta - Vector2.Dot(velocity, Abs(axisVector)) * halfTime)) / (halfTime * halfTime);
+        velocity = -velocity;
+
+        Debug.Log("GRAV: " + gravity);
+        Debug.Log("VEL: " + velocity);
+
+
+        // dX = v0t + 0.5at^2
+        // dX = t(v0 + 0.5at)
+        // dX / t = v0 + 0.5at
+        // 2((dX / t) - v0) / t
+
         bounceHeightMod = moveTime;
         Debug.Log("BOUNCE HEIGHT MOD: " + bounceHeightMod);
         gravity = gravity * bounceHeightMod;
-
+*/
         // Calculate the velocity needed to hit at new deltaT.
         // Comes from the kinematic equation v = v0 + at solved for v0
         // v0 = -at
@@ -106,6 +137,14 @@ public class BounceBall : Ball
 
         // Move along the other axis
         velocity += otherAxisVector * (deltaD / moveTime);
+    }
+
+    private Vector2 Abs(Vector2 in_vec)
+    {
+        Vector2 new_vec = in_vec;
+        new_vec.x = Mathf.Abs(in_vec.x);
+        new_vec.y = Mathf.Abs(in_vec.y);
+        return new_vec;
     }
 
     public override void MoveActions()

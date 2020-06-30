@@ -137,7 +137,7 @@ public abstract class Ball : MonoBehaviour
         SetAxisVectors();
 
         // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
-        InitializeBallSpecific();
+        InitializeBallSpecific(data);
 
         // CHECK FOR ERRORS
         if(CheckForInvalid() == true)
@@ -159,11 +159,7 @@ public abstract class Ball : MonoBehaviour
         else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
     }
 
-    public void SetDirection()
-    {
-    }
-
-    public virtual void InitializeBallSpecific(){}
+    public virtual void InitializeBallSpecific(BallData data){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * NOTES
@@ -257,8 +253,6 @@ public abstract class Ball : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public float NextHitTime(){return notes[currentNote].hitTime;}
 
     public List<NoteData> getNotes(){return notes;}
 

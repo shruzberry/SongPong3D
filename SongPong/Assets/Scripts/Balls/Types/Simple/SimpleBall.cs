@@ -24,7 +24,7 @@ public class SimpleBall : Ball
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBallSpecific()
+    public override void InitializeBallSpecific(BallData data)
     {
         // ATTRIBUTES
         size = GetComponent<Collider2D>().bounds.size.y;
