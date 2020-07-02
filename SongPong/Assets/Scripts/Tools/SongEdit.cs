@@ -67,6 +67,7 @@ public class SongEdit : MonoBehaviour
                 new_ball.notes.Add(CreateNote());
             }
         }
+        
         SaveNotes(new_ball.notes);
         SaveBall(new_ball);
         return new_ball;

@@ -60,7 +60,9 @@ public class Game : MonoBehaviour
 
     public void ReloadBallData()
     {
-        balls = LoadBallData(editorSong.name);
+        if(editorSong != null){
+            balls = LoadBallData(editorSong.name);
+        }
     }
 
     public List<BallData> LoadBallData(string songName)
