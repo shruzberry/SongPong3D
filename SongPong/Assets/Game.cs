@@ -16,12 +16,22 @@ public class Game : MonoBehaviour
     private List<BallData> balls;
     private string dataPath;
 
+    // MANAGERS
+    [Header("Managers")]
+    public SongController songController;
+    public PaddleManager paddleManager;
+    public BallDropper ballDropper;
+
     // EDITOR
     [Header("Editor")]
     public SongData editorSong;
 
     private void OnEnable() 
     {
+        songController = FindObjectOfType<SongController>();
+        paddleManager = FindObjectOfType<PaddleManager>();
+        ballDropper = FindObjectOfType<BallDropper>();
+
         ReloadBallData();
     }
 
@@ -32,18 +42,15 @@ public class Game : MonoBehaviour
     {
         // SONG
         this.songData = song;
-        SongController songController = FindObjectOfType<SongController>();
         songController.LoadSong(song);
         songController.JumpToStart();
 
         // PADDLES
-        PaddleManager paddleManager = FindObjectOfType<PaddleManager>();
         paddleManager.Activate();
 
         // BALLS
         balls = LoadBallData(song.name);
         SortBalls();
-        BallDropper ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
         ballDropper.Activate();
         ballDropper.ballMapName = song.songName;
 
@@ -51,13 +58,17 @@ public class Game : MonoBehaviour
     }
 
     /**
-     * Called when game is being initialized through the editor
+     * Called by LevelLoader when game is being initialized through the Song Scene
+     * Sets the song equal to the song from the SongBuilder editor
      **/
     public void InitializeEditor()
     {
-        Initialize(editorSong);
+        if(editorSong != null) Initialize(editorSong);
     }
 
+    /**
+     * Called by SongBuilder to reload ball data files when the song gets changed
+     **/
     public void ReloadBallData()
     {
         if(editorSong != null){
@@ -65,6 +76,10 @@ public class Game : MonoBehaviour
         }
     }
 
+    /**
+     * Loads all BallData ScriptableObjects from the Resources file for the song
+     * and stores them into the Game's list of Balls
+     **/
     public List<BallData> LoadBallData(string songName)
     {
         string path = rootDataPath + songName + "/Balls/";
@@ -79,6 +94,9 @@ public class Game : MonoBehaviour
         return balls;
     }
 
+    /**
+     * Sort balls by their first hit time
+     **/
     public void SortBalls()
     {
         balls.Sort(BallData.CompareBallsBySpawnTime);
