@@ -51,6 +51,11 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         CheckForNonMenuPlay();
     }
 
+    public void OnLevelWasLoaded()
+    {
+        PopulateGame();
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -92,7 +97,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
             }
         }
         else
-        {
+        {/*
             Debug.Log("STARTING NEW SONG \"" + songData.name + "\".");
             bool success = game.Initialize(songData);
             if(success)
@@ -102,11 +107,21 @@ public class LevelChanger : MonoSingleton<LevelChanger>
                     onGameLoaded();
                 }
             }
-        }
+        */}
     }
 
     private void OnFadeComplete()
     {
         SceneManager.LoadScene(levelToLoad);
+    }
+
+    private void PopulateGame()
+    {
+        game = FindObjectOfType<Game>();
+        
+        if(game != null)
+        {
+            game.Initialize(songData);
+        }
     }
 }

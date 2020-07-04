@@ -99,6 +99,7 @@ public class MenuLoader : MonoBehaviour
         button.onClick.AddListener(() => 
         {
             levelChanger.SetSong(sd);
+            print("setting song");
         });
 
         // Put Under Menu in hierarchy
