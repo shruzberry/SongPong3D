@@ -97,8 +97,10 @@ public class BounceBall : Ball
         float moveTime = CalcBounceTime();
 
         // Get distance between the current column and the next
-        Vector2 deltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
+        Vector2 deltaD = bounceHeight * axisVector * -1.0f;
+        Vector2 otherDeltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
 
+        Debug.Log("Delta D: " + deltaD);
 /*
         // deltaX = v0t + 0.5at^2
         // known: t, deltaX (bounceHeight), v0 = v
@@ -136,7 +138,7 @@ public class BounceBall : Ball
         velocity += axisVector * -gravity * (moveTime / 2);
 
         // Move along the other axis
-        velocity += otherAxisVector * (deltaD / moveTime);
+        velocity += otherAxisVector * (otherDeltaD / moveTime);
     }
 
     private Vector2 Abs(Vector2 in_vec)

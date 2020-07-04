@@ -24,11 +24,13 @@ public class Game : MonoBehaviour
 
     // EDITOR
     [Header("Editor")]
-    public SongData editorSong;
+    [SerializeField]
+    private SongData editorSong;
 
     private void OnEnable() 
     {
         ReloadBallData();
+        Debug.Log("TEST MY BOY: " + editorSong.name);
     }
 
     /**
@@ -65,6 +67,7 @@ public class Game : MonoBehaviour
      **/
     public bool InitializeEditor()
     {
+        Debug.Log("EDITOR SONG: " + editorSong);
         if(editorSong != null)
         {
             Initialize(editorSong);
@@ -75,6 +78,16 @@ public class Game : MonoBehaviour
             Debug.LogWarning("No editor song set. Use SongBuilder to fix this issue.");
             return false;
         }
+    }
+
+    public void SetEditorSong(SongData song)
+    {
+        editorSong = song;
+    }
+
+    public SongData GetEditorSong()
+    {
+        return editorSong;
     }
 
     /**
@@ -125,5 +138,4 @@ public class Game : MonoBehaviour
     {
         return balls;
     }
-
 }
