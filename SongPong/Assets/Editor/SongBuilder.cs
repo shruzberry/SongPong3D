@@ -81,8 +81,6 @@ public class SongBuilder : EditorWindow
     
     public void OnEnable()
     {
-        game = FindObjectOfType<Game>();
-
         addNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/CreateNote_tex.png", typeof(Texture2D));
         deleteNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/DeleteNote_tex.png", typeof(Texture2D));
         oldColor = GUI.color;
@@ -146,12 +144,14 @@ public class SongBuilder : EditorWindow
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
 
+            game = FindObjectOfType<Game>();
             songController = FindObjectOfType<SongController>();
 
             GUILayout.BeginHorizontal();
                 SongData newData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
                 if(songData != newData)
                 {
+                    Debug.Log("CHANGE SONG TO " + newData.name);
                     songData = newData;
                     game.editorSong = songData;
                     game.ReloadBallData();
