@@ -28,10 +28,6 @@ public class Game : MonoBehaviour
 
     private void OnEnable() 
     {
-        songController = FindObjectOfType<SongController>();
-        paddleManager = FindObjectOfType<PaddleManager>();
-        ballDropper = FindObjectOfType<BallDropper>();
-
         ReloadBallData();
     }
 
@@ -40,6 +36,10 @@ public class Game : MonoBehaviour
      */
     public void Initialize(SongData song)
     {
+        songController = FindObjectOfType<SongController>();
+        paddleManager = FindObjectOfType<PaddleManager>();
+        ballDropper = FindObjectOfType<BallDropper>();
+
         // SONG
         this.songData = song;
         songController.LoadSong(song);
@@ -61,9 +61,18 @@ public class Game : MonoBehaviour
      * Called by LevelLoader when game is being initialized through the Song Scene
      * Sets the song equal to the song from the SongBuilder editor
      **/
-    public void InitializeEditor()
+    public bool InitializeEditor()
     {
-        if(editorSong != null) Initialize(editorSong);
+        if(editorSong != null)
+        {
+            Initialize(editorSong);
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("No editor song set. Use SongBuilder to fix this issue.");
+            return false;
+        }
     }
 
     /**

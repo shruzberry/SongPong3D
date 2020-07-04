@@ -191,7 +191,8 @@ public class SongBuilder : EditorWindow
                 }
 
                 // Current Beat
-                GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
+                if(Application.isPlaying)
+                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
