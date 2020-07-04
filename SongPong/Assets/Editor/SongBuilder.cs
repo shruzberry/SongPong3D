@@ -82,7 +82,6 @@ public class SongBuilder : EditorWindow
     public void OnEnable()
     {
         game = FindObjectOfType<Game>();
-        songController = FindObjectOfType<SongController>();
 
         addNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/CreateNote_tex.png", typeof(Texture2D));
         deleteNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/DeleteNote_tex.png", typeof(Texture2D));
@@ -147,9 +146,11 @@ public class SongBuilder : EditorWindow
         GUILayout.BeginArea(navBarSection);
             GUILayout.Label("Navigation");
 
+            songController = FindObjectOfType<SongController>();
+
             GUILayout.BeginHorizontal();
                 SongData newData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
-                if(songData != newData || songData == null)
+                if(songData != newData)
                 {
                     songData = newData;
                     game.editorSong = songData;
@@ -157,7 +158,7 @@ public class SongBuilder : EditorWindow
                 }
             GUILayout.EndHorizontal();
 
-            if(songController != null && songData != null)
+            if(songData != null)
             {
             EditorGUILayout.BeginHorizontal();
 
@@ -193,7 +194,7 @@ public class SongBuilder : EditorWindow
 
                 // Current Beat
                 if(Application.isPlaying)
-                    GUILayout.Label("Beat: " + game.songController.GetSongTimeBeats(), GUILayout.Width(60));
+                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
