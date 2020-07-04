@@ -443,7 +443,7 @@ public class SongBuilder : EditorWindow
                 if(note.hitBeat != new_beat)
                 {
                     note.hitBeat = new_beat;
-                    ball.SortNotes();
+                    //ball.SortNotes();
                 }
 
                 //________Set Direction___________________
