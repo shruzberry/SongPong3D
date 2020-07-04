@@ -81,7 +81,7 @@ public class SongEdit : MonoBehaviour
     {
         Game game = FindObjectOfType<Game>();
 
-        string dpath = game.editorSong.dataPath + "/Balls/";
+        string dpath = game.GetEditorSong().dataPath + "/Balls/";
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 
@@ -99,7 +99,7 @@ public class SongEdit : MonoBehaviour
         {
             foreach(NoteData nd in ball.notes)
             {
-                AssetDatabase.DeleteAsset(game.editorSong.dataPath + "/Notes/" + nd.name + ".asset");
+                AssetDatabase.DeleteAsset(game.GetEditorSong().dataPath + "/Notes/" + nd.name + ".asset");
             }
         }
         DeleteBall(ball);
@@ -108,7 +108,7 @@ public class SongEdit : MonoBehaviour
     public static void DeleteBall(BallData ball)
     {
         Game game = FindObjectOfType<Game>();
-        string path = game.editorSong.dataPath + "/Balls/" + ball.name + ".asset";
+        string path = game.GetEditorSong().dataPath + "/Balls/" + ball.name + ".asset";
         
         AssetDatabase.DeleteAsset(path);
     }
@@ -193,7 +193,7 @@ public class SongEdit : MonoBehaviour
     {
         Game game = FindObjectOfType<Game>();
 
-        string dpath = game.editorSong.dataPath + "/Notes/";
+        string dpath = game.GetEditorSong().dataPath + "/Notes/";
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 
@@ -216,7 +216,7 @@ public class SongEdit : MonoBehaviour
 
         ball.notes.Remove(note);
         
-        AssetDatabase.DeleteAsset(game.editorSong.dataPath + "/Notes/" + note.name + ".asset");
+        AssetDatabase.DeleteAsset(game.GetEditorSong().dataPath + "/Notes/" + note.name + ".asset");
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

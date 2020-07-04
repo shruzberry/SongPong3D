@@ -51,7 +51,10 @@ MonoBehaviour:
   rootDataPath: SongData/data/
   gameAxis: 1
   songData: {fileID: 0}
-  editorSong: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a, type: 2}
+  songController: {fileID: 0}
+  paddleManager: {fileID: 0}
+  ballDropper: {fileID: 0}
+  editorSong: {fileID: 0}
 --- !u!1 &7904085085055076265
 GameObject:
   m_ObjectHideFlags: 0

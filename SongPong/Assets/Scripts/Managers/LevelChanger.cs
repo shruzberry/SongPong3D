@@ -85,7 +85,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            Debug.Log("STARTING EDITOR SONG.");
+            Debug.Log("STARTING EDITOR SONG");
             bool success = game.InitializeEditor();
 
             if(success)
