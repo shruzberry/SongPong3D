@@ -46,7 +46,7 @@ public class BounceBall : Ball
         velocity = speed * axisVector;
 
         // OPTIONS
-        bounceHeight = d.options.Find(x => x.opt_name == "Bounce Height").value;
+        bounceHeight = d.GetOption("Bounce Height");
     }
 
     protected override bool CheckForInvalid()

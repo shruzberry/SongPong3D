@@ -98,6 +98,11 @@ public abstract class BallData : ScriptableObject
         }
     }
 
+    public float GetOption(string name)
+    {
+        return options.Find(x => x.opt_name == name).value;
+    }
+
     public void PulseActive()
     {
         activity = 100.0f;
