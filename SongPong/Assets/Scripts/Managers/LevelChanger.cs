@@ -84,11 +84,9 @@ public class LevelChanger : MonoSingleton<LevelChanger>
             bool success = game.InitializeEditor();
 
             if(success)
-            {                                Debug.Log("TEST 2");
-
+            {
                 if(onGameLoaded != null)
                 {
-                    Debug.Log("TEST 3");
                     onGameLoaded();
                 }
             }
