@@ -46,14 +46,28 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         base.Awake();
 
         animator = this.GetComponent<Animator>();
-        game = FindObjectOfType<Game>();
+        game = FindObjectOfType<Game>(); 
+    }
 
+    public void Start()
+    {
         CheckForNonMenuPlay();
     }
 
-    public void OnLevelWasLoaded()
+    public void OnEnable()
     {
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("level loaded");
         PopulateGame();
+        animator.SetTrigger("FadeIn");
+    }
+    private void OnDisable() 
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -95,18 +109,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
                 }
             }
         }
-        else
-        {/*
-            Debug.Log("STARTING NEW SONG \"" + songData.name + "\".");
-            bool success = game.Initialize(songData);
-            if(success)
-            {
-                if(onGameLoaded != null) 
-                {
-                    onGameLoaded();
-                }
-            }
-        */}
     }
 
     private void OnFadeComplete()
@@ -121,6 +123,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         if(game != null)
         {
             game.Initialize(songData);
+            Debug.Log("init " + songData.name);
         }
     }
 }
