@@ -30,7 +30,6 @@ public class Game : MonoBehaviour
     private void OnEnable() 
     {
         ReloadBallData();
-        Debug.Log("TEST MY BOY: " + editorSong.name);
     }
 
     /**
@@ -67,7 +66,6 @@ public class Game : MonoBehaviour
      **/
     public bool InitializeEditor()
     {
-        Debug.Log("EDITOR SONG: " + editorSong);
         if(editorSong != null)
         {
             Initialize(editorSong);
