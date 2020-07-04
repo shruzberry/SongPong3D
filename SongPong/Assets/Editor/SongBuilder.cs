@@ -36,6 +36,7 @@ public class SongBuilder : EditorWindow
 
     // References
     Game game;
+    LevelChanger levelChanger;
     SongData songData;
     SongController songController;
     List<BallData> ballList = new List<BallData>();
@@ -81,7 +82,7 @@ public class SongBuilder : EditorWindow
     public void OnEnable()
     {
         game = FindObjectOfType<Game>();
-        songController = game.songController;
+        songController = FindObjectOfType<SongController>();
 
         addNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/CreateNote_tex.png", typeof(Texture2D));
         deleteNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/DeleteNote_tex.png", typeof(Texture2D));
@@ -156,7 +157,7 @@ public class SongBuilder : EditorWindow
                 }
             GUILayout.EndHorizontal();
 
-            if(songData != null)
+            if(songController != null && songData != null)
             {
             EditorGUILayout.BeginHorizontal();
 
@@ -192,7 +193,7 @@ public class SongBuilder : EditorWindow
 
                 // Current Beat
                 if(Application.isPlaying)
-                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
+                    GUILayout.Label("Beat: " + game.songController.GetSongTimeBeats(), GUILayout.Width(60));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);

@@ -34,7 +34,7 @@ public class Game : MonoBehaviour
     /**
      * Called when the Game starts
      */
-    public void Initialize(SongData song)
+    public bool Initialize(SongData song)
     {
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
@@ -55,6 +55,8 @@ public class Game : MonoBehaviour
         ballDropper.ballMapName = song.songName;
 
         songController.Play();
+
+        return true;
     }
 
     /**

@@ -32,6 +32,9 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public SongData songData;
     private Game game;
 
+    public delegate void OnGameLoaded();
+    public event OnGameLoaded onGameLoaded;
+
     private int levelToLoad;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -78,12 +81,29 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
             Debug.Log("STARTING EDITOR SONG.");
-            game.InitializeEditor();
+            bool success = game.InitializeEditor();
+
+            if(success)
+            {                                Debug.Log("TEST 2");
+
+                if(onGameLoaded != null)
+                {
+                    Debug.Log("TEST 3");
+                    onGameLoaded();
+                }
+            }
         }
         else
         {
             Debug.Log("STARTING NEW SONG \"" + songData.name + "\".");
-            game.Initialize(songData);
+            bool success = game.Initialize(songData);
+            if(success)
+            {
+                if(onGameLoaded != null) 
+                {
+                    onGameLoaded();
+                }
+            }
         }
     }
 
