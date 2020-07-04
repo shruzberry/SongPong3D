@@ -149,7 +149,7 @@ public class SongBuilder : EditorWindow
 
             GUILayout.BeginHorizontal();
                 SongData newData = (SongData)EditorGUILayout.ObjectField(songData, typeof(SongData), true, GUILayout.MaxWidth(187));
-                if(songData != newData)
+                if(songData != newData || songData == null)
                 {
                     songData = newData;
                     game.editorSong = songData;
