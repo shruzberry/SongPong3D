@@ -113,7 +113,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 260
+  m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -266.81543, w: -54.731323}
+  m_margin: {x: 0, y: 0, z: 0.3123169, w: -0.07601929}
   m_textInfo:
     textComponent: {fileID: 1959417341}
     characterCount: 1
