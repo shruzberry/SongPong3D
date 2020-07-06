@@ -31,6 +31,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public Animator animator;
     public SongData songData;
     private Game game;
+    private SongController songController;
 
     public delegate void OnGameLoaded();
     public event OnGameLoaded onGameLoaded;
@@ -61,13 +62,16 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("level loaded");
         PopulateGame();
+        CheckForSongController();
         animator.SetTrigger("FadeIn");
     }
+
     private void OnDisable() 
     {
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        if (songController != null)
+            songController.onSongEnd -= ReturnToMenu;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -123,7 +127,23 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         if(game != null)
         {
             game.Initialize(songData);
-            Debug.Log("init " + songData.name);
         }
     }
+
+    
+    private void CheckForSongController()
+    {
+        songController = FindObjectOfType<SongController>();
+        if (songController != null)
+        {
+            songController.onSongEnd += ReturnToMenu;
+        }
+    }
+
+    private void ReturnToMenu()
+    {
+        Invoke("FadeToMenu", 2);
+    }
+
+    private void FadeToMenu() {FadeToLevel(0);}
 }

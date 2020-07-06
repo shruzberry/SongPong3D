@@ -44,7 +44,6 @@ public class PlayerScore : MonoBehaviour
         Transform t = GetComponent<Transform>();
 
         Vector3 position = t.position;
-        Debug.Log("song ended");
         t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
     }
 
