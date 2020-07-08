@@ -446,6 +446,7 @@ public class SongBuilder : EditorWindow
                 if(note.hitBeat != new_beat)
                 {
                     note.hitBeat = new_beat;
+                    EditorUtility.SetDirty(note);
                     //ball.SortNotes();
                 }
 
