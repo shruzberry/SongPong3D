@@ -23,7 +23,6 @@ public class BallDropper : MonoBehaviour
     //___________References______________
     private Game game;
     private SongController song;
-    private SpawnInfo spawner;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -35,6 +34,10 @@ public class BallDropper : MonoBehaviour
         private int currentBallIndex; // pointer that keeps track of where we are in ballDataList
 
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
+
+    //__________Ball Attributes__________
+    public float startSpeed = 7;
+    public float gravity = 3;
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -61,7 +64,6 @@ public class BallDropper : MonoBehaviour
     {
         game = FindObjectOfType<Game>();
         song = FindObjectOfType<SongController>();
-        spawner = FindObjectOfType<SpawnInfo>();
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
@@ -76,7 +78,7 @@ public class BallDropper : MonoBehaviour
 
     private void CalcMoveTimes()
     {
-        Vector2 spawnAxis = spawner.spawnAxis;
+        Vector2 spawnAxis = game.spawner.spawnAxis;
 
         Vector2 paddleAxis = FindObjectOfType<PaddleMover>().GetPaddleTopAxis();
 
@@ -84,7 +86,7 @@ public class BallDropper : MonoBehaviour
         if(game.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
         else{axisVector = new Vector2(1,0);}
 
-        float fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, 0.0f, 3.0f);
+        float fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, startSpeed, gravity);
         fallTimeBeats = song.ToBeat(fallTime);
     }
 
@@ -203,7 +205,7 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper object to parent
 
-            ball.InitializeBall(data, game.gameAxis, spawner, song);
+            ball.InitializeBall(game, data, this);
 
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);

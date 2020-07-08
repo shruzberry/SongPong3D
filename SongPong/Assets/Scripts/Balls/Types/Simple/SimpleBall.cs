@@ -9,8 +9,8 @@ public class SimpleBall : Ball
 
     //________MOVEMENT______________
     protected Vector2 velocity;
-    public float speed = 0.0f;
-    public float gravity = 3.0f;
+    private float speed;
+    private float gravity;
 
     //________COMPONENTS____________
     Vector3 screenBounds;
@@ -24,11 +24,18 @@ public class SimpleBall : Ball
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBallSpecific(BallData data)
+    public override void InitializeBall(Game game, BallData data, BallDropper dropper)
     {
+        base.InitializeBall(game, data, dropper);
+
         // ATTRIBUTES
         size = GetComponent<Collider2D>().bounds.size.y;
         radius = size / 2;
+
+        // MOTION
+        speed = dropper.startSpeed;
+        gravity = dropper.gravity;
+        velocity = speed * axisVector;
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();

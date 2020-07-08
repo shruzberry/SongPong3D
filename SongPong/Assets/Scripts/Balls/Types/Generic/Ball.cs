@@ -19,6 +19,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Types;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public abstract class Ball : MonoBehaviour
 {
     #region Variables
@@ -97,27 +98,24 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void InitializeBall(BallData data, Axis axis, SpawnInfo spawner, SongController song)
+    public virtual void InitializeBall(Game game, BallData data, BallDropper dropper)
     {
         // REFERENCES
-        //this.paddleManager = paddleManager;
-        this.spawnInfo = spawner;
-        this.song = song;
+        this.ballData = data;
+        this.spawnInfo = game.spawner;
+        this.song = game.songController;
+        this.axis = game.gameAxis;
 
         // COMPONENTS
         this.ball_renderer = GetComponent<SpriteRenderer>();
-        this.axis = axis;
-
-        // INITIALIZE ID AND NOTES
-        this.ballData = data;
-        this.id = data.id;
-        this.type = data.type;
 
         // APPEARANCE
         this.name = id.ToString() + "_" + type.ToString();
         gameObject.layer = LayerMask.NameToLayer("Balls");
 
         // NOTES
+        this.id = data.id;
+        this.type = data.type;
         this.notes = data.notes;
         currentNote = 0;
         numNotes = notes.Count;
@@ -135,9 +133,6 @@ public abstract class Ball : MonoBehaviour
 
         // DIRECTION
         SetAxisVectors();
-
-        // CALL BALL IMPLEMENTATION'S CONSTRUCTOR
-        InitializeBallSpecific(data);
 
         // CHECK FOR ERRORS
         if(CheckForInvalid() == true)
@@ -159,16 +154,11 @@ public abstract class Ball : MonoBehaviour
         else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
     }
 
-    public virtual void InitializeBallSpecific(BallData data){}
-
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * NOTES
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void NextNote()
-    {
-        currentNote++;
-    }
+    public void NextNote(){ currentNote++; }
 
     /**
      * Returns the position in world coordinates of the given note
@@ -242,7 +232,6 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void OnExitActions();
-
     public abstract void ExitActions();
 
     public void DestroyBall()

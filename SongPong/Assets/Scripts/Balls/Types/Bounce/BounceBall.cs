@@ -29,10 +29,12 @@ public class BounceBall : Ball
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBallSpecific(BallData data)
+    public override void InitializeBall(Game game, BallData data, BallDropper dropper)
     {
+        base.InitializeBall(game, data, dropper);
+
         // downcast data to specific type
-        BounceBallData d = (data as BounceBallData);
+        BounceBallData bounceData = (data as BounceBallData);
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
@@ -44,10 +46,12 @@ public class BounceBall : Ball
         ball_renderer.material.SetColor("_Color", dissolveColor);
 
         // MOVEMENT
+        speed = dropper.startSpeed;
+        gravity = dropper.gravity;
         velocity = speed * axisVector;
 
         // OPTIONS
-        bounceHeight = d.GetOption("Bounce Height");
+        bounceHeight = bounceData.GetOption("Bounce Height");
     }
 
     protected override bool CheckForInvalid()

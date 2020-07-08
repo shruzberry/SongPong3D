@@ -21,6 +21,7 @@ public class Game : MonoBehaviour
     public SongController songController;
     public PaddleManager paddleManager;
     public BallDropper ballDropper;
+    public SpawnInfo spawner;
 
     // EDITOR
     [Header("Editor")]
@@ -40,6 +41,7 @@ public class Game : MonoBehaviour
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
         ballDropper = FindObjectOfType<BallDropper>();
+        spawner = FindObjectOfType<SpawnInfo>();
 
         // SONG
         this.songData = song;
