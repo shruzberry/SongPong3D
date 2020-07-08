@@ -20,6 +20,7 @@ _________ PUBLIC ___________
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
@@ -30,6 +31,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     // REFERENCES
     public Animator animator;
     public SongData songData;
+    public Canvas canvas;
     private Game game;
     private SongController songController;
 
@@ -38,6 +40,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     private int levelToLoad;
 
+    private bool firstLevelLoaded = true;
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -45,14 +49,9 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public override void Awake()
     {
         base.Awake();
-
+    
         animator = this.GetComponent<Animator>();
         game = FindObjectOfType<Game>(); 
-    }
-
-    public void Start()
-    {
-        CheckForNonMenuPlay();
     }
 
     public void OnEnable()
@@ -62,9 +61,16 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        bool nonMenu = CheckForNonMenuPlay();
-        if(!nonMenu) PopulateGame();
+        if(firstLevelLoaded)
+        {
+            CheckForNonMenuPlay();
+            firstLevelLoaded = false;
+            return;
+        }
+
+        PopulateGame();
         CheckForSongController();
+        
         animator.SetTrigger("FadeIn");
     }
 
