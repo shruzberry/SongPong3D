@@ -49,6 +49,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Fast Forward"",
+                    ""type"": ""Button"",
+                    ""id"": ""34ebb968-2204-409b-9d3d-d937bc200ca1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Rewind"",
+                    ""type"": ""Button"",
+                    ""id"": ""dac8316b-aac4-476f-9274-289efa095888"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -227,6 +243,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""SprintP2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8bdd4b8-b03e-4a86-9cba-4de7af9c7664"",
+                    ""path"": ""<Keyboard>/period"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Fast Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e4c0ade-303d-499c-a390-a990326865ee"",
+                    ""path"": ""<Keyboard>/comma"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rewind"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -283,6 +321,52 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Song"",
+            ""id"": ""810790e4-a7b1-48f2-bda5-aa2968841087"",
+            ""actions"": [
+                {
+                    ""name"": ""Fast Forward"",
+                    ""type"": ""Button"",
+                    ""id"": ""e215093d-5150-4980-bcdb-cfab54b951e9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Rewind"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb23725d-72b7-4445-992a-02383ff50629"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""977ef7d7-72e0-46b7-97e3-43386a65194b"",
+                    ""path"": ""<Keyboard>/period"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Fast Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b67d1801-0cb1-4d23-83ff-228d8a7d2dbe"",
+                    ""path"": ""<Keyboard>/comma"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rewind"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -305,12 +389,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Paddle_MoveP2 = m_Paddle.FindAction("MoveP2", throwIfNotFound: true);
         m_Paddle_SprintP1 = m_Paddle.FindAction("SprintP1", throwIfNotFound: true);
         m_Paddle_SprintP2 = m_Paddle.FindAction("SprintP2", throwIfNotFound: true);
+        m_Paddle_FastForward = m_Paddle.FindAction("Fast Forward", throwIfNotFound: true);
+        m_Paddle_Rewind = m_Paddle.FindAction("Rewind", throwIfNotFound: true);
         // NoteListener
         m_NoteListener = asset.FindActionMap("NoteListener", throwIfNotFound: true);
         m_NoteListener_MousePos = m_NoteListener.FindAction("MousePos", throwIfNotFound: true);
         // Debugger
         m_Debugger = asset.FindActionMap("Debugger", throwIfNotFound: true);
         m_Debugger_ToggleDebugLines = m_Debugger.FindAction("ToggleDebugLines", throwIfNotFound: true);
+        // Song
+        m_Song = asset.FindActionMap("Song", throwIfNotFound: true);
+        m_Song_FastForward = m_Song.FindAction("Fast Forward", throwIfNotFound: true);
+        m_Song_Rewind = m_Song.FindAction("Rewind", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -364,6 +454,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Paddle_MoveP2;
     private readonly InputAction m_Paddle_SprintP1;
     private readonly InputAction m_Paddle_SprintP2;
+    private readonly InputAction m_Paddle_FastForward;
+    private readonly InputAction m_Paddle_Rewind;
     public struct PaddleActions
     {
         private @InputMaster m_Wrapper;
@@ -372,6 +464,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @MoveP2 => m_Wrapper.m_Paddle_MoveP2;
         public InputAction @SprintP1 => m_Wrapper.m_Paddle_SprintP1;
         public InputAction @SprintP2 => m_Wrapper.m_Paddle_SprintP2;
+        public InputAction @FastForward => m_Wrapper.m_Paddle_FastForward;
+        public InputAction @Rewind => m_Wrapper.m_Paddle_Rewind;
         public InputActionMap Get() { return m_Wrapper.m_Paddle; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -393,6 +487,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @SprintP2.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnSprintP2;
                 @SprintP2.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnSprintP2;
                 @SprintP2.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnSprintP2;
+                @FastForward.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnFastForward;
+                @FastForward.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnFastForward;
+                @FastForward.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnFastForward;
+                @Rewind.started -= m_Wrapper.m_PaddleActionsCallbackInterface.OnRewind;
+                @Rewind.performed -= m_Wrapper.m_PaddleActionsCallbackInterface.OnRewind;
+                @Rewind.canceled -= m_Wrapper.m_PaddleActionsCallbackInterface.OnRewind;
             }
             m_Wrapper.m_PaddleActionsCallbackInterface = instance;
             if (instance != null)
@@ -409,6 +509,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @SprintP2.started += instance.OnSprintP2;
                 @SprintP2.performed += instance.OnSprintP2;
                 @SprintP2.canceled += instance.OnSprintP2;
+                @FastForward.started += instance.OnFastForward;
+                @FastForward.performed += instance.OnFastForward;
+                @FastForward.canceled += instance.OnFastForward;
+                @Rewind.started += instance.OnRewind;
+                @Rewind.performed += instance.OnRewind;
+                @Rewind.canceled += instance.OnRewind;
             }
         }
     }
@@ -479,6 +585,47 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public DebuggerActions @Debugger => new DebuggerActions(this);
+
+    // Song
+    private readonly InputActionMap m_Song;
+    private ISongActions m_SongActionsCallbackInterface;
+    private readonly InputAction m_Song_FastForward;
+    private readonly InputAction m_Song_Rewind;
+    public struct SongActions
+    {
+        private @InputMaster m_Wrapper;
+        public SongActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @FastForward => m_Wrapper.m_Song_FastForward;
+        public InputAction @Rewind => m_Wrapper.m_Song_Rewind;
+        public InputActionMap Get() { return m_Wrapper.m_Song; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SongActions set) { return set.Get(); }
+        public void SetCallbacks(ISongActions instance)
+        {
+            if (m_Wrapper.m_SongActionsCallbackInterface != null)
+            {
+                @FastForward.started -= m_Wrapper.m_SongActionsCallbackInterface.OnFastForward;
+                @FastForward.performed -= m_Wrapper.m_SongActionsCallbackInterface.OnFastForward;
+                @FastForward.canceled -= m_Wrapper.m_SongActionsCallbackInterface.OnFastForward;
+                @Rewind.started -= m_Wrapper.m_SongActionsCallbackInterface.OnRewind;
+                @Rewind.performed -= m_Wrapper.m_SongActionsCallbackInterface.OnRewind;
+                @Rewind.canceled -= m_Wrapper.m_SongActionsCallbackInterface.OnRewind;
+            }
+            m_Wrapper.m_SongActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @FastForward.started += instance.OnFastForward;
+                @FastForward.performed += instance.OnFastForward;
+                @FastForward.canceled += instance.OnFastForward;
+                @Rewind.started += instance.OnRewind;
+                @Rewind.performed += instance.OnRewind;
+                @Rewind.canceled += instance.OnRewind;
+            }
+        }
+    }
+    public SongActions @Song => new SongActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -494,6 +641,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnMoveP2(InputAction.CallbackContext context);
         void OnSprintP1(InputAction.CallbackContext context);
         void OnSprintP2(InputAction.CallbackContext context);
+        void OnFastForward(InputAction.CallbackContext context);
+        void OnRewind(InputAction.CallbackContext context);
     }
     public interface INoteListenerActions
     {
@@ -502,5 +651,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IDebuggerActions
     {
         void OnToggleDebugLines(InputAction.CallbackContext context);
+    }
+    public interface ISongActions
+    {
+        void OnFastForward(InputAction.CallbackContext context);
+        void OnRewind(InputAction.CallbackContext context);
     }
 }

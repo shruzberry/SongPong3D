@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
 public class InputHandler : MonoBehaviour
 {
     public InputMaster inputMaster;
@@ -11,6 +12,6 @@ public class InputHandler : MonoBehaviour
     {
         inputMaster = new InputMaster();
         inputMaster.Paddle.Enable();
-        //inputMaster.Song.Enable();
+        inputMaster.Song.Enable();
     }
 }

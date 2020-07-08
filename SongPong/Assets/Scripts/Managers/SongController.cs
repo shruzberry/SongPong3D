@@ -171,12 +171,12 @@ public class SongController : MonoBehaviour
 * SONG CONTROLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void SkipForward(InputAction.CallbackContext context)
+    public void SkipForward(InputAction.CallbackContext context)
     {
         FastForward(skipIncrement);
     }
 
-    private void SkipBackward(InputAction.CallbackContext context)
+    public void SkipBackward(InputAction.CallbackContext context)
     {
         Rewind(skipIncrement);
     }
@@ -234,8 +234,8 @@ public class SongController : MonoBehaviour
     private void Start() 
     {
         input = FindObjectOfType<InputHandler>().inputMaster;
-        //input.Song.FastForward.performed += SkipForward;
-        //input.Song.Rewind.performed += SkipBackward;
+        input.Song.FastForward.performed += SkipForward;
+        input.Song.Rewind.performed += SkipBackward;
     }
 
     public void Update()

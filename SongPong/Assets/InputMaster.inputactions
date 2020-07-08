@@ -36,6 +36,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Fast Forward",
+                    "type": "Button",
+                    "id": "34ebb968-2204-409b-9d3d-d937bc200ca1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Rewind",
+                    "type": "Button",
+                    "id": "dac8316b-aac4-476f-9274-289efa095888",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -214,6 +230,28 @@
                     "action": "SprintP2",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a8bdd4b8-b03e-4a86-9cba-4de7af9c7664",
+                    "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fast Forward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e4c0ade-303d-499c-a390-a990326865ee",
+                    "path": "<Keyboard>/comma",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Rewind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -266,6 +304,52 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "ToggleDebugLines",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Song",
+            "id": "810790e4-a7b1-48f2-bda5-aa2968841087",
+            "actions": [
+                {
+                    "name": "Fast Forward",
+                    "type": "Button",
+                    "id": "e215093d-5150-4980-bcdb-cfab54b951e9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Rewind",
+                    "type": "Button",
+                    "id": "eb23725d-72b7-4445-992a-02383ff50629",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "977ef7d7-72e0-46b7-97e3-43386a65194b",
+                    "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Fast Forward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b67d1801-0cb1-4d23-83ff-228d8a7d2dbe",
+                    "path": "<Keyboard>/comma",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Rewind",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

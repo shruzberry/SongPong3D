@@ -62,7 +62,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        PopulateGame();
+        bool nonMenu = CheckForNonMenuPlay();
+        if(!nonMenu) PopulateGame();
         CheckForSongController();
         animator.SetTrigger("FadeIn");
     }
@@ -98,7 +99,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void CheckForNonMenuPlay()
+    private bool CheckForNonMenuPlay()
     {
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
@@ -111,8 +112,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
                 {
                     onGameLoaded();
                 }
+                return true;
             }
         }
+        return false;
     }
 
     private void OnFadeComplete()
