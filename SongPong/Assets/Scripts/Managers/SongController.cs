@@ -66,6 +66,9 @@ public class SongController : MonoBehaviour
     public delegate void OnSongRewind();
     public event OnSongRewind onSongRewind;
 
+    public delegate void OnSongEnd();
+    public event OnSongEnd onSongEnd;
+
     // COMPONENTS
     private AudioSource source;
 
@@ -235,6 +238,11 @@ public class SongController : MonoBehaviour
         //input.Song.Rewind.performed += SkipBackward;
     }
 
+    public void Update()
+    {
+        CheckForEnd();
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -243,5 +251,20 @@ public class SongController : MonoBehaviour
     {
         source.time = time;
         source.Play();
+    }
+
+    private bool songPlaying = true;
+    public void CheckForEnd()
+    {
+        if (songPlaying && (ToBeat(source.time) > songData.endBeat))
+        {
+            songPlaying = false;
+            if(onSongFastForward != null) onSongEnd(); 
+
+        }
+        else if(!songPlaying && (ToBeat(source.time) < songData.endBeat))
+        {
+            songPlaying = true;
+        }
     }
 }

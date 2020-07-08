@@ -31,6 +31,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     public Animator animator;
     public SongData songData;
     private Game game;
+    private SongController songController;
 
     public delegate void OnGameLoaded();
     public event OnGameLoaded onGameLoaded;
@@ -46,9 +47,31 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         base.Awake();
 
         animator = this.GetComponent<Animator>();
-        game = FindObjectOfType<Game>();
+        game = FindObjectOfType<Game>(); 
+    }
 
+    public void Start()
+    {
         CheckForNonMenuPlay();
+    }
+
+    public void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        PopulateGame();
+        CheckForSongController();
+        animator.SetTrigger("FadeIn");
+    }
+
+    private void OnDisable() 
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        if (songController != null)
+            songController.onSongEnd -= ReturnToMenu;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -90,22 +113,37 @@ public class LevelChanger : MonoSingleton<LevelChanger>
                 }
             }
         }
-        else
-        {
-            Debug.Log("STARTING NEW SONG \"" + songData.name + "\".");
-            bool success = game.Initialize(songData);
-            if(success)
-            {
-                if(onGameLoaded != null) 
-                {
-                    onGameLoaded();
-                }
-            }
-        }
     }
 
     private void OnFadeComplete()
     {
         SceneManager.LoadScene(levelToLoad);
     }
+
+    private void PopulateGame()
+    {
+        game = FindObjectOfType<Game>();
+        
+        if(game != null)
+        {
+            game.Initialize(songData);
+        }
+    }
+
+    
+    private void CheckForSongController()
+    {
+        songController = FindObjectOfType<SongController>();
+        if (songController != null)
+        {
+            songController.onSongEnd += ReturnToMenu;
+        }
+    }
+
+    private void ReturnToMenu()
+    {
+        Invoke("FadeToMenu", 2);
+    }
+
+    private void FadeToMenu() {FadeToLevel(0);}
 }

@@ -92,15 +92,10 @@ public class MenuLoader : MonoBehaviour
         // Add scene transition listener
         button.onClick.AddListener(() => 
         {
+            levelChanger.SetSong(sd);
             levelChanger.FadeToNextLevel();
         });
  
-        // Set SongData to be passed to levelChanger onClick
-        button.onClick.AddListener(() => 
-        {
-            levelChanger.SetSong(sd);
-        });
-
         // Put Under Menu in hierarchy
         RectTransform transform = button.GetComponent<RectTransform>();
         transform.SetParent(GameObject.Find("Menu").transform, false);

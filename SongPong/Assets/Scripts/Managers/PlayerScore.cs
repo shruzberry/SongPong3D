@@ -31,12 +31,21 @@ public class PlayerScore : MonoBehaviour
     public int score = 0;
 
     private BallDropper ballDropper;
+    private SongController songController;
     private TextMeshProUGUI scoreText;
     private List<Ball> activeBalls;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void FlashEndScore()
+    {
+        Transform t = GetComponent<Transform>();
+
+        Vector3 position = t.position;
+        t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
+    }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * RUNTIME FUNCTIONS
@@ -45,8 +54,15 @@ public class PlayerScore : MonoBehaviour
     void OnEnable()
     {
         ballDropper = GameObject.Find("BallDropper").GetComponent<BallDropper>();
+        songController = GameObject.Find("SongController").GetComponent<SongController>();
         ballDropper.onBallSpawned += AddBallListener;
+        songController.onSongEnd += FlashEndScore;
         scoreText = GetComponent<TextMeshProUGUI>();
+    }
+
+    void Awake()
+    {
+        GetComponent<RectTransform>().position = new Vector3(Screen.width - 50.0f, Screen.height - 50.0f, 0.0f);
     }
 
     void Update()
@@ -58,11 +74,13 @@ public class PlayerScore : MonoBehaviour
     void OnDisable()
     {
         ballDropper.onBallSpawned -= AddBallListener;
+        songController.onSongEnd -= FlashEndScore;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PRIVATE FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    
     private void checkPlayerSelect()
     {
         switch (player)

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 3019c66f41cc148a0aff7cac5ec114fc
+=======
+guid: 646cf22a7ac9c404e8b87bf8f9e054df
+>>>>>>> 1.7-MenuTransitionAgain
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
