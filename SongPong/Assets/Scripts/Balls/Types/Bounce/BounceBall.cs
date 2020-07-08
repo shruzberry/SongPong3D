@@ -40,6 +40,7 @@ public class BounceBall : Ball
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // ATTRIBUTES
+        radius = GetComponent<SpriteRenderer>().bounds.size.y / 2;
         ball_renderer.material.SetColor("_Color", dissolveColor);
 
         // MOVEMENT
@@ -94,48 +95,28 @@ public class BounceBall : Ball
     {
         SetAxisVectors();
 
+        // How many beats until next hit
         float moveTime = CalcBounceTime();
+        // Time to reach peak (with constant motion)
+        float halfTime = moveTime / 2;
 
-        // Get distance between the current column and the next
-        Vector2 deltaD = bounceHeight * axisVector * -1.0f;
-        Vector2 otherDeltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1);
+        // Get the distance to travel (world units)
+        float deltaD = bounceHeight - radius;
+        Vector2 otherDeltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1); // distance on other axis
 
-        Debug.Log("Delta D: " + deltaD);
-/*
-        // deltaX = v0t + 0.5at^2
-        // known: t, deltaX (bounceHeight), v0 = v
-        // 2(deltaX - v0t) / t^2 = a
+        // Calculate the initial velocity
+        // u = (2s/t) - v
+        // (v = 0 because this is to the peak)
+        float initialVelocity = ((2 * deltaD) / halfTime) - 0;
 
-        // i want to move bounceHeight units in halfTime seconds with velocity = -hit velocity
-        float halfTime = moveTime;
-        float delta = bounceHeight;
+        // Calculate the gravity
+        // a = (v - u) / t
+        gravity = -initialVelocity / halfTime;
+        gravity = Mathf.Abs(gravity);
 
-        Debug.Log("POS: " + transform.position);
-        Debug.Log("DELTA: " + delta);
-        Debug.Log("SEC: " + halfTime);
-        
-        gravity = (2 * (delta - Vector2.Dot(velocity, Abs(axisVector)) * halfTime)) / (halfTime * halfTime);
-        velocity = -velocity;
-
-        Debug.Log("GRAV: " + gravity);
-        Debug.Log("VEL: " + velocity);
-
-
-        // dX = v0t + 0.5at^2
-        // dX = t(v0 + 0.5at)
-        // dX / t = v0 + 0.5at
-        // 2((dX / t) - v0) / t
-
-        bounceHeightMod = moveTime;
-        Debug.Log("BOUNCE HEIGHT MOD: " + bounceHeightMod);
-        gravity = gravity * bounceHeightMod;
-*/
-        // Calculate the velocity needed to hit at new deltaT.
-        // Comes from the kinematic equation v = v0 + at solved for v0
-        // v0 = -at
-        // we calculate only time to reach the peak, so (t/2)
+        // Move along game axis
         velocity = Vector2.zero;
-        velocity += axisVector * -gravity * (moveTime / 2);
+        velocity += axisVector * -initialVelocity;
 
         // Move along the other axis
         velocity += otherAxisVector * (otherDeltaD / moveTime);
