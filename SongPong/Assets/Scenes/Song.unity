@@ -532,12 +532,12 @@ PrefabInstance:
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 832
+      value: 756
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 446
+      value: 403.5
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
@@ -1494,6 +1494,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[9].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508226783582944914, guid: 1c783558b9dc24b80a22c3b3b27b3077,
+        type: 3}
+      propertyPath: speed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7591239930983950174, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
