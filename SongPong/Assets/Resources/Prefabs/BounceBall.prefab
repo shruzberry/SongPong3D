@@ -149,9 +149,11 @@ MonoBehaviour:
   catchTimesBeats: []
   numNotes: 0
   currentNote: 0
+  options: []
   dissolveColor: {r: 1.7425076, g: 0.13093565, b: 3.0842633, a: 0}
   speed: 0
   gravity: 3
+  bounceHeight: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
 --- !u!95 &-5808006672611441360

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayOnHover : MonoBehaviour
 {
+    public float gameSpeed = 1.0f;
     private SongController song;
     private InputMaster input;
     private Vector2 mousePos;
@@ -43,7 +44,7 @@ public class PlayOnHover : MonoBehaviour
         if(!song.isPlaying && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
         {
             song.Play();
-            Time.timeScale = 1.0f;
+            Time.timeScale = gameSpeed;
         }
     }
 

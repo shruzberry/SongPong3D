@@ -122,14 +122,14 @@ MonoBehaviour:
   caught: 0
   missed: 0
   exit: 0
+  notes: []
   ballData: {fileID: 0}
   negative: 0
-  spawnTime: 0
-  catchTimes: []
+  spawnTimeBeats: 0
+  catchTimesBeats: []
   numNotes: 0
   currentNote: 0
-  speed: 0
-  gravity: 3
+  options: []
   rb: {fileID: 0}
   animator: {fileID: 0}
 --- !u!50 &-4914575063395382804
