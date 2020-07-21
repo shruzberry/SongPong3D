@@ -14,6 +14,7 @@ public class SimpleBall : Ball
 
     //________COMPONENTS____________
     Vector3 screenBounds;
+    private Collider2D collider;
     public Rigidbody2D rb;
     public Animator animator;
 
@@ -40,6 +41,7 @@ public class SimpleBall : Ball
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        collider = GetComponent<Collider2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
     }
 
@@ -90,7 +92,12 @@ public class SimpleBall : Ball
 
     public override bool CheckMiss()
     {
-        if(!ball_renderer.isVisible) missed = true;
+        float positionOnAxis = Vector2.Dot(transform.position, axisVector);
+        float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
+        if(positionOnAxis > maxValueOnAxis)
+        {
+            missed = true;
+        }
         return missed;
     }
 

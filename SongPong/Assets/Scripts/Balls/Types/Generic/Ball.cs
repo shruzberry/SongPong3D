@@ -40,7 +40,7 @@ public abstract class Ball : MonoBehaviour
     public SongController song;
 
     //___________COMPONENTS_____________
-    protected SpriteRenderer ball_renderer;
+
 
     //___________STATE__________________
     protected BallState currentState;
@@ -106,7 +106,7 @@ public abstract class Ball : MonoBehaviour
         this.axis = game.gameAxis;
 
         // COMPONENTS
-        this.ball_renderer = GetComponent<SpriteRenderer>();
+
 
         // APPEARANCE
         this.name = id.ToString() + "_" + type.ToString();

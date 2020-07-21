@@ -43,7 +43,7 @@ public class BounceBall : Ball
 
         // ATTRIBUTES
         radius = GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        ball_renderer.material.SetColor("_Color", dissolveColor);
+        //ball_renderer.material.SetColor("_Color", dissolveColor);
 
         // MOVEMENT
         speed = dropper.startSpeed;
@@ -151,7 +151,12 @@ public class BounceBall : Ball
 
     public override bool CheckMiss()
     {
-        if(!ball_renderer.isVisible) missed = true;
+        float positionOnAxis = Vector2.Dot(transform.position, axisVector);
+        float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
+        if(positionOnAxis > maxValueOnAxis)
+        {
+            missed = true;
+        }
         return missed;
     }
 
