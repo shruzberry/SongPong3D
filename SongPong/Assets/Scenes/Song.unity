@@ -456,7 +456,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1959417341, guid: c9697c6d19f304ef9bf211f6a7fc4a93, type: 3}
       propertyPath: m_margin.x
-      value: 3.8214111
+      value: -123.26904
       objectReference: {fileID: 0}
     - target: {fileID: 1959417341, guid: c9697c6d19f304ef9bf211f6a7fc4a93, type: 3}
       propertyPath: m_margin.w
@@ -1625,7 +1625,7 @@ PrefabInstance:
         type: 3}
       propertyPath: editorSong
       value: 
-      objectReference: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a,
+      objectReference: {fileID: 11400000, guid: 9a00d712b3a1545139188635361a79af,
         type: 2}
     - target: {fileID: 8721034331695712498, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}

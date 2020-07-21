@@ -286,6 +286,10 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
+            if(Mathf.Abs(ball.notes[0].hitBeat - jumpToTime) > 64){}
+                
+            else
+            {
             DrawUILine(dividerLineColor);
 
             GUILayout.BeginHorizontal();
@@ -329,6 +333,7 @@ public class SongBuilder : EditorWindow
             DrawOptions(ball);
 
             if(ball.notes != null) DrawNotes(ball);
+            }
         }
         // --------- END BALL ITERATION --------------------------
 
@@ -407,6 +412,8 @@ public class SongBuilder : EditorWindow
         // --------- BEGIN NOTES ITERATION --------------------------
         foreach(NoteData note in ball.notes)
         {
+            
+
             if(note == null)
             {
                 deleteNotes.Add(note);
