@@ -19,6 +19,6 @@ MonoBehaviour:
   axis: 0
   startBeat: 0
   endBeat: 78
-  offset: 3.3
+  offset: 0
   myPath: Assets/Resources/SongData/data/school/School.asset
   dataPath: Assets/Resources/SongData/data/school

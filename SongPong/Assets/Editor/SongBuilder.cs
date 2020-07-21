@@ -197,7 +197,7 @@ public class SongBuilder : EditorWindow
 
                 // Current Beat
                 if(Application.isPlaying)
-                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
+                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(100));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
@@ -286,9 +286,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if(Mathf.Abs(ball.notes[0].hitBeat - jumpToTime) > 64){}
-                
-            else
+            if((Mathf.Abs(ball.notes[0].hitBeat - jumpToTime) < 64) || (ball.notes[0].hitPosition == 0))
             {
             DrawUILine(dividerLineColor);
 

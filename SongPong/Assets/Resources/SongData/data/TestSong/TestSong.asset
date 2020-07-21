@@ -15,10 +15,10 @@ MonoBehaviour:
   currentTime: 0
   bpm: 100
   songName: TestSong
-  dataPath: Assets/Resources/SongData/data/TestSong
   song: {fileID: 8300000, guid: ed444094b338b49a7b5aba3b2454e1d3, type: 3}
   axis: 1
   startBeat: 0
-  endBeat: 100
+  endBeat: 1000
   offset: 0
   myPath: Assets/Resources/SongData/data/TestSong/TestSong.asset
+  dataPath: Assets/Resources/SongData/data/TestSong
