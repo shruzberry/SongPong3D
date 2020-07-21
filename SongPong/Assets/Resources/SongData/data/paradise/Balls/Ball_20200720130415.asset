@@ -18,7 +18,6 @@ MonoBehaviour:
   notes:
   - {fileID: 11400000, guid: d220947307413b04a99dbd1931f56997, type: 2}
   - {fileID: 11400000, guid: 21a3600697c7d5f449ebee3b5172bd99, type: 2}
-  - {fileID: 11400000, guid: 77686374494a45e4d8bf6ddceb79e1ff, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
   options:
   - opt_name: Bounce Height
