@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Note_20200721120004
   m_EditorClassIdentifier: 
   hitPosition: 4
-  hitBeat: 402
+  hitBeat: 400
   noteDirection: 1

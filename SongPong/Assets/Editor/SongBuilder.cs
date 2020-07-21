@@ -286,7 +286,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if((Mathf.Abs(ball.notes[0].hitBeat - jumpToTime) < 64) || (ball.notes[0].hitPosition == 0))
+            if(ball.notes[0].hitBeat > jumpToTime || ball.notes[0].hitBeat < 100)
             {
             DrawUILine(dividerLineColor);
 
