@@ -19,7 +19,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Types;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public abstract class Ball : MonoBehaviour
 {
     #region Variables
