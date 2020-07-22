@@ -282,22 +282,18 @@ public class SongBuilder : EditorWindow
         newBalls.Clear();
         deleteBalls.Clear();
         typeChangeBalls.Clear();
-
         
         int numBallsDisplayed = 0;
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if(ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 50)
+            if((ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 50) || ball.notes[0].hitBeat < 100)
             {
-                numBallsDisplayed += 1;
-
-                
+            
+            numBallsDisplayed += 1;
 
             DrawUILine(dividerLineColor);
             
-            
-
             GUILayout.BeginHorizontal();
 
                 // Change color of field when ball is close to hit time
@@ -327,7 +323,17 @@ public class SongBuilder : EditorWindow
                 if (GUILayout.Button("R", b, GUILayout.Width(25)))
                 {
                     //SongData.DeleteBall(ball);
-                    BallData repairedBall = SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
+                    BallData repairedBall;
+                    if (ball.GetType() == typeof(SimpleBallData))
+                    {
+                        repairedBall = SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
+                    }    
+                    else
+                    {
+                        Debug.Log("its a bounce ball");
+                        repairedBall = SongEdit.CreateBall(typeof(BounceBallData), ball.notes);
+                    }
+
                     ballList.Add(repairedBall);
                     
                     SongEdit.DeleteBallAndNotes(ball);
