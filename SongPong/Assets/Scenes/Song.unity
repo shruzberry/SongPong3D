@@ -532,12 +532,12 @@ PrefabInstance:
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 389.00003
+      value: 348.50003
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 197
+      value: 174
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
@@ -1625,7 +1625,7 @@ PrefabInstance:
         type: 3}
       propertyPath: editorSong
       value: 
-      objectReference: {fileID: 11400000, guid: 701fa12dd22b2584aabcf0bd619bd7bb,
+      objectReference: {fileID: 11400000, guid: 9a00d712b3a1545139188635361a79af,
         type: 2}
     - target: {fileID: 8721034331695712498, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
