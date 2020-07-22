@@ -322,9 +322,11 @@ public class SongBuilder : EditorWindow
                 if (GUILayout.Button("R", b, GUILayout.Width(25)))
                 {
                     //SongData.DeleteBall(ball);
-                    SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
-                    deleteBalls.Add(ball);
-                    Repaint();
+                    BallData repairedBall = SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
+                    ballList.Add(repairedBall);
+                    
+                    SongEdit.DeleteBallAndNotes(ball);
+                    ballList.Remove(ball);
                 }
                 ResetColor();
 
