@@ -1625,7 +1625,7 @@ PrefabInstance:
         type: 3}
       propertyPath: editorSong
       value: 
-      objectReference: {fileID: 11400000, guid: fe5ce9294673e4525b609be514a3007a,
+      objectReference: {fileID: 11400000, guid: 701fa12dd22b2584aabcf0bd619bd7bb,
         type: 2}
     - target: {fileID: 8721034331695712498, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
