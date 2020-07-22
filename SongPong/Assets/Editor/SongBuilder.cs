@@ -288,9 +288,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            
-
-            if(ball.notes[0].hitBeat > jumpToTime && numBallsDisplayed < 20)
+            if(ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 20)
             {
                 numBallsDisplayed += 1;
             DrawUILine(dividerLineColor);
@@ -319,6 +317,17 @@ public class SongBuilder : EditorWindow
                 }
                 ResetColor();
 
+                //________Delete Ball___________________
+                ChangeColor(Color.yellow);
+                if (GUILayout.Button("R", b, GUILayout.Width(25)))
+                {
+                    //SongData.DeleteBall(ball);
+                    SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
+                    deleteBalls.Add(ball);
+                    Repaint();
+                }
+                ResetColor();
+
                 //________Ball Type___________________
                 GUILayout.Label("type:", GUILayout.Width(40));
                 BallTypes ball_type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
@@ -329,7 +338,9 @@ public class SongBuilder : EditorWindow
                 }
 
                 //________Enabled / Disabled Field___________________
-                ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+                //ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+
+                EditorGUILayout.ObjectField(ball, typeof(Object), true);
 
             GUILayout.EndHorizontal();
 
