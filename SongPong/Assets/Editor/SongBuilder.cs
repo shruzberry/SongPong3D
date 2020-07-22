@@ -291,7 +291,12 @@ public class SongBuilder : EditorWindow
             if(ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 20)
             {
                 numBallsDisplayed += 1;
+
+                
+
             DrawUILine(dividerLineColor);
+            
+            
 
             GUILayout.BeginHorizontal();
 
@@ -327,6 +332,8 @@ public class SongBuilder : EditorWindow
                     
                     SongEdit.DeleteBallAndNotes(ball);
                     ballList.Remove(ball);
+
+                    game.SortBalls();
                 }
                 ResetColor();
 
@@ -341,8 +348,12 @@ public class SongBuilder : EditorWindow
 
                 //________Enabled / Disabled Field___________________
                 //ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
-
+                if(Mathf.Abs(ball.notes[0].hitBeat - songController.GetSongTimeBeats()) < 2.0f)
+                    ChangeColor(Color.cyan);
+                
                 EditorGUILayout.ObjectField(ball, typeof(Object), true);
+
+                ResetColor();
 
             GUILayout.EndHorizontal();
 
