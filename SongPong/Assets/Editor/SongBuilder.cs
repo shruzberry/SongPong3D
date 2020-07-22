@@ -283,11 +283,16 @@ public class SongBuilder : EditorWindow
         deleteBalls.Clear();
         typeChangeBalls.Clear();
 
+        
+        int numBallsDisplayed = 0;
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if(ball.notes[0].hitBeat > jumpToTime || ball.notes[0].hitBeat < 100)
+            
+
+            if(ball.notes[0].hitBeat > jumpToTime && numBallsDisplayed < 20)
             {
+                numBallsDisplayed += 1;
             DrawUILine(dividerLineColor);
 
             GUILayout.BeginHorizontal();
