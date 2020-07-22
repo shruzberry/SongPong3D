@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe877721e99694a4c9b1e94bc45ebc7e, type: 3}
-  m_Name: Ball_20200722120608
+  m_Name: Ball_20200722123856
   m_EditorClassIdentifier: 
   id: 0
   enabled: 1
   type: 1
   notes:
-  - {fileID: 11400000, guid: bae9b59b0fc373247a89feb781df5e00, type: 2}
-  - {fileID: 11400000, guid: 7ddeb68df724a27418539d6473a74894, type: 2}
+  - {fileID: 11400000, guid: db0e8ddd9162bb14db8f185c28b7401c, type: 2}
+  - {fileID: 11400000, guid: 72683546d12448043902d6310515a2c9, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
   options:
   - opt_name: Bounce Height
     value: 4
-  activity: 100
+  activity: 0
