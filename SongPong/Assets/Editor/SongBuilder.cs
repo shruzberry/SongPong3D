@@ -288,7 +288,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if(ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 20)
+            if(ball.notes[0].hitBeat >= jumpToTime && numBallsDisplayed < 50)
             {
                 numBallsDisplayed += 1;
 
@@ -348,9 +348,16 @@ public class SongBuilder : EditorWindow
 
                 //________Enabled / Disabled Field___________________
                 //ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
-                if(Mathf.Abs(ball.notes[0].hitBeat - songController.GetSongTimeBeats()) < 2.0f)
-                    ChangeColor(Color.cyan);
                 
+                float timeDiff = ball.notes[0].hitBeat - songController.GetSongTimeBeats();
+                
+                if(Mathf.Abs(timeDiff) < 4.0f && timeDiff > 0.0f)
+                {
+                    ChangeColor(Color.cyan);    
+                }
+                else if(Mathf.Abs(timeDiff) < 2.0f)
+                    ChangeColor(Color.yellow);
+                    
                 EditorGUILayout.ObjectField(ball, typeof(Object), true);
 
                 ResetColor();
@@ -505,6 +512,11 @@ public class SongBuilder : EditorWindow
         }
 
         ResetColor();
+    }
+
+    static void ModeChanged ()
+    {
+        FindObjectOfType<Game>().SortBalls();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
