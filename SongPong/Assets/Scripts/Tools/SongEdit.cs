@@ -32,7 +32,7 @@ public class SongEdit : MonoBehaviour
 * CREATE BALLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public static BallData CreateBall(Type type, List<NoteData> notes = null)
+    public static BallData CreateBall(Type type, List<NoteData> notes = null, int bh = 1)
     {
         BallData new_ball = (BallData)ScriptableObject.CreateInstance(type);
         new_ball.Initialize("Generic");
@@ -65,8 +65,11 @@ public class SongEdit : MonoBehaviour
             if(new_ball.notes.Count < new_ball.MinNotes)
             {
                 new_ball.notes.Add(CreateNote());
+                //new_ball.bounceHeight = bh;
             }
         }
+
+        
         
         SaveNotes(new_ball.notes);
         SaveBall(new_ball);
