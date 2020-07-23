@@ -45,6 +45,8 @@ public class PlayerScore : MonoBehaviour
 
         Vector3 position = t.position;
         t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
+
+        GetComponent<TextMesh>().alignment = TextAlignment.Center;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -62,7 +64,7 @@ public class PlayerScore : MonoBehaviour
 
     void Awake()
     {
-        GetComponent<RectTransform>().position = new Vector3(Screen.width - 50.0f, Screen.height - 50.0f, 0.0f);
+        //GetComponent<RectTransform>().position = new Vector3(Screen.width - 50.0f, Screen.height - 50.0f, 0.0f);
     }
 
     void Update()
