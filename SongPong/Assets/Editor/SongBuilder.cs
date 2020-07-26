@@ -146,7 +146,6 @@ public class SongBuilder : EditorWindow
             GUILayout.Label("Navigation");
 
             game = FindObjectOfType<Game>();
-
             songController = FindObjectOfType<SongController>();
 
             GUILayout.BeginHorizontal();
@@ -278,7 +277,6 @@ public class SongBuilder : EditorWindow
         b.alignment = TextAnchor.MiddleCenter;
         var w = GUILayout.Width(100);
 
-        // TODO STOP REASSIGNING MEMORY
         newBalls.Clear();
         deleteBalls.Clear();
         typeChangeBalls.Clear();

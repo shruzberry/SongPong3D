@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -43,6 +42,9 @@ public class Game : MonoBehaviour
         ballDropper = FindObjectOfType<BallDropper>();
         spawner = FindObjectOfType<SpawnInfo>();
 
+        // SPAWN INFO
+        spawner.Initialize(this);
+
         // SONG
         this.songData = song;
         songController.LoadSong(song);
@@ -52,8 +54,10 @@ public class Game : MonoBehaviour
         paddleManager.Activate();
 
         // BALLS
+        // TODO Move balls to BallDropper?
         balls = LoadBallData(song.name);
         SortBalls();
+        ballDropper.Initialize(this, songController);
         ballDropper.Activate();
         ballDropper.ballMapName = song.songName;
 

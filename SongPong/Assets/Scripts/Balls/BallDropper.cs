@@ -22,7 +22,11 @@ public class BallDropper : MonoBehaviour
 {
     //___________References______________
     private Game game;
+    private SpawnInfo spawnInfo;
     private SongController song;
+
+    //___________Variables_______________
+    private float lagAmount = 0.5f;
 
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
@@ -31,13 +35,14 @@ public class BallDropper : MonoBehaviour
     //___________Balls___________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
         private int numBalls; // total number of balls in ballDataList
-        private int currentBallIndex; // pointer that keeps track of where we are in ballDataList
+        public int currentBallIndex; // pointer that keeps track of where we are in ballDataList
 
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
 
     //__________Ball Attributes__________
-    public float startSpeed = 7;
-    public float gravity = 3;
+    public float startSpeed;
+    public float size;
+    public float gravity;
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -60,10 +65,10 @@ public class BallDropper : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void Awake()
+    public void Initialize(Game game, SongController song)
     {
-        game = FindObjectOfType<Game>();
-        song = FindObjectOfType<SongController>();
+        this.game = game;
+        this.song = song;
 
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
@@ -74,6 +79,10 @@ public class BallDropper : MonoBehaviour
 
         // POINTERS
         currentBallIndex = 0;
+
+        // ATTRIBUTES
+        spawnInfo = FindObjectOfType<SpawnInfo>();
+        size = spawnInfo.columnWidth - 0.15f;
     }
 
     private void CalcMoveTimes()
@@ -86,7 +95,7 @@ public class BallDropper : MonoBehaviour
         if(game.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
         else{axisVector = new Vector2(1,0);}
 
-        float fallTime = Fall_Behavior.CalcMoveTime(simpleBall, spawnAxis, paddleAxis, axisVector, startSpeed, gravity);
+        float fallTime = Fall_Behavior.CalcMoveTime(size/2, spawnAxis, paddleAxis, axisVector, startSpeed, gravity);
         fallTimeBeats = song.ToBeat(fallTime);
     }
 
@@ -174,7 +183,7 @@ public class BallDropper : MonoBehaviour
         }
 
         // Check first ball for spawn
-        if(!isFinished && dropBeat <= song.GetSongTimeBeats())
+        if(!isFinished && dropBeat <= song.GetSongTimeBeats() + lagAmount)
         {
             spawning = true;
             // Check other balls for spawn 
@@ -191,7 +200,7 @@ public class BallDropper : MonoBehaviour
                     checkBall = ballDataList[currentBallIndex];
                     dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
                     // If the next ball isn't ready to drop, continue
-                    if(!(dropBeat <= song.GetSongTimeBeats())){ spawning = false; }
+                    if(!(dropBeat <= song.GetSongTimeBeats() + lagAmount)){ spawning = false; }
                 }
             }
         }

@@ -16,6 +16,7 @@ public abstract class BallData : ScriptableObject
     public List<NoteData> notes;
     [HideInInspector]
     public GameObject prefab;
+    public string baseBallPath;
 
     [SerializeField]
     public List<BallOption> options;
@@ -46,7 +47,11 @@ public abstract class BallData : ScriptableObject
         {
             valid = note.CheckValid();
         }
-        if(prefab == null) valid = false;
+        if(prefab == null)
+        {
+            Debug.LogError("Ball has null prefab");
+            valid = false;
+        }
 
         return valid;
     }

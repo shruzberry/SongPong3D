@@ -11,7 +11,7 @@ public class IdleState : BallState
 
     public override void OnStateEnter()
     {
-        ball.GetComponent<SpriteRenderer>().enabled = false;
+        //ball.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     public override void Tick()
@@ -27,7 +27,7 @@ public class IdleState : BallState
 
     public override void OnStateExit()
     {
-        ball.GetComponent<SpriteRenderer>().enabled = true;
+        //ball.GetComponent<SpriteRenderer>().enabled = true;
         ball.OnIdleExit();
     }
 

@@ -28,6 +28,7 @@ public class SpawnInfo : MonoBehaviour
     [Tooltip("Determines what height the ball spawns are from the top of the screen")]
     public float ballHeightMod = 0;
     private float ballDropHeight; // height (x or y) that balls spawn from
+    public float columnWidth;
 
     //_______DEBUG_______________
     public bool showColumns = true; // if true, show columns
@@ -39,10 +40,9 @@ public class SpawnInfo : MonoBehaviour
  * INIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    // Start is called before the first frame update
-    private void Awake() 
+    public void Initialize(Game game)
     {
-        game = FindObjectOfType<Game>();
+        this.game = game;
         gameAxis = game.gameAxis;
 
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
@@ -56,13 +56,7 @@ public class SpawnInfo : MonoBehaviour
         {
             spawnAxis = new Vector2(0,0);
         }
-
         calcColumns();
-    }
-
-    private void Update() 
-    {
-        UpdateAxis();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -102,6 +96,7 @@ public class SpawnInfo : MonoBehaviour
 		    int effScreenW = width - 2 * screenPadding; // the screen width minus the padding
 
 		    int colStep = effScreenW / NUM_COL; // amount of x to move per column
+            columnWidth = ConvertToUnits(Camera.main, (float)colStep);
 
             for(int i = 0; i < NUM_COL+1; i++)
             {
@@ -115,11 +110,16 @@ public class SpawnInfo : MonoBehaviour
 		    int effScreenH = height - 2 * screenPadding; // the screen width minus the padding
 
 		    int colStep = effScreenH / NUM_COL; // amount of y to move per column
+            columnWidth = colStep;
  
             for(int i = 0; i < NUM_COL+1; i++)
             {
 			    ballCols[i] = Camera.main.ScreenToWorldPoint(new Vector3(0,colStep * i + screenPadding,0)).y;
 		    }
+        }
+        else
+        {
+            Debug.LogError("Axis has not been set.");
         }
 
     }
@@ -198,5 +198,13 @@ public class SpawnInfo : MonoBehaviour
         }
 
         return new Vector2(999f,999f);
+    }
+
+    private float ConvertToUnits(Camera cam, float p)
+    {
+        float ortho = cam.orthographicSize;
+        float pixelH = cam.pixelHeight;
+
+        return (p * ortho * 2) / pixelH;
     }
 }

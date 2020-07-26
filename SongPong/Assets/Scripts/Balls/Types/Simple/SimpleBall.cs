@@ -2,6 +2,7 @@
 using UnityEngine;
 using Types;
 
+[RequireComponent(typeof(CircleCollider2D))]
 public class SimpleBall : Ball
 {
     //________ATTRIBUTES____________
@@ -14,7 +15,6 @@ public class SimpleBall : Ball
 
     //________COMPONENTS____________
     Vector3 screenBounds;
-    private Collider2D collider;
     public Rigidbody2D rb;
     public Animator animator;
 
@@ -29,19 +29,14 @@ public class SimpleBall : Ball
     {
         base.InitializeBall(game, data, dropper);
 
-        // ATTRIBUTES
-        size = GetComponent<Collider2D>().bounds.size.y;
-        radius = size / 2;
-
         // MOTION
         speed = dropper.startSpeed;
         gravity = dropper.gravity;
-        velocity = speed * axisVector;
+        velocity = speed * axisDirVector;
 
         // COMPONENTS
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        collider = GetComponent<Collider2D>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
     }
 
@@ -54,7 +49,6 @@ public class SimpleBall : Ball
     protected override bool CheckForInvalid()
     {
         bool error = false;
-
         if(numNotes > 1) error = true;
 
         return error;
@@ -76,7 +70,7 @@ public class SimpleBall : Ball
     public override void MoveActions()
     {
         // UPDATE VELOCITY
-        Vector2 velocityStep = axisVector * (gravity * Time.deltaTime);
+        Vector2 velocityStep = axisDirVector * (gravity * Time.deltaTime);
 
         velocity += velocityStep;
 
@@ -94,7 +88,7 @@ public class SimpleBall : Ball
     {
         float positionOnAxis = Vector2.Dot(transform.position, axisVector);
         float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
-        if(positionOnAxis > maxValueOnAxis)
+        if(positionOnAxis < -maxValueOnAxis)
         {
             missed = true;
         }
@@ -116,9 +110,9 @@ public class SimpleBall : Ball
         }
     }
 
-    public override void CatchActions()
+    public override void OnCatchActions()
     {
-        base.CatchActions();
+        base.OnCatchActions();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

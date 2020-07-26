@@ -19,6 +19,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Types;
 
+[RequireComponent(typeof(CircleCollider2D))]
 public abstract class Ball : MonoBehaviour
 {
     #region Variables
@@ -30,7 +31,8 @@ public abstract class Ball : MonoBehaviour
     protected float size;
 
     protected Axis axis;
-    protected Vector2 axisVector; // the unit vector that represents the base of the axis and direction
+    protected Vector2 axisVector; // the vector representing which axis the game is played on: (1,0) is x-axis, (0,1) is y-axis
+    protected Vector2 axisDirVector; // the unit vector that represents the base of the axis and direction
     protected Vector2 otherAxisVector; // the unit vector that represents the other axis (with same direction)
 
     //___________REFERENCES_____________
@@ -40,7 +42,7 @@ public abstract class Ball : MonoBehaviour
     public SongController song;
 
     //___________COMPONENTS_____________
-
+    private CircleCollider2D ball_collider;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -57,19 +59,22 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallCaught(Ball ball);
     public event BallCaught onBallCaught;
 
-    //___________DATA___________________
+    public delegate void BallSpawn(Ball ball);
+    public event BallSpawn onBallSpawn;
+
+    //___________DATA____________________
     public List<NoteData> notes;
     [HideInInspector]
     public BallData ballData;
 
-    //___________MOVEMENT_______________
+    //___________MOVEMENT________________
     public float negative;
 
-    //___________TIME___________________
+    //___________TIME____________________
     public float spawnTimeBeats;
     public float[] catchTimesBeats;
 
-    //___________INDEXING________________
+    //___________NOTES___________________
     public int numNotes;
     public int currentNote;
 
@@ -106,15 +111,19 @@ public abstract class Ball : MonoBehaviour
         this.axis = game.gameAxis;
 
         // COMPONENTS
-
+        //this.id = data.id;
+        ball_collider = GetComponent<CircleCollider2D>();
 
         // APPEARANCE
+        this.type = data.type;
+        this.id = dropper.currentBallIndex;
         this.name = id.ToString() + "_" + type.ToString();
         gameObject.layer = LayerMask.NameToLayer("Balls");
+        size = dropper.size;
+        ball_collider.radius = size/2 + 0.1f;
+        transform.localScale = new Vector2(size,size);
 
         // NOTES
-        this.id = data.id;
-        this.type = data.type;
         this.notes = data.notes;
         currentNote = 0;
         numNotes = notes.Count;
@@ -141,16 +150,20 @@ public abstract class Ball : MonoBehaviour
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
+
+        // TRIGGER SPAWN EVENT
+        if(onBallSpawn != null) onBallSpawn(this);
     }
 
     public virtual void SetAxisVectors()
     {
         negative = (notes[currentNote].noteDirection == Direction.negative) ? -1.0f : 1.0f;
+        axisVector = (axis == Axis.x) ? new Vector2(1,0) : new Vector2(0,1);
 
-        if(axis == Axis.y && negative == 1.0f) {axisVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.y && negative == -1.0f) {axisVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.x && negative == 1.0f) {axisVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
-        else if(axis == Axis.x && negative == -1.0f) {axisVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+        if(axis == Axis.y && negative == 1.0f) {axisDirVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.y && negative == -1.0f) {axisDirVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
+        else if(axis == Axis.x && negative == 1.0f) {axisDirVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
+        else if(axis == Axis.x && negative == -1.0f) {axisDirVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -214,7 +227,7 @@ public abstract class Ball : MonoBehaviour
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public virtual void CatchActions()
+    public virtual void OnCatchActions()
     {
         if(onBallCaught != null) onBallCaught(this); // call the onBallCaught event, if there are subscribers
     }

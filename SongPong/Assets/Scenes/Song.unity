@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 353941582984348679, guid: 2ea64c75d62f04b599de28581d0a3c86,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 353941582984348679, guid: 2ea64c75d62f04b599de28581d0a3c86,
         type: 3}
@@ -532,12 +532,12 @@ PrefabInstance:
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 789
+      value: 1630
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 422
+      value: 895
       objectReference: {fileID: 0}
     - target: {fileID: 430504765820059271, guid: c9697c6d19f304ef9bf211f6a7fc4a93,
         type: 3}
@@ -729,7 +729,7 @@ Transform:
   - {fileID: 73722474}
   - {fileID: 1819895133}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1683649541 stripped
 RectTransform:
@@ -791,7 +791,7 @@ Transform:
   - {fileID: 1934193826}
   - {fileID: 1988391329}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1898151677
 GameObject:
@@ -975,7 +975,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1988391327
 GameObject:
@@ -1330,6 +1330,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
+        type: 3}
+      propertyPath: printCatchDebug
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
+        type: 3}
+      propertyPath: detailed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
+        type: 3}
+      propertyPath: printSpawnDebug
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5487389302397974905, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: m_ActionEvents.Array.size

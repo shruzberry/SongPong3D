@@ -8,9 +8,8 @@ public class CatchState : BallState
 
     public override void OnStateEnter()
     {
-        ball.CatchActions();
-
         ball.NextNote();
+        ball.OnCatchActions();
 
         if(ball.currentNote < ball.numNotes)
         {

@@ -5,6 +5,8 @@ using Types;
 
 public class BounceBallData : BallData
 {
+    // PATH
+    public string prefabPath = "Prefabs/Balls/BounceBall";
     // CONSTANTS
     private const int minNotes = 2;
     private const int maxNotes = int.MaxValue;
@@ -34,6 +36,6 @@ public class BounceBallData : BallData
 
     protected override void SetPrefab()
     {
-        prefab = Resources.Load("Prefabs/BounceBall") as GameObject;
+        prefab = Resources.Load(prefabPath) as GameObject;
     }
 }

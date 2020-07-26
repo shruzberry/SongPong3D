@@ -7,6 +7,8 @@ public class BallDebug : MonoBehaviour
     public bool printCatchDebug;
     public bool detailed;
 
+    public bool printSpawnDebug;
+
     private BallDropper ballDropper;
     private SongController song;
     // Start is called before the first frame update
@@ -21,6 +23,9 @@ public class BallDebug : MonoBehaviour
     public void AttachBallListener(Ball ball)
     {
         ball.onBallCaught += DebugCatch;
+
+        if(!printSpawnDebug) return;
+        Debug.Log("Spawned " + ball.name + " at beat " + song.GetSongTimeBeats());
     }
 
     public void DebugCatch(Ball ball)
@@ -36,6 +41,8 @@ public class BallDebug : MonoBehaviour
             //Debug.Log("SPAWN TIME: " + ball.spawnTimeBeats);
             //Debug.Log("CATCH TIME: " + ball.catchTimesBeats[currentNote]);
             catchTimeBeats = ball.catchTimesBeats[currentNote] - ball.spawnTimeBeats;
+            Debug.Log(ball.catchTimesBeats[currentNote]);
+            Debug.Log(ball.spawnTimeBeats);
         }
         // for bounces, etc. use the last catch time
         else

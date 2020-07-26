@@ -7,10 +7,8 @@ public class BounceBall : Ball
     //________ATTRIBUTES____________
     protected float radius;
 
-    [ColorUsage(true, true)]
-    public Color dissolveColor;
-
     //________MOVEMENT______________
+    [Header("Movement")]
     protected Vector2 velocity;
     public float speed = 0.0f;
     public float gravity = 3.0f;
@@ -18,9 +16,18 @@ public class BounceBall : Ball
     public float bounceHeight;
 
     //________COMPONENTS____________
+    [Header("Components")]
     Vector3 screenBounds;
     public Rigidbody2D rb;
     public Animator animator;
+    public GameObject ring1;
+    public GameObject ring2;
+    public GameObject ring3;
+
+    //________APPEARANCE____________
+    [Header("Appearance")]
+    [ColorUsage(true, true)]
+    public Color dissolveColor;
 
     //________MOVEMENT______________
     private float deltaH;
@@ -42,17 +49,37 @@ public class BounceBall : Ball
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // ATTRIBUTES
-        radius = GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        //ball_renderer.material.SetColor("_Color", dissolveColor);
+        radius = GetComponent<Collider2D>().bounds.size.y / 2;
+        InitializeRings();
 
         // MOVEMENT
         speed = dropper.startSpeed;
         gravity = dropper.gravity;
-        velocity = speed * axisVector;
+        velocity = speed * axisDirVector;
 
         // OPTIONS
         bounceHeight = bounceData.GetOption("Bounce Height");
     }
+
+    private void InitializeRings()
+    {
+        ring1.SetActive(true);
+        ring2.SetActive(true);
+        ring3.SetActive(true);
+
+        if(numNotes < 4)
+        {
+            ring3.SetActive(false);
+        }
+        if(numNotes < 3)
+        {
+            ring2.SetActive(false);
+        }
+        if(numNotes < 2)
+        {
+            ring1.SetActive(false);
+        }
+    } 
 
     protected override bool CheckForInvalid()
     {
@@ -120,7 +147,7 @@ public class BounceBall : Ball
 
         // Move along game axis
         velocity = Vector2.zero;
-        velocity += axisVector * -initialVelocity;
+        velocity += axisDirVector * -initialVelocity;
 
         // Move along the other axis
         velocity += otherAxisVector * (otherDeltaD / moveTime);
@@ -137,7 +164,7 @@ public class BounceBall : Ball
     public override void MoveActions()
     {
         // UPDATE VELOCITY along main axis
-        Vector2 velocityStep = axisVector * (gravity * Time.deltaTime);
+        Vector2 velocityStep = axisDirVector * (gravity * Time.deltaTime);
         velocity += velocityStep;
 
         // UPDATE POSITION
@@ -153,7 +180,7 @@ public class BounceBall : Ball
     {
         float positionOnAxis = Vector2.Dot(transform.position, axisVector);
         float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
-        if(positionOnAxis > maxValueOnAxis)
+        if(positionOnAxis < -maxValueOnAxis)
         {
             missed = true;
         }
@@ -175,6 +202,23 @@ public class BounceBall : Ball
         }
     }
 
+    public override void OnCatchActions()
+    {
+        base.OnCatchActions();
+        if(numNotes - currentNote < 4)
+        {
+            ring3.GetComponent<Animator>().SetTrigger("fadeOut");
+        }
+        if(numNotes - currentNote < 3)
+        {
+            ring2.GetComponent<Animator>().SetTrigger("fadeOut");
+        }
+        if(numNotes - currentNote < 2)
+        {
+            ring1.GetComponent<Animator>().SetTrigger("fadeOut");
+        }
+    }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * EXIT
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -182,6 +226,7 @@ public class BounceBall : Ball
     public override void OnExitActions()
     {
         animator.SetTrigger("isFinished");
+
         velocity = BounceVelocity(velocity);
     }
 
@@ -205,7 +250,7 @@ public class BounceBall : Ball
     public Vector2 BounceVelocity(Vector2 velocity)
     {
         Vector2 newVel = Vector2.zero;
-        newVel -= axisVector * Vector2.Dot(axisVector, velocity);
+        newVel -= axisDirVector * Vector2.Dot(axisDirVector, velocity);
         newVel += otherAxisVector * Vector2.Dot(otherAxisVector, velocity);
         return newVel;
     }

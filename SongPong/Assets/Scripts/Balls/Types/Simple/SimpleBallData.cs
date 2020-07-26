@@ -5,6 +5,7 @@ using Types;
 
 public class SimpleBallData : BallData
 {
+    public string prefabPath = "Prefabs/Balls/SimpleBall";
     private const int minNotes = 1;
     private const int maxNotes = 1;
     public override int MinNotes {get{return minNotes;}}
@@ -18,6 +19,6 @@ public class SimpleBallData : BallData
     }
     protected override void SetPrefab()
     {
-        prefab = Resources.Load("Prefabs/SimpleBall") as GameObject;
+        prefab = Resources.Load(prefabPath) as GameObject;
     }
 }
