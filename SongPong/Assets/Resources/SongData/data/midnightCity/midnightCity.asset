@@ -15,10 +15,10 @@ MonoBehaviour:
   currentTime: 0
   bpm: 105
   songName: Midnight City
-  song: {fileID: 0}
-  axis: 0
+  song: {fileID: 8300000, guid: 2ee619eab0be1e545935c7a1d11f2ccb, type: 3}
+  axis: 1
   startBeat: 0
-  endBeat: 0
+  endBeat: 230
   offset: 0
-  myPath: 
+  myPath: Assets/Resources/SongData/data/midnightCity/midnightCity.asset
   dataPath: Assets/Resources/SongData/data/midnightCity
