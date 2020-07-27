@@ -287,7 +287,7 @@ public class SongBuilder : EditorWindow
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            if((ball.notes[0].hitBeat > 900) || (ball.notes[0].hitBeat <= 200))
+            if((ball.notes[0].hitBeat > 100) || (ball.notes[0].hitBeat <= 100))
             {
             
             numBallsDisplayed += 1;
