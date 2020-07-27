@@ -151,7 +151,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     private void ReturnToMenu()
     {
-        Invoke("FadeToMenu", 2);
+        //Invoke("FadeToMenu", 2);
+        FadeToMenu();
     }
 
     private void FadeToMenu() {FadeToLevel(0);}
