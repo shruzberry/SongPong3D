@@ -46,7 +46,7 @@ public class PlayerScore : MonoBehaviour
         Vector3 position = t.position;
         t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
 
-        GetComponent<TextMesh>().alignment = TextAlignment.Center;
+        scoreText.alignment = TextAlignmentOptions.Center;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
