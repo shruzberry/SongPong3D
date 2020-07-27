@@ -18,7 +18,7 @@ MonoBehaviour:
   song: {fileID: 8300000, guid: f2b0611b8c7fe484b9c7e191b87f32fe, type: 3}
   axis: 1
   startBeat: 0
-  endBeat: 1320
+  endBeat: 1240
   offset: 0
   myPath: Assets/Resources/SongData/data/1999she/1999she.asset
   dataPath: Assets/Resources/SongData/data/1999she
