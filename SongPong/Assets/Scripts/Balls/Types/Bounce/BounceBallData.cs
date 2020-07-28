@@ -10,7 +10,7 @@ public class BounceBallData : BallData
     private const int maxNotes = int.MaxValue;
 
     // OPTIONS
-    private float deafultBounceHeight = 8.0f;
+    private float deafultBounceHeight = 6.0f;
 
     // PROPERTIES
     public override int MinNotes {get{return minNotes;}}
