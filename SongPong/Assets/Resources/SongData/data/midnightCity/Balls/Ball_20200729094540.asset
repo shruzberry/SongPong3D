@@ -22,4 +22,4 @@ MonoBehaviour:
   options:
   - opt_name: Bounce Height
     value: 6
-  activity: 0
+  activity: 100
