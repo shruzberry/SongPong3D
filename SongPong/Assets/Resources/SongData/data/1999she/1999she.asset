@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 496
-  songName: 1999 She
+  songName: 1999 She (Medium)
   song: {fileID: 8300000, guid: f2b0611b8c7fe484b9c7e191b87f32fe, type: 3}
   axis: 1
   startBeat: 0

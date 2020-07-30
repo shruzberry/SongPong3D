@@ -267,7 +267,7 @@ public class SongController : MonoBehaviour
             if(onSongFastForward != null) 
             {
                 onSongEnd();
-                Invoke("SendOnSceneEnd", 1.5);
+                Invoke("SendOnSceneEnd", 1.5f);
             } 
 
         }

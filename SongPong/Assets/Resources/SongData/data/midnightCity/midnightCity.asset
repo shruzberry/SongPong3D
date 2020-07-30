@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 105
-  songName: Midnight City
+  songName: Midnight City (Hard)
   song: {fileID: 8300000, guid: 2ee619eab0be1e545935c7a1d11f2ccb, type: 3}
   axis: 1
   startBeat: 0

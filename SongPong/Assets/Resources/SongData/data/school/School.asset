@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 96
-  songName: School
+  songName: School (Medium)
   song: {fileID: 8300000, guid: ed444094b338b49a7b5aba3b2454e1d3, type: 3}
   axis: 0
   startBeat: 0
