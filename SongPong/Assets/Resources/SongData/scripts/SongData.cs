@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using Types;
 
 [CreateAssetMenuAttribute(fileName="Song", menuName="Song")]
@@ -23,7 +23,7 @@ public class SongData : ScriptableObject
 
     public void OnEnable()
     {
-        myPath = AssetDatabase.GetAssetPath(this);
+        //myPath = AssetDatabase.GetAssetPath(this);
         dataPath = GetDataPath();
     }
 
