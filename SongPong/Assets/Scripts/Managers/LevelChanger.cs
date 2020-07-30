@@ -145,7 +145,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         songController = FindObjectOfType<SongController>();
         if (songController != null)
         {
-            songController.onSongEnd += ReturnToMenu;
+            songController.onSceneEnd += ReturnToMenu;
         }
     }
 
