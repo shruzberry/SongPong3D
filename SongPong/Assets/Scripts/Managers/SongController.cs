@@ -268,6 +268,7 @@ public class SongController : MonoBehaviour
             {
                 onSongEnd();
                 Invoke("SendOnSceneEnd", 1.5f);
+                source.volume -= 0.01f;
             } 
 
         }
