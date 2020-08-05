@@ -145,13 +145,14 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         songController = FindObjectOfType<SongController>();
         if (songController != null)
         {
-            songController.onSongEnd += ReturnToMenu;
+            songController.onSceneEnd += ReturnToMenu;
         }
     }
 
     private void ReturnToMenu()
     {
-        Invoke("FadeToMenu", 2);
+        //Invoke("FadeToMenu", 2);
+        FadeToMenu();
     }
 
     private void FadeToMenu() {FadeToLevel(0);}

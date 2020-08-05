@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   bpm: 145
-  songName: paradise
-  dataPath: Assets/Resources/SongData/data/paradise
+  songName: Paradise (Easy)
   song: {fileID: 8300000, guid: 542714616d6a44927b7f8e90a2a08955, type: 3}
   axis: 1
   startBeat: 0
-  endBeat: 650
+  endBeat: 636
   offset: 0
   myPath: Assets/Resources/SongData/data/paradise/Paradise.asset
+  dataPath: Assets/Resources/SongData/data/paradise

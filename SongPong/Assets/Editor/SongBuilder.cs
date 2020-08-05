@@ -196,7 +196,7 @@ public class SongBuilder : EditorWindow
 
                 // Current Beat
                 if(Application.isPlaying)
-                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(60));
+                    GUILayout.Label("Beat: " + songController.GetSongTimeBeats(), GUILayout.Width(100));
 
                 // Song Slider
                 jumpToTime = (int) EditorGUILayout.Slider((float)jumpToTime, songData.startBeat, songData.endBeat);
@@ -280,12 +280,18 @@ public class SongBuilder : EditorWindow
         newBalls.Clear();
         deleteBalls.Clear();
         typeChangeBalls.Clear();
-
+        
+        int numBallsDisplayed = 0;
         //Ball Field
         foreach(BallData ball in ballList)
         {
-            DrawUILine(dividerLineColor);
+            if((ball.notes[0].hitBeat > 100) || (ball.notes[0].hitBeat <= 100))
+            {
+            
+            numBallsDisplayed += 1;
 
+            DrawUILine(dividerLineColor);
+            
             GUILayout.BeginHorizontal();
 
                 // Change color of field when ball is close to hit time
@@ -310,6 +316,31 @@ public class SongBuilder : EditorWindow
                 }
                 ResetColor();
 
+                //________Delete Ball___________________
+                ChangeColor(Color.yellow);
+                if (GUILayout.Button("R", b, GUILayout.Width(25)))
+                {
+                    //SongData.DeleteBall(ball);
+                    BallData repairedBall;
+                    if (ball.GetType() == typeof(SimpleBallData))
+                    {
+                        repairedBall = SongEdit.CreateBall(typeof(SimpleBallData), ball.notes);
+                    }    
+                    else
+                    {
+                        Debug.Log("its a bounce ball");
+                        repairedBall = SongEdit.CreateBall(typeof(BounceBallData), ball.notes);
+                    }
+
+                    ballList.Add(repairedBall);
+                    
+                    SongEdit.DeleteBallAndNotes(ball);
+                    ballList.Remove(ball);
+
+                    game.SortBalls();
+                }
+                ResetColor();
+
                 //________Ball Type___________________
                 GUILayout.Label("type:", GUILayout.Width(40));
                 BallTypes ball_type = (BallTypes)EditorGUILayout.EnumPopup("", ball.type, s, w);
@@ -320,13 +351,27 @@ public class SongBuilder : EditorWindow
                 }
 
                 //________Enabled / Disabled Field___________________
-                ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+                //ball.enabled = GUILayout.Toggle(ball.enabled, "Enabled", s, w);
+                
+                float timeDiff = ball.notes[0].hitBeat - songController.GetSongTimeBeats();
+                
+                if(Mathf.Abs(timeDiff) < 4.0f && timeDiff > 0.0f)
+                {
+                    ChangeColor(Color.cyan);    
+                }
+                else if(Mathf.Abs(timeDiff) < 2.0f)
+                    ChangeColor(Color.yellow);
+                    
+                EditorGUILayout.ObjectField(ball, typeof(Object), true);
+
+                ResetColor();
 
             GUILayout.EndHorizontal();
 
             DrawOptions(ball);
 
             if(ball.notes != null) DrawNotes(ball);
+            }
         }
         // --------- END BALL ITERATION --------------------------
 
@@ -405,6 +450,8 @@ public class SongBuilder : EditorWindow
         // --------- BEGIN NOTES ITERATION --------------------------
         foreach(NoteData note in ball.notes)
         {
+            
+
             if(note == null)
             {
                 deleteNotes.Add(note);
@@ -469,6 +516,11 @@ public class SongBuilder : EditorWindow
         }
 
         ResetColor();
+    }
+
+    static void ModeChanged ()
+    {
+        FindObjectOfType<Game>().SortBalls();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

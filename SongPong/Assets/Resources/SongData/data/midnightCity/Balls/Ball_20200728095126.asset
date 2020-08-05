@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe877721e99694a4c9b1e94bc45ebc7e, type: 3}
+  m_Name: Ball_20200728095126
+  m_EditorClassIdentifier: 
+  id: 0
+  enabled: 1
+  type: 1
+  notes:
+  - {fileID: 11400000, guid: 422d6866c63dffe4aad5daa50cf005ec, type: 2}
+  - {fileID: 11400000, guid: e497438b685df4844bdc199534f860a7, type: 2}
+  - {fileID: 11400000, guid: 59c0f3e25fc649340833d14aa8d53a8b, type: 2}
+  - {fileID: 11400000, guid: 2d2c1b1cff90bc14ab8dcc0d11a177af, type: 2}
+  - {fileID: 11400000, guid: fe694c23d64690041a038ef0a44013f1, type: 2}
+  - {fileID: 11400000, guid: d2b39cced68d3ad4da3455862e5a65b0, type: 2}
+  - {fileID: 11400000, guid: ede4f22cfb724f249966fd5dbc662fc7, type: 2}
+  prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
+  options:
+  - opt_name: Bounce Height
+    value: 6
+  activity: 100

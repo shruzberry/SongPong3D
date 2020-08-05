@@ -58,6 +58,7 @@ public class SongController : MonoBehaviour
     public bool isLoaded = false;
     [HideInInspector]
     public bool isPlaying;
+    public float returnToMenuConst = 2.0f;
 
     // EVENTS
     public delegate void OnSongFastForward();
@@ -68,6 +69,9 @@ public class SongController : MonoBehaviour
 
     public delegate void OnSongEnd();
     public event OnSongEnd onSongEnd;
+
+    public delegate void OnSceneEnd();
+    public event OnSceneEnd onSceneEnd;
 
     // COMPONENTS
     private AudioSource source;
@@ -241,6 +245,7 @@ public class SongController : MonoBehaviour
     public void Update()
     {
         CheckForEnd();
+        CheckForRetMenu();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -259,12 +264,28 @@ public class SongController : MonoBehaviour
         if (songPlaying && (ToBeat(source.time) > songData.endBeat))
         {
             songPlaying = false;
-            if(onSongFastForward != null) onSongEnd(); 
+            if(onSongFastForward != null) 
+            {
+                onSongEnd();
+                Invoke("SendOnSceneEnd", 1.5f);
+                source.volume -= 0.01f;
+            } 
 
         }
         else if(!songPlaying && (ToBeat(source.time) < songData.endBeat))
         {
             songPlaying = true;
         }
+    }
+
+    public void CheckForRetMenu()
+    {
+        //if (songPlaying && (ToBeat(source.time) > songData.endBeat + returnToMenuConst)) onSceneEnd();
+        
+    }
+
+    void SendOnSceneEnd()
+    {
+        onSceneEnd();
     }
 }
