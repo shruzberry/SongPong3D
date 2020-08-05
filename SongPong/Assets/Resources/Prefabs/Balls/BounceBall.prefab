@@ -14505,10 +14505,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7516071679550247880}
-  - component: {fileID: 7320976081495728797}
-  - component: {fileID: 2092558329866218601}
   - component: {fileID: 8999375191186098885}
   - component: {fileID: -5808006672611441360}
+  - component: {fileID: 6704575060692584622}
+  - component: {fileID: 5062578687983327616}
   m_Layer: 0
   m_Name: BounceBall
   m_TagString: Untagged
@@ -14531,43 +14531,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &7320976081495728797
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7317875046587389755}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
---- !u!50 &2092558329866218601
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7317875046587389755}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &8999375191186098885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14580,10 +14543,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6825a35859e63434cbc18b8b44657563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  song: {fileID: 0}
   id: 0
   type: 0
-  spawnLoc: {x: 0, y: 0}
-  song: {fileID: 0}
+  spawnLoc: {x: 0, y: 0, z: 0}
   ready: 0
   caught: 0
   missed: 0
@@ -14596,11 +14559,11 @@ MonoBehaviour:
   numNotes: 0
   currentNote: 0
   options: []
+  fallAxisBounds: {x: 0, y: 0}
   speed: 0
   gravity: 3
+  baseHeight: 1
   bounceHeight: 0
-  rb: {fileID: 0}
-  animator: {fileID: 0}
   ring1: {fileID: 4006423086192122725}
   ring2: {fileID: 6301405468920841349}
   ring3: {fileID: 6307072827746880798}
@@ -14624,6 +14587,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!54 &6704575060692584622
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317875046587389755}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &5062578687983327616
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317875046587389755}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &930641236361770694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14687,6 +14679,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4013750224901074, guid: 2f76c9175b9738342b6e06ccafee44b0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013750224901074, guid: 2f76c9175b9738342b6e06ccafee44b0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4013750224901074, guid: 2f76c9175b9738342b6e06ccafee44b0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 198354491284848536, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -14695,6 +14699,36 @@ PrefabInstance:
     - target: {fileID: 198661011438297882, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: LightsModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199056862106553592, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199185607902425088, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199340268907704908, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199622221185842674, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199722283004614752, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199830478147735362, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2804347890617020619, guid: 2f76c9175b9738342b6e06ccafee44b0,

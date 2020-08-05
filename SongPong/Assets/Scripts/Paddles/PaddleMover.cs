@@ -4,27 +4,31 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
+[RequireComponent(typeof(BoxCollider))]
 public class PaddleMover : MonoBehaviour
 {
+    //__________ATTRIBUTES________________
     public float radius; // the half-width or radius of the paddle
     public float height; // the height / thickness of the paddle
+    public float yValue;
+    public float distFromTrack;
 
+    //__________MOVEMENT________________
     public float speed = 10.0f;
-
     public float sprint;
 
-    //[HideInInspector]
-    public Vector2 paddleAxis;
+    public Vector3 paddleAxis;
+    public Vector2 bounds;
 
-    private Vector2 _movement;
-    private Vector2 paddlePos;
+    private Vector3 _movement;
+    private Vector3 paddlePos;
 
     private float sprintTriggerTime;
 
     private void Awake() 
     {
-        radius = GetComponent<Collider2D>().bounds.size.x / 2;
-        height = GetComponent<Collider2D>().bounds.size.y;
+        radius = GetComponent<BoxCollider>().bounds.size.x / 2;
+        height = GetComponent<BoxCollider>().bounds.size.z;
     }
 
     public void Move(CallbackContext context)
@@ -40,21 +44,20 @@ public class PaddleMover : MonoBehaviour
     void Update()
     {
         paddlePos += _movement * (speed + sprint) * Time.deltaTime;
-        paddlePos = Clamp.ClampToAxis(paddlePos, radius, paddleAxis);
-        transform.position = paddlePos;
-    }
 
-    public Vector2 GetAxis()
-    {
-        return paddleAxis;
+        paddlePos = Clamp.ClampToAxis(paddlePos, paddleAxis, bounds);
+        paddlePos.y = yValue;
+        paddlePos.z = distFromTrack;
+
+        transform.position = paddlePos;
     }
 
     /**
      * Returns the paddles' axis adjusted so that it lies on the top of the paddle instead of the middle
      */
-    public Vector2 GetPaddleTopAxis()
+    public float GetPaddleTopLoc()
     {
         float paddleHalfHeight = height / 2;
-        return paddleAxis - (paddleAxis.normalized * paddleHalfHeight);
+        return distFromTrack + paddleHalfHeight;
     }
 }

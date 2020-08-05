@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameType {OnePlayer, TwoPlayer};
+
 [ExecuteInEditMode]
 public class Game : MonoBehaviour
 {
@@ -10,17 +12,17 @@ public class Game : MonoBehaviour
 
     // GAME
     [Header("Game")]
-    public Axis gameAxis;
+    public GameType gameType;
     public SongData songData;
     private List<BallData> balls;
     private string dataPath;
 
     // MANAGERS
     [Header("Managers")]
+    public Track track;
     public SongController songController;
     public PaddleManager paddleManager;
     public BallDropper ballDropper;
-    public SpawnInfo spawner;
 
     // EDITOR
     [Header("Editor")]
@@ -39,11 +41,11 @@ public class Game : MonoBehaviour
     {
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
+        track = FindObjectOfType<Track>();
         ballDropper = FindObjectOfType<BallDropper>();
-        spawner = FindObjectOfType<SpawnInfo>();
 
-        // SPAWN INFO
-        spawner.Initialize(this);
+        // ENVIRONMENT
+        track.Initialize();
 
         // SONG
         this.songData = song;

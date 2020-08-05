@@ -12,7 +12,7 @@ public class SongData : ScriptableObject
     public int bpm;
     public string songName;
     public AudioClip song;
-    public Axis axis;
+    public GameType axis;
     public int startBeat = 0;
     public int endBeat = 0;
     public float offset = 0;

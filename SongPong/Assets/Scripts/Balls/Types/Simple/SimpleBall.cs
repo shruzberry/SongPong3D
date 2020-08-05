@@ -2,21 +2,21 @@
 using UnityEngine;
 using Types;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class SimpleBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
 
     //________MOVEMENT______________
-    protected Vector2 velocity;
-    private float speed;
-    private float gravity;
+    [Header("Movement")]
+    private Vector2 fallAxisBounds;
+    protected Vector3 velocity;
+    public float speed;
+    public float gravity;
 
     //________COMPONENTS____________
-    Vector3 screenBounds;
-    public Rigidbody2D rb;
-    public Animator animator;
+    private Rigidbody rb;
+    private Animator animator;
 
     //________MOVEMENT______________
     private float deltaH;
@@ -30,30 +30,16 @@ public class SimpleBall : Ball
         base.InitializeBall(game, data, dropper);
 
         // MOTION
+        fallAxisBounds = dropper.fallAxisBounds;
         speed = dropper.startSpeed;
         gravity = dropper.gravity;
-        velocity = speed * axisDirVector;
+        velocity = speed * axisVector * negative;
 
         // COMPONENTS
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
     }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * ERROR CHECKING
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    /**
-     * Make sure that this ball fits the requirements for a simple ball
-     **/
-    protected override bool CheckForInvalid()
-    {
-        bool error = false;
-        if(numNotes > 1) error = true;
-
-        return error;
-    }
-
+    
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * IDLE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -70,12 +56,12 @@ public class SimpleBall : Ball
     public override void MoveActions()
     {
         // UPDATE VELOCITY
-        Vector2 velocityStep = axisDirVector * (gravity * Time.deltaTime);
+        Vector3 velocityStep = axisVector * (gravity * Time.deltaTime) * negative;
 
         velocity += velocityStep;
 
         // UPDATE POSITION
-        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
+        Vector3 newPos = new Vector3(0.0f, 0.0f, velocity.z * Time.deltaTime);
 
         rb.MovePosition(transform.position + newPos);
     }
@@ -86,11 +72,13 @@ public class SimpleBall : Ball
 
     public override bool CheckMiss()
     {
-        float positionOnAxis = Vector2.Dot(transform.position, axisVector);
-        float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
-        if(positionOnAxis < -maxValueOnAxis)
+        float positionOnAxis = Vector3.Dot(transform.position, axisVector);
+        float minValueOnAxis = fallAxisBounds.x;
+
+        if(positionOnAxis < minValueOnAxis)
         {
             missed = true;
+            Debug.Log("MISS");
         }
         return missed;
     }
@@ -101,7 +89,7 @@ public class SimpleBall : Ball
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-   private void OnCollisionEnter2D(Collision2D other)
+   private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.tag == "Paddle"){
             //paddle = other.gameObject.GetComponent<Paddle>();
@@ -113,6 +101,7 @@ public class SimpleBall : Ball
     public override void OnCatchActions()
     {
         base.OnCatchActions();
+        velocity = -velocity;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -122,7 +111,6 @@ public class SimpleBall : Ball
     public override void OnExitActions()
     {
         animator.SetTrigger("isFinished");
-        velocity = -velocity;
     }
 
     public override void ExitActions()
@@ -132,12 +120,6 @@ public class SimpleBall : Ball
 
     public void OnAnimationFinish()
     {
-        exit = true;
-    }
-
-    IEnumerator WaitThenDestroy()
-    {
-        yield return new WaitForSeconds(3.0f);
         exit = true;
     }
 }

@@ -36,7 +36,7 @@ public class NoteListener : MonoBehaviour
     private bool active = true;
     private InputMaster input;
     private SongController sc;
-    private SpawnInfo si;
+    private BallDropper bd;
 
     Vector2 mousePos;
     
@@ -67,7 +67,7 @@ public class NoteListener : MonoBehaviour
     void Awake()
     {
         sc = FindObjectOfType<SongController>();
-        si = FindObjectOfType<SpawnInfo>();
+        bd = FindObjectOfType<BallDropper>();
 
         input = new InputMaster();
         input.NoteListener.MousePos.performed += mov => mousePos = mov.ReadValue<Vector2>();
@@ -80,7 +80,7 @@ public class NoteListener : MonoBehaviour
         {
             NoteData nd = new NoteData();
             
-            nd.hitPosition = si.GetNearestColumn(mousePos);
+            nd.hitPosition = bd.GetNearestColumn(mousePos);
             nd.hitBeat = (int) sc.GetSongTimeBeats();
             nd.noteDirection = Direction.positive;
 

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1492843242582942965}
   - component: {fileID: 1492843242582942966}
   - component: {fileID: 9146009305604118117}
-  - component: {fileID: 460742475}
   m_Layer: 8
   m_Name: BallDropper
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492843242582942967}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.2761421, y: 0.023819145, z: 0.08093785}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -45,9 +44,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1acb7afe34e47f6af04a3224cb24b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallTime: 0
-  dataLocation: SongData/data/
+  yValue: 2
+  dropEnabled: 1
+  NUM_COL: 16
+  ballAxis: {x: 0, y: 0, z: 0}
+  spawnLoc: {x: 0, y: 0, z: 0}
+  ballDropHeight: 0
+  ballHeightMod: 0
+  columnWidth: 0
+  currentBallIndex: 0
+  startSpeed: 0
+  size: 0
+  gravity: 0
+  fallAxisBounds: {x: 0, y: 0}
   ballMapName: TestSong
+  showColumns: 1
+  printLoadedBalls: 0
 --- !u!114 &9146009305604118117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,22 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed88dde90ac18436996f5a6d85e8fa78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  printDebug: 1
---- !u!114 &460742475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1492843242582942967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ef2b9996b85540b3b323b66ca1731cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnAxis: {x: 0, y: 0}
-  paddingXAxis: 0.1
-  paddingYAxis: 0.1
-  NUM_COL: 16
-  ballHeightMod: 0
-  showColumns: 1
+  printCatchDebug: 0
+  detailed: 0
+  printSpawnDebug: 0

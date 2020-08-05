@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class PaddleManager : MonoBehaviour
 {
+    //__________REFERENCES____________
+    private Game game;
+    private Track track;
+
     //__________AXIS__________________
-    [Header("AXIS")]
-    public Game game;
+    [Header("AXIS")]    
     [Range(0,45)]
     [Tooltip("The percent(%) away from the edge of screen the paddle's axis is.")]
     public int padding; // percent
+
+    private float yValue = 2; // the y-height above the track the paddles will appear
+    private float bound; // bounds
+    private float distFromTrack = 1;
 
     //__________PADDLE________________
     [Header("PADDLES")]
@@ -18,37 +25,21 @@ public class PaddleManager : MonoBehaviour
 
     public void Activate()
     {
+        // REFERENCES
         game = FindObjectOfType<Game>();
-        if(game.gameAxis == Axis.x) InitAxisX();
-        else if(game.gameAxis == Axis.y) InitAxisY();
-    }
-
-    void InitAxisX()
-    {
-        PaddleMover pm1 = paddle1.GetComponent<PaddleMover>();
-        PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
-
-        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - (Screen.width * (padding/100.0f)),0,0)).x;
-
-        pm1.paddleAxis = new Vector2(-1,0) * axisValue;
-        pm2.paddleAxis = new Vector2(1,0) * axisValue;
-
-// NOTE investigate rotate vs. euler angles
-        pm1.transform.Rotate(0,0,-90);
-        pm2.transform.Rotate(0,0,90);
-
-        //paddle1.transform.eulerAngles.z = -90;
-    }
-
-    void InitAxisY()
-    {
-        float axisValue = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height - (Screen.height * (padding/100.0f)), 0)).y;
+        track = FindObjectOfType<Track>();
 
         // PADDLE 2
+        // moves along x axis (horizontal)
         PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
-        pm2.paddleAxis = new Vector2(0,-1) * axisValue;
+        pm2.paddleAxis = new Vector3(1,0,0);
+        pm2.distFromTrack = distFromTrack;
+        pm2.yValue = yValue;
+        bound = track.GetRight() - track.padding;
+        pm2.bounds = new Vector2(-bound + pm2.radius, bound - pm2.radius);
         
         // PADDLE 1
+        // Disabled
         paddle1.SetActive(false);
     }
 }

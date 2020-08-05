@@ -20,17 +20,26 @@ using System;
 
 public class BallDropper : MonoBehaviour
 {
+    //___________Settings________________
+    public float yValue = 2; // the y-value that the balls appear on
+    private float lagAmount = 0.07f; // arbitrary "lag" amount apparent in all ball behaviors, meant to be 0.0f
+    public bool dropEnabled = true; // should balls drop?
+
     //___________References______________
     private Game game;
-    private SpawnInfo spawnInfo;
+    private Track track;
     private SongController song;
 
-    //___________Variables_______________
-    private float lagAmount = 0.5f;
-
-    //___________Events__________________
-    public delegate void OnBallSpawned(Ball ball);
-    public event OnBallSpawned onBallSpawned;
+    //___________Spawn___________________
+    [Range(1,16)]
+    public int NUM_COL = 16; // number of ball columns
+    public Vector3 ballAxis; // the axis that balls move down primarily
+    public Vector3 spawnLoc;
+    public float ballDropHeight;
+    [Tooltip("Determines what height the ball spawns are from the top of the screen")]
+    private float[] ballCols; // x- or z-positions of each column in world coordinates
+    public float ballHeightMod = 0;
+    public float columnWidth;
 
     //___________Balls___________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
@@ -50,15 +59,21 @@ public class BallDropper : MonoBehaviour
 
     //___________Move Behaviors__________
     private float fallTimeBeats;
+    public Vector2 fallAxisBounds;
 
     //___________Loader__________________
     public static string dataLocation = "SongData/data/";
     public string ballMapName; // name of the current song
 
+    //___________Events__________________
+    public delegate void OnBallSpawned(Ball ball);
+    public event OnBallSpawned onBallSpawned;
+
     //___________State___________________
     private bool isFinished = false; // any balls left to update
 
     //___________Debug___________________
+    public bool showColumns = true; // if true, show columns
     public bool printLoadedBalls = false;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -67,11 +82,18 @@ public class BallDropper : MonoBehaviour
 
     public void Initialize(Game game, SongController song)
     {
+        // REFERENCES
         this.game = game;
         this.song = song;
+        track = FindObjectOfType<Track>();
 
+        // PREFABS
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
+
+        // COLUMNS
+        SetSpawnLocation();
+        calcColumns();
 
         // EVENTS
         song.onSongFastForward += FastForwardBalls;
@@ -81,21 +103,23 @@ public class BallDropper : MonoBehaviour
         currentBallIndex = 0;
 
         // ATTRIBUTES
-        spawnInfo = FindObjectOfType<SpawnInfo>();
-        size = spawnInfo.columnWidth - 0.15f;
+        ballAxis = Vector3.forward;
+        size = columnWidth;
+        fallAxisBounds = track.GetBoundsFallAxis();
+
+        // LAG ADJUSTMENT
+        if(lagAmount != 0.0f)
+        {
+            Debug.LogWarning("BallDropper initialized with " + lagAmount + "sec. of lag");
+        }
     }
 
     private void CalcMoveTimes()
     {
-        Vector2 spawnAxis = game.spawner.spawnAxis;
+        float paddleLoc = FindObjectOfType<PaddleMover>().GetPaddleTopLoc();
 
-        Vector2 paddleAxis = FindObjectOfType<PaddleMover>().GetPaddleTopAxis();
-
-        Vector2 axisVector;
-        if(game.gameAxis == Axis.y) {axisVector = new Vector2(0,1);}
-        else{axisVector = new Vector2(1,0);}
-
-        float fallTime = Fall_Behavior.CalcMoveTime(size/2, spawnAxis, paddleAxis, axisVector, startSpeed, gravity);
+        float fallTime = Fall_Behavior.CalcMoveTime(size/2, spawnLoc.z, paddleLoc, startSpeed, gravity);
+        Debug.Log("Falltime: " + fallTime + "s. Beats: " + song.ToBeat(fallTime));
         fallTimeBeats = song.ToBeat(fallTime);
     }
 
@@ -105,11 +129,14 @@ public class BallDropper : MonoBehaviour
 
     private void Update()
     {
-        UpdateActiveBalls();
+        if(dropEnabled)
+        {
+            UpdateActiveBalls();
 
-        CheckSpawn();
+            CheckSpawn();
 
-        CheckActiveBallsForDestroy();
+            CheckActiveBallsForDestroy();
+        }
     }
 
     private void UpdateActiveBalls()
@@ -275,6 +302,70 @@ public class BallDropper : MonoBehaviour
             ball.DestroyBall();
         }
         activeBallList.Clear();
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * COLUMNS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void SetSpawnLocation()
+    {
+        ballDropHeight = track.GetHeight() - 1;
+        spawnLoc = new Vector3(0, yValue, ballDropHeight);
+    }
+
+    public Vector3 GetSpawnLocation(int spawnNum)
+    {
+        return new Vector3(ballCols[spawnNum], yValue, ballDropHeight); 
+    }
+
+        private void calcColumns()
+    {
+        ballCols = new float[NUM_COL+1]; // need n+1 lines to make n column
+
+        float trackLeft = track.transform.position.x - (track.GetWidth() / 2);
+        float effScreenW = track.GetWidth() - (2 * track.padding); // the screen width minus the padding
+
+        // STEP for each column
+        columnWidth = effScreenW / NUM_COL; // amount of x to move per column
+
+        for(int i = 0; i < NUM_COL+1; i++)
+        {
+            ballCols[i] = trackLeft + (columnWidth * i + track.padding);
+        }
+    }
+
+    public int GetNearestColumn(Vector2 screenPos, bool debug = false)
+    {
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+        int nearestColumn = 0;
+        float minDist = float.MaxValue;
+
+        float compare;
+        if(game.gameType == GameType.OnePlayer){compare = worldPos.x;}
+        else if(game.gameType == GameType.TwoPlayer){compare = worldPos.z;}
+        else{return 0;}
+
+        for(int f = 0; f < ballCols.Length; f++)
+        {
+            float delta = Mathf.Abs(ballCols[f] - compare);
+            if(delta < minDist)
+            {
+                minDist = delta;
+                nearestColumn = f;
+            }
+        }
+        if(debug){print("NEAREST COLUMN: " + nearestColumn);}
+
+        return nearestColumn;
+    }
+
+    private float ConvertToUnits(Camera cam, float p)
+    {
+        float ortho = cam.orthographicSize;
+        float pixelH = cam.pixelHeight;
+
+        return (p * ortho * 2) / pixelH;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

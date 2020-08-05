@@ -19,30 +19,26 @@ using UnityEngine;
 using System.Collections.Generic;
 using Types;
 
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(SphereCollider))]
 public abstract class Ball : MonoBehaviour
 {
-    #region Variables
+    //___________REFERENCES_____________
+    private BallDropper dropper;
+    public SongController song;
 
     //___________ATTRIBUTES_____________
     public int id;
     public BallTypes type;
-    public Vector2 spawnLoc;
+    public Vector3 spawnLoc;
     protected float size;
 
-    protected Axis axis;
-    protected Vector2 axisVector; // the vector representing which axis the game is played on: (1,0) is x-axis, (0,1) is y-axis
-    protected Vector2 axisDirVector; // the unit vector that represents the base of the axis and direction
-    protected Vector2 otherAxisVector; // the unit vector that represents the other axis (with same direction)
-
-    //___________REFERENCES_____________
-    //protected PlayerInputHandler paddleManager;
-    //protected Paddle paddle;
-    protected SpawnInfo spawnInfo;
-    public SongController song;
+    protected GameType gameType;
+    protected Vector3 axisVector; // the vector representing which axis the game is played on: (1,0) is x-axis, (0,1) is y-axis
+    protected Vector3 otherAxisVector; // the unit vector that represents the other axis (with same direction)
 
     //___________COMPONENTS_____________
-    private CircleCollider2D ball_collider;
+    private SphereCollider ball_collider;
+    private GameObject ball_render;
 
     //___________STATE__________________
     protected BallState currentState;
@@ -81,8 +77,6 @@ public abstract class Ball : MonoBehaviour
     //___________OPTIONS_________________
     public List<BallOption> options;
 
-    #endregion Variables
-
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * STATE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
@@ -106,22 +100,26 @@ public abstract class Ball : MonoBehaviour
     {
         // REFERENCES
         this.ballData = data;
-        this.spawnInfo = game.spawner;
+        this.dropper = dropper;
         this.song = game.songController;
-        this.axis = game.gameAxis;
+        this.gameType = game.gameType;
 
         // COMPONENTS
-        //this.id = data.id;
-        ball_collider = GetComponent<CircleCollider2D>();
+        ball_collider = GetComponent<SphereCollider>();
+        ball_render = transform.Find("Render").gameObject;
+
+        // DATA
+        this.type = data.type;
+        this.options = data.options;
 
         // APPEARANCE
-        this.type = data.type;
         this.id = dropper.currentBallIndex;
         this.name = id.ToString() + "_" + type.ToString();
         gameObject.layer = LayerMask.NameToLayer("Balls");
         size = dropper.size;
-        ball_collider.radius = size/2 + 0.1f;
+        ball_collider.radius = size/2;
         transform.localScale = new Vector2(size,size);
+        ball_render.transform.localScale = new Vector2(size, size);
 
         // NOTES
         this.notes = data.notes;
@@ -131,22 +129,12 @@ public abstract class Ball : MonoBehaviour
         // INDEXING
         catchTimesBeats = new float[numNotes + 1];
 
-        // OPTIONS
-        options = data.options;
-
-        // SET SPAWN LOCATION
+        // POSITION
         spawnLoc = GetNotePosition(currentNote);
-//        Debug.Log("SPAWN: " + spawnLoc);
         transform.position = spawnLoc;
 
         // DIRECTION
         SetAxisVectors();
-
-        // CHECK FOR ERRORS
-        if(CheckForInvalid() == true)
-        {
-            Debug.LogWarning("BALL " + name + " did not initialize because it has incorrect parameters.");
-        }
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
@@ -158,12 +146,9 @@ public abstract class Ball : MonoBehaviour
     public virtual void SetAxisVectors()
     {
         negative = (notes[currentNote].noteDirection == Direction.negative) ? -1.0f : 1.0f;
-        axisVector = (axis == Axis.x) ? new Vector2(1,0) : new Vector2(0,1);
 
-        if(axis == Axis.y && negative == 1.0f) {axisDirVector = new Vector2(0,1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.y && negative == -1.0f) {axisDirVector = new Vector2(0,-1); otherAxisVector = new Vector2(1,0);}
-        else if(axis == Axis.x && negative == 1.0f) {axisDirVector = new Vector2(1,0); otherAxisVector = new Vector2(0,1);}
-        else if(axis == Axis.x && negative == -1.0f) {axisDirVector = new Vector2(-1,0); otherAxisVector = new Vector2(0,-1);}
+        axisVector = new Vector3(0,0,1);
+        otherAxisVector = new Vector3(1,0,0);
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -175,23 +160,11 @@ public abstract class Ball : MonoBehaviour
     /**
      * Returns the position in world coordinates of the given note
      */
-    public Vector2 GetNotePosition(int index)
+    public Vector3 GetNotePosition(int index)
     {
         int spawnNum = notes[index].hitPosition;
-        return spawnInfo.GetSpawnLocation(spawnNum);
+        return dropper.GetSpawnLocation(spawnNum);
     }
-
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * ERROR
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    protected virtual bool CheckForInvalid(){return false;}
-
- /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * IDLE
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public virtual void ReadyActions(){if(onBallReady != null) onBallReady(this);}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * UPDATE
@@ -215,6 +188,8 @@ public abstract class Ball : MonoBehaviour
     {
         spawnTimeBeats = song.GetSongTimeBeats();
     }
+    
+    public virtual void ReadyActions(){if(onBallReady != null) onBallReady(this);}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * MOVING

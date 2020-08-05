@@ -6,20 +6,20 @@ public class BounceBall : Ball
 {
     //________ATTRIBUTES____________
     protected float radius;
+    public Vector2 fallAxisBounds;
 
     //________MOVEMENT______________
     [Header("Movement")]
-    protected Vector2 velocity;
-    public float speed = 0.0f;
-    public float gravity = 3.0f;
-
+    protected Vector3 velocity;
+    public float speed;
+    public float gravity;
+    public float baseHeight = 1;
     public float bounceHeight;
 
     //________COMPONENTS____________
     [Header("Components")]
-    Vector3 screenBounds;
-    public Rigidbody2D rb;
-    public Animator animator;
+    private Rigidbody rb;
+    private Animator animator;
     public GameObject ring1;
     public GameObject ring2;
     public GameObject ring3;
@@ -44,18 +44,18 @@ public class BounceBall : Ball
         BounceBallData bounceData = (data as BounceBallData);
 
         // COMPONENTS
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         // ATTRIBUTES
-        radius = GetComponent<Collider2D>().bounds.size.y / 2;
+        radius = GetComponent<SphereCollider>().bounds.size.y / 2;
         InitializeRings();
 
         // MOVEMENT
+        fallAxisBounds = dropper.fallAxisBounds;
         speed = dropper.startSpeed;
         gravity = dropper.gravity;
-        velocity = speed * axisDirVector;
+        velocity = speed * axisVector * negative;
 
         // OPTIONS
         bounceHeight = bounceData.GetOption("Bounce Height");
@@ -79,19 +79,6 @@ public class BounceBall : Ball
         {
             ring1.SetActive(false);
         }
-    } 
-
-    protected override bool CheckForInvalid()
-    {
-        bool error = false;
-
-        if(numNotes < 2) error = true;
-
-        // same note more than once
-
-        // notes have different directions
-
-        return error;
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -124,16 +111,14 @@ public class BounceBall : Ball
      */
     public override void ResetMove()
     {
-        SetAxisVectors();
-
         // How many beats until next hit
         float moveTime = CalcBounceTime();
         // Time to reach peak (with constant motion)
         float halfTime = moveTime / 2;
 
         // Get the distance to travel (world units)
-        float deltaD = bounceHeight - radius;
-        Vector2 otherDeltaD = GetNotePosition(currentNote) - GetNotePosition(currentNote - 1); // distance on other axis
+        float deltaD = baseHeight + bounceHeight - radius;
+        float otherDeltaD = Vector3.Dot(GetNotePosition(currentNote) - GetNotePosition(currentNote - 1), axisVector); // distance on other axis
 
         // Calculate the initial velocity
         // u = (2s/t) - v
@@ -146,11 +131,12 @@ public class BounceBall : Ball
         gravity = Mathf.Abs(gravity);
 
         // Move along game axis
-        velocity = Vector2.zero;
-        velocity += axisDirVector * -initialVelocity;
+        velocity = Vector3.zero;
+        velocity += axisVector * -initialVelocity * negative;
 
         // Move along the other axis
         velocity += otherAxisVector * (otherDeltaD / moveTime);
+        Debug.Log(velocity);
     }
 
     private Vector2 Abs(Vector2 in_vec)
@@ -163,12 +149,13 @@ public class BounceBall : Ball
 
     public override void MoveActions()
     {
-        // UPDATE VELOCITY along main axis
-        Vector2 velocityStep = axisDirVector * (gravity * Time.deltaTime);
+        // UPDATE VELOCITY
+        Vector3 velocityStep = axisVector * (gravity * Time.deltaTime) * negative;
         velocity += velocityStep;
 
         // UPDATE POSITION
-        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, velocity.y * Time.deltaTime, 0.0f);
+        Vector3 newPos = new Vector3(velocity.x * Time.deltaTime, 0.0f, velocity.z * Time.deltaTime);
+
         rb.MovePosition(transform.position + newPos);
     }
 
@@ -178,9 +165,9 @@ public class BounceBall : Ball
 
     public override bool CheckMiss()
     {
-        float positionOnAxis = Vector2.Dot(transform.position, axisVector);
-        float maxValueOnAxis = Vector2.Dot(screenBounds, axisVector);
-        if(positionOnAxis < -maxValueOnAxis)
+        float positionOnAxis = Vector3.Dot(transform.position, axisVector);
+        float minValueOnAxis = fallAxisBounds.x;
+        if(positionOnAxis < minValueOnAxis)
         {
             missed = true;
         }
@@ -193,7 +180,7 @@ public class BounceBall : Ball
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.tag == "Paddle")
         {
@@ -247,11 +234,11 @@ public class BounceBall : Ball
     /**
      * Flips the direction of the velocity on the gravity axis
      */
-    public Vector2 BounceVelocity(Vector2 velocity)
+    public Vector3 BounceVelocity(Vector2 velocity)
     {
-        Vector2 newVel = Vector2.zero;
-        newVel -= axisDirVector * Vector2.Dot(axisDirVector, velocity);
-        newVel += otherAxisVector * Vector2.Dot(otherAxisVector, velocity);
+        Vector3 newVel = Vector3.zero;
+        newVel -= axisVector * Vector3.Dot(axisVector, velocity);
+        newVel += otherAxisVector * Vector3.Dot(otherAxisVector, velocity);
         return newVel;
     }
 }
