@@ -18,6 +18,7 @@ public class Track : MonoBehaviour
     private float top;
     private float left;
     private float right;
+    private float middle;
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
@@ -34,6 +35,7 @@ public class Track : MonoBehaviour
         bottom = transform.position.z - (height / 2);
         left = transform.position.x - (width / 2);
         right = transform.position.x + (width / 2);
+        middle = transform.position.z;
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -75,6 +77,11 @@ public class Track : MonoBehaviour
     public float GetRight()
     {
         return right;
+    }
+
+    public float GetMiddle()
+    {
+        return middle;
     }
 
     public Vector3 GetSize()

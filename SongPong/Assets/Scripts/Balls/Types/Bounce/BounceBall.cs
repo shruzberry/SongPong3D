@@ -118,7 +118,7 @@ public class BounceBall : Ball
 
         // Get the distance to travel (world units)
         float deltaD = baseHeight + bounceHeight - radius;
-        float otherDeltaD = Vector3.Dot(GetNotePosition(currentNote) - GetNotePosition(currentNote - 1), axisVector); // distance on other axis
+        float otherDeltaD = Vector3.Dot(GetNotePosition(currentNote) - GetNotePosition(currentNote - 1), otherAxisVector); // distance on other axis
 
         // Calculate the initial velocity
         // u = (2s/t) - v
@@ -136,7 +136,6 @@ public class BounceBall : Ball
 
         // Move along the other axis
         velocity += otherAxisVector * (otherDeltaD / moveTime);
-        Debug.Log(velocity);
     }
 
     private Vector2 Abs(Vector2 in_vec)
@@ -180,7 +179,7 @@ public class BounceBall : Ball
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Paddle")
         {
@@ -214,7 +213,10 @@ public class BounceBall : Ball
     {
         animator.SetTrigger("isFinished");
 
-        velocity = BounceVelocity(velocity);
+        if(caught)
+        {
+            velocity = BounceVelocity(velocity);
+        }
     }
 
     public override void ExitActions()
@@ -234,7 +236,7 @@ public class BounceBall : Ball
     /**
      * Flips the direction of the velocity on the gravity axis
      */
-    public Vector3 BounceVelocity(Vector2 velocity)
+    public Vector3 BounceVelocity(Vector3 velocity)
     {
         Vector3 newVel = Vector3.zero;
         newVel -= axisVector * Vector3.Dot(axisVector, velocity);

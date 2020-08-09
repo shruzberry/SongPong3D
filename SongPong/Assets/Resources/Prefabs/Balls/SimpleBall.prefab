@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80383bd76b9b4b58b7b7973a507a3d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  song: {fileID: 0}
   id: 0
   type: 0
   spawnLoc: {x: 0, y: 0, z: 0}
-  song: {fileID: 0}
   ready: 0
   caught: 0
   missed: 0
@@ -64,8 +64,8 @@ MonoBehaviour:
   numNotes: 0
   currentNote: 0
   options: []
-  rb: {fileID: 0}
-  animator: {fileID: 0}
+  speed: 0
+  gravity: 0
 --- !u!114 &4859509252022318338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4100339267235431660}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
@@ -221,6 +221,36 @@ PrefabInstance:
         type: 3}
       propertyPath: LightsModule.enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199056862106553592, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 199185607902425088, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 199340268907704908, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 199622221185842674, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 199722283004614752, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 199830478147735362, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2804347890617020619, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}

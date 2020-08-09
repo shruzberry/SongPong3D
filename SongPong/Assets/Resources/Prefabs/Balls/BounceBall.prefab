@@ -14611,7 +14611,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7317875046587389755}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
@@ -14706,30 +14706,60 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 199056862106553592, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 199185607902425088, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199185607902425088, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 199340268907704908, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 199340268907704908, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 199622221185842674, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199622221185842674, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 199722283004614752, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 199722283004614752, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 199830478147735362, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199830478147735362, guid: 2f76c9175b9738342b6e06ccafee44b0,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2804347890617020619, guid: 2f76c9175b9738342b6e06ccafee44b0,
         type: 3}

@@ -129,14 +129,16 @@ public class BallDropper : MonoBehaviour
 
     private void Update()
     {
-        if(dropEnabled)
+        if(dropEnabled && !song.hasStarted)
         {
-            UpdateActiveBalls();
-
-            CheckSpawn();
-
-            CheckActiveBallsForDestroy();
+            CheckPreSpawn();
         }
+        if(dropEnabled && song.hasStarted)
+        {
+            CheckSpawn();
+        }
+        UpdateActiveBalls();
+        CheckActiveBallsForDestroy();
     }
 
     private void UpdateActiveBalls()
@@ -190,6 +192,37 @@ public class BallDropper : MonoBehaviour
  * SPAWN
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
+    /**
+     * Spawn balls before the song starts
+     **/
+    public void CheckPreSpawn()
+    {
+        bool spawning = false;
+        BallData checkBall = ballDataList[currentBallIndex];
+        float dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
+
+        if(!isFinished && dropBeat <= song.ToBeat(Time.time) - fallTimeBeats)
+        {
+            spawning = true;
+            // Check other balls for spawn 
+            // Because we want balls with same hit time to spawn in same Update loop so their motions are synced
+            while(spawning)
+            {
+                Ball ball = SpawnBall(checkBall);
+                checkBall.PulseActive();
+
+                // if there are no balls left, exit the loop
+                if(isFinished){ spawning = false; break;}
+                else
+                {
+                    checkBall = ballDataList[currentBallIndex];
+                    dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
+                    // If the next ball isn't ready to drop, continue
+                    if(!(dropBeat <= song.ToBeat(Time.time - fallTimeBeats) + lagAmount)){ spawning = false; }
+                }
+            }
+        }
+    }
     /**
      * Checks the next ball in the ballDataList to see if it is ready to drop
      * If it is, it spawns the ball and any others ready to spawn
@@ -436,5 +469,10 @@ public class BallDropper : MonoBehaviour
     }
     public List<Ball> GetActiveBalls(){return activeBallList;}
     public float GetFallTimeBeats(){return fallTimeBeats;}
+
+    public float GetTimeToFallBeats()
+    {
+        return fallTimeBeats;
+    }
 
 }

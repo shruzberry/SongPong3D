@@ -19,7 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 60e94896462b26b4f9da68acab33cbdf, type: 2}
   - {fileID: 11400000, guid: 4d4da84312cbf0e47bd87cd758a936d1, type: 2}
   prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
+  baseBallPath: 
   options:
   - opt_name: Bounce Height
     value: 5
   activity: 100
+  prefabPath: Prefabs/Balls/BounceBall

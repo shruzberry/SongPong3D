@@ -89,7 +89,7 @@ public class SimpleBall : Ball
  * CATCH
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-   private void OnCollisionEnter(Collision other)
+   private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Paddle"){
             //paddle = other.gameObject.GetComponent<Paddle>();

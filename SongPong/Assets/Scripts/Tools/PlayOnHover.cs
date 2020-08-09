@@ -36,12 +36,12 @@ public class PlayOnHover : MonoBehaviour
 
     void CheckMouseHover()
     {
-        if(song.isPlaying && !isMouseOverGame()) //fullWindow.Contains(Event.current.mousePosition)
+        if(song.isPlaying && song.hasStarted && !isMouseOverGame()) //fullWindow.Contains(Event.current.mousePosition)
         {
             song.Pause();
             Time.timeScale = 0.0f;
         }
-        if(!song.isPlaying && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
+        if(!song.isPlaying && song.hasStarted && isMouseOverGame()) //!fullWindow.Contains(Event.current.mousePosition)
         {
             song.Play();
             Time.timeScale = gameSpeed;

@@ -15,6 +15,7 @@ public class CatchState : BallState
         {
             ball.ResetMove();      
             ball.SetState(new MoveState(ball));
+            ball.caught = false;
         }
         else
         {
@@ -24,7 +25,6 @@ public class CatchState : BallState
 
     public override void OnStateExit()
     {   
-        ball.caught = false;
     }
 
 }

@@ -14,9 +14,13 @@ public class PaddleManager : MonoBehaviour
     [Tooltip("The percent(%) away from the edge of screen the paddle's axis is.")]
     public int padding; // percent
 
+    //__________PADDLE________________
+    [Header("PADDLE")]
+    public float speed = 12.0f;
+
     private float yValue = 2; // the y-height above the track the paddles will appear
     private float bound; // bounds
-    private float distFromTrack = 1;
+    private float distFromTrack = 2;
 
     //__________PADDLE________________
     [Header("PADDLES")]
@@ -32,6 +36,7 @@ public class PaddleManager : MonoBehaviour
         // PADDLE 2
         // moves along x axis (horizontal)
         PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
+        pm2.speed = speed;
         pm2.paddleAxis = new Vector3(1,0,0);
         pm2.distFromTrack = distFromTrack;
         pm2.yValue = yValue;

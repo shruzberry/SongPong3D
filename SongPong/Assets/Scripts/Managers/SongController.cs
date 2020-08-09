@@ -50,6 +50,7 @@ public class SongController : MonoBehaviour
 
     // OTHER
     private int startTime;
+    private float waitSec;
     [Tooltip("The number of seconds to fast-forward or rewind")]
     public float skipIncrement = 1;
 
@@ -58,6 +59,7 @@ public class SongController : MonoBehaviour
     public bool isLoaded = false;
     [HideInInspector]
     public bool isPlaying;
+    public bool hasStarted;
     public float returnToMenuConst = 2.0f;
 
     // EVENTS
@@ -109,12 +111,29 @@ public class SongController : MonoBehaviour
         startTime = newSongData.startBeat;
 
         isLoaded = true;
+        hasStarted = false;
+
+        JumpToStart();
     }
 
     public void Play()
     {
         isPlaying = true;
+        hasStarted = true;
         source.Play();
+    }
+
+    public void Play(float waitBeats)
+    {
+        float waitSec = ToTime(waitBeats);
+        this.waitSec = waitSec;
+        StartCoroutine(WaitThenPlay(waitSec));
+    }
+
+    IEnumerator WaitThenPlay(float waitSec)
+    {
+        yield return new WaitForSeconds(waitSec);
+        Play();
     }
 
     public void Pause()
@@ -152,7 +171,7 @@ public class SongController : MonoBehaviour
 
     public float GetSongTimeSeconds()
     {
-        return source.time;
+        return source.time - waitSec;
     }
 
     public float GetSongTimeBeats()
@@ -255,7 +274,6 @@ public class SongController : MonoBehaviour
     private void goToTime(float time)
     {
         source.time = time;
-        source.Play();
     }
 
     private bool songPlaying = true;

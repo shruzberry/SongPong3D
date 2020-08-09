@@ -39,6 +39,7 @@ public class Game : MonoBehaviour
      */
     public bool Initialize(SongData song)
     {
+        //OHCamera ohCam = FindObjectOfType<OHCamera>();
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
         track = FindObjectOfType<Track>();
@@ -46,24 +47,28 @@ public class Game : MonoBehaviour
 
         // ENVIRONMENT
         track.Initialize();
+        //ohCam.Initialize();
 
-        // SONG
+        // LOAD SONG
         this.songData = song;
         songController.LoadSong(song);
-        songController.JumpToStart();
 
         // PADDLES
         paddleManager.Activate();
 
         // BALLS
-        // TODO Move balls to BallDropper?
         balls = LoadBallData(song.name);
         SortBalls();
+
+        // BALL DROPPER
         ballDropper.Initialize(this, songController);
         ballDropper.Activate();
         ballDropper.ballMapName = song.songName;
 
-        songController.Play();
+        float waitBeats = ballDropper.GetTimeToFallBeats();
+
+        songController.Play(waitBeats);
+        //songController.Play();
 
         return true;
     }
@@ -103,6 +108,7 @@ public class Game : MonoBehaviour
     {
         if(editorSong != null){
             balls = LoadBallData(editorSong.name);
+            SortBalls();
         }
     }
 
