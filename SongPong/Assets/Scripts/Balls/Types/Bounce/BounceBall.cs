@@ -13,7 +13,7 @@ public class BounceBall : Ball
     protected Vector3 velocity;
     public float speed;
     public float gravity;
-    public float baseHeight = 1;
+    public float baseHeight = 5;
     public float bounceHeight;
 
     //________COMPONENTS____________
@@ -56,6 +56,7 @@ public class BounceBall : Ball
         speed = dropper.startSpeed;
         gravity = dropper.gravity;
         velocity = speed * axisVector * negative;
+        baseHeight = dropper.bounceHeightBase;
 
         // OPTIONS
         bounceHeight = bounceData.GetOption("Bounce Height");

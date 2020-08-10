@@ -52,6 +52,7 @@ public class BallDropper : MonoBehaviour
     public float startSpeed;
     public float size;
     public float gravity;
+    public float bounceHeightBase;
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -343,7 +344,7 @@ public class BallDropper : MonoBehaviour
 
     public void SetSpawnLocation()
     {
-        ballDropHeight = track.GetHeight() - 1;
+        ballDropHeight = track.GetTop() - 30;
         spawnLoc = new Vector3(0, yValue, ballDropHeight);
     }
 
