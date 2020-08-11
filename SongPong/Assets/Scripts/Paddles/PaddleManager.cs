@@ -18,7 +18,7 @@ public class PaddleManager : MonoBehaviour
     [Header("PADDLE")]
     public float speed = 12.0f;
 
-    private float yValue = 2; // the y-height above the track the paddles will appear
+    private float yValue; // the y-height above the track the paddles will appear
     private float bound; // bounds
     private float distFromTrack; // the z-position of the paddle
 
@@ -33,7 +33,8 @@ public class PaddleManager : MonoBehaviour
         game = FindObjectOfType<Game>();
         track = FindObjectOfType<Track>();
 
-        distFromTrack = track.GetBottom() + 2; 
+        distFromTrack = track.GetBottom() + 2;
+        yValue = track.gameYValue;
 
         // PADDLE 2
         // moves along x axis (horizontal)

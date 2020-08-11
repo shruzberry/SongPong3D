@@ -33,6 +33,8 @@ public class NoteListener : MonoBehaviour
 
     public List<NoteData> data;
 
+    public Track track;
+
     private bool active = true;
     private InputMaster input;
     private SongController sc;
@@ -55,8 +57,9 @@ public class NoteListener : MonoBehaviour
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     void OnEnable()
-    { 
+    {
         input.Enable();
+        track = FindObjectOfType<Track>();
     }
 
     void OnDisable()
@@ -80,7 +83,7 @@ public class NoteListener : MonoBehaviour
         {
             NoteData nd = new NoteData();
             
-            nd.hitPosition = bd.GetNearestColumn(mousePos);
+            nd.hitPosition = track.GetNearestColumn(mousePos);
             nd.hitBeat = (int) sc.GetSongTimeBeats();
             nd.noteDirection = Direction.positive;
 

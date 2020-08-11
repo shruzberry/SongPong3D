@@ -46,7 +46,7 @@ public class Game : MonoBehaviour
         ballDropper = FindObjectOfType<BallDropper>();
 
         // ENVIRONMENT
-        track.Initialize();
+        track.Initialize(this);
         //ohCam.Initialize();
 
         // LOAD SONG

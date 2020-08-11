@@ -238,7 +238,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_RenderPostProcessing: 1
-  m_Antialiasing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1015,8 +1015,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1582dda0b684ee79819708b91f61a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  columnPrefab: {fileID: 7363317539766453879, guid: fea4a1ec4df334293963044cb5ff2c9d,
+    type: 3}
+  NUM_COL: 16
   padding: 2
   paddingFallAxis: 1
+  gameYValue: 1
+  ballCols: []
+  ballHeightMod: 0
+  columnWidth: 0
 --- !u!23 &385012797
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5461,17 +5468,17 @@ PrefabInstance:
     - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: printCatchDebug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: detailed
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1395505108748958305, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}
       propertyPath: printSpawnDebug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5427112925761299432, guid: 1c783558b9dc24b80a22c3b3b27b3077,
         type: 3}

@@ -30,16 +30,9 @@ public class BallDropper : MonoBehaviour
     private Track track;
     private SongController song;
 
-    //___________Spawn___________________
-    [Range(1,16)]
-    public int NUM_COL = 16; // number of ball columns
-    public Vector3 ballAxis; // the axis that balls move down primarily
-    public Vector3 spawnLoc;
+    //___________SPAWN___________________
     public float ballDropHeight;
-    [Tooltip("Determines what height the ball spawns are from the top of the screen")]
-    private float[] ballCols; // x- or z-positions of each column in world coordinates
-    public float ballHeightMod = 0;
-    public float columnWidth;
+    public Vector3 spawnLoc;
 
     //___________Balls___________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
@@ -49,6 +42,7 @@ public class BallDropper : MonoBehaviour
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
 
     //__________Ball Attributes__________
+    public Vector3 ballAxis; // the axis that balls move down primarily
     public float startSpeed;
     public float size;
     public float gravity;
@@ -92,10 +86,6 @@ public class BallDropper : MonoBehaviour
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
         bounceBall = Resources.Load("Prefabs/BounceBall") as GameObject;
 
-        // COLUMNS
-        SetSpawnLocation();
-        calcColumns();
-
         // EVENTS
         song.onSongFastForward += FastForwardBalls;
         song.onSongRewind += RewindBalls;
@@ -105,8 +95,10 @@ public class BallDropper : MonoBehaviour
 
         // ATTRIBUTES
         ballAxis = Vector3.forward;
-        size = columnWidth;
+        size = track.columnWidth;
         fallAxisBounds = track.GetBoundsFallAxis();
+
+        SetSpawnLocation();
 
         // LAG ADJUSTMENT
         if(lagAmount != 0.0f)
@@ -339,70 +331,6 @@ public class BallDropper : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * COLUMNS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void SetSpawnLocation()
-    {
-        ballDropHeight = track.GetTop() - 30;
-        spawnLoc = new Vector3(0, yValue, ballDropHeight);
-    }
-
-    public Vector3 GetSpawnLocation(int spawnNum)
-    {
-        return new Vector3(ballCols[spawnNum], yValue, ballDropHeight); 
-    }
-
-        private void calcColumns()
-    {
-        ballCols = new float[NUM_COL+1]; // need n+1 lines to make n column
-
-        float trackLeft = track.transform.position.x - (track.GetWidth() / 2);
-        float effScreenW = track.GetWidth() - (2 * track.padding); // the screen width minus the padding
-
-        // STEP for each column
-        columnWidth = effScreenW / NUM_COL; // amount of x to move per column
-
-        for(int i = 0; i < NUM_COL+1; i++)
-        {
-            ballCols[i] = trackLeft + (columnWidth * i + track.padding);
-        }
-    }
-
-    public int GetNearestColumn(Vector2 screenPos, bool debug = false)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        int nearestColumn = 0;
-        float minDist = float.MaxValue;
-
-        float compare;
-        if(game.gameType == GameType.OnePlayer){compare = worldPos.x;}
-        else if(game.gameType == GameType.TwoPlayer){compare = worldPos.z;}
-        else{return 0;}
-
-        for(int f = 0; f < ballCols.Length; f++)
-        {
-            float delta = Mathf.Abs(ballCols[f] - compare);
-            if(delta < minDist)
-            {
-                minDist = delta;
-                nearestColumn = f;
-            }
-        }
-        if(debug){print("NEAREST COLUMN: " + nearestColumn);}
-
-        return nearestColumn;
-    }
-
-    private float ConvertToUnits(Camera cam, float p)
-    {
-        float ortho = cam.orthographicSize;
-        float pixelH = cam.pixelHeight;
-
-        return (p * ortho * 2) / pixelH;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * PUBLIC ACCESSORS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
@@ -461,6 +389,17 @@ public class BallDropper : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void SetSpawnLocation()
+    {
+        ballDropHeight = track.GetTop() - 30;
+        spawnLoc = new Vector3(0, track.gameYValue, ballDropHeight);
+    }
+
+    public Vector3 GetSpawnLocation(int spawnNum)
+    {
+        return new Vector3(track.ballCols[spawnNum], track.gameYValue, ballDropHeight); 
+    }
 
     public BallData[] GetAllBallData()
     {
