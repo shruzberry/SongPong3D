@@ -20,33 +20,43 @@ using System;
 
 public class BallDropper : MonoBehaviour
 {
-    //___________Settings________________
-    public float yValue = 2; // the y-value that the balls appear on
-    private float lagAmount = 0.07f; // arbitrary "lag" amount apparent in all ball behaviors, meant to be 0.0f
-    public bool dropEnabled = true; // should balls drop?
-
     //___________References______________
     private Game game;
     private Track track;
     private SongController song;
 
+    //___________Settings________________
+    [Header("Settings")]
+    public bool dropEnabled = true; // should balls drop?
+    public bool debugBalls = false;
+    private float lagAmount = 0.07f; // arbitrary "lag" amount apparent in all ball behaviors, meant to be 0.0f
+
+    //___________Loader__________________
+    [Header("Loader")]
+    public string dataLocation = "SongData/data/";
+    public string ballMapName; // name of the current song
+
     //___________SPAWN___________________
+    [HideInInspector]
     public float ballDropHeight;
+    [HideInInspector]
     public Vector3 spawnLoc;
 
     //___________Balls___________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
         private int numBalls; // total number of balls in ballDataList
-        public int currentBallIndex; // pointer that keeps track of where we are in ballDataList
 
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
 
     //__________Ball Attributes__________
-    public Vector3 ballAxis; // the axis that balls move down primarily
+    [Header("Ball Settings")]
     public float startSpeed;
-    public float size;
     public float gravity;
     public float bounceHeightBase;
+    [HideInInspector]
+    public Vector3 ballAxis; // the axis that balls move down primarily
+    [HideInInspector]
+    public float size;
 
     //__________Ball Types_______________
     private GameObject simpleBall;
@@ -56,20 +66,15 @@ public class BallDropper : MonoBehaviour
     private float fallTimeBeats;
     public Vector2 fallAxisBounds;
 
-    //___________Loader__________________
-    public static string dataLocation = "SongData/data/";
-    public string ballMapName; // name of the current song
-
     //___________Events__________________
     public delegate void OnBallSpawned(Ball ball);
     public event OnBallSpawned onBallSpawned;
 
     //___________State___________________
+    [Header("State")]
+    public int currentBallIndex; // pointer that keeps track of where we are in ballDataList
     private bool isFinished = false; // any balls left to update
 
-    //___________Debug___________________
-    public bool showColumns = true; // if true, show columns
-    public bool printLoadedBalls = false;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
@@ -337,7 +342,7 @@ public class BallDropper : MonoBehaviour
     public void Activate()
     {
         LoadBalls();
-        if(printLoadedBalls) DebugLoadedBalls();
+        if(debugBalls) DebugLoadedBalls();
         // balls not instantiated yet
         CalcMoveTimes();
     }

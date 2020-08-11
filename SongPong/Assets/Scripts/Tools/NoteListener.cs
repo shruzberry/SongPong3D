@@ -34,6 +34,7 @@ public class NoteListener : MonoBehaviour
     public List<NoteData> data;
 
     public Track track;
+    public Keyboard keyboard;
 
     private bool active = true;
     private InputMaster input;
@@ -60,6 +61,7 @@ public class NoteListener : MonoBehaviour
     {
         input.Enable();
         track = FindObjectOfType<Track>();
+        keyboard = InputSystem.GetDevice<Keyboard>();
     }
 
     void OnDisable()
@@ -78,9 +80,9 @@ public class NoteListener : MonoBehaviour
     
     void Update()
     {
-        Keyboard kb = InputSystem.GetDevice<Keyboard>();
-        if(kb.spaceKey.wasPressedThisFrame && active)
+        if(keyboard.spaceKey.wasPressedThisFrame && active)
         {
+            /*
             NoteData nd = new NoteData();
             
             nd.hitPosition = track.GetNearestColumn(mousePos);
@@ -88,6 +90,8 @@ public class NoteListener : MonoBehaviour
             nd.noteDirection = Direction.positive;
 
             data.Add(nd);
+            */
+           Debug.Log("CLICK: " + sc.GetSongTimeBeats());
         }
     }
 }

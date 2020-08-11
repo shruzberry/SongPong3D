@@ -13,6 +13,7 @@ public class Track : MonoBehaviour
 
     //_______ATTRIBUTES__________________
     [Range(1,16)]
+    public bool showColumns = true; // if true, show columns
     public int NUM_COL = 16; // number of ball columns
     public float padding;
     public float paddingFallAxis;
@@ -55,7 +56,7 @@ public class Track : MonoBehaviour
         middle = transform.position.z;
 
         CalcColumns();
-        SpawnColumns();
+        if(showColumns) SpawnColumns();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
