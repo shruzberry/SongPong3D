@@ -27,6 +27,10 @@ public class PaddleManager : MonoBehaviour
     public GameObject paddle1;
     public GameObject paddle2;
 
+    //__________LEDS__________________
+    [Header("LEDs")]
+    public float beatsPerFlash;
+
     public void Activate()
     {
         // REFERENCES
@@ -39,6 +43,7 @@ public class PaddleManager : MonoBehaviour
         // PADDLE 2
         // moves along x axis (horizontal)
         PaddleMover pm2 = paddle2.GetComponent<PaddleMover>();
+        pm2.Initialize(this);
         pm2.speed = speed;
         pm2.paddleAxis = new Vector3(1,0,0);
         pm2.distFromTrack = distFromTrack;

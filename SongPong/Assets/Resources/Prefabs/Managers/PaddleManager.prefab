@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   padding: 8
+  speed: 11
   paddle1: {fileID: 6951196518428667468}
   paddle2: {fileID: 6951196518251095643}
+  beatsPerFlash: 4
 --- !u!1001 &4735052277282849697
 PrefabInstance:
   m_ObjectHideFlags: 0

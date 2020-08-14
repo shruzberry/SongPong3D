@@ -31,6 +31,15 @@ public class PaddleMover : MonoBehaviour
         height = GetComponent<BoxCollider>().bounds.size.z;
     }
 
+    public void Initialize(PaddleManager pm)
+    {
+        LED[] leds = GetComponentsInChildren<LED>();
+        foreach(LED led in leds)
+        {
+            led.Initialize(pm);
+        }
+    }
+
     public void Move(CallbackContext context)
     {
         _movement = context.ReadValue<Vector2>();

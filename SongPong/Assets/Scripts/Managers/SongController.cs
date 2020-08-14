@@ -96,6 +96,11 @@ public class SongController : MonoBehaviour
         return (60.0f / songData.bpm) * (beat);
     }
 
+    public float GetBPM()
+    {
+        return songData.bpm;
+    }
+
     public void LoadSong(SongData newSongData)
     {
         source = GetComponent<AudioSource>();

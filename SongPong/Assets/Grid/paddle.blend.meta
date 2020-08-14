@@ -3,7 +3,32 @@ guid: bf20634cbc76741799c85b78a959fbe3
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LED
+    second: {fileID: 2100000, guid: d9d20a29c5b4349e2bb11f18b2da5b92, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LICENSEPLATE
+    second: {fileID: 2100000, guid: ab25579992da84186bd3ec6f48a14df1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LPFrame
+    second: {fileID: 2100000, guid: 8d04b3963f349412e99fb95b0e38c45c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paddle
+    second: {fileID: 2100000, guid: 642b65a84f2984b5eaaf36b19276aee2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WLED
+    second: {fileID: 2100000, guid: d0f05027456ce4069a01c7c5ccac985d, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
