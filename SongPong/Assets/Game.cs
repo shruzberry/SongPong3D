@@ -29,6 +29,9 @@ public class Game : MonoBehaviour
     [SerializeField]
     private SongData editorSong;
 
+    // TIME
+    private float startTime;
+
     private void OnEnable() 
     {
         ReloadBallData();
@@ -39,6 +42,8 @@ public class Game : MonoBehaviour
      */
     public bool Initialize(SongData song)
     {
+        startTime = Time.time;
+
         //OHCamera ohCam = FindObjectOfType<OHCamera>();
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
@@ -149,5 +154,10 @@ public class Game : MonoBehaviour
     public List<BallData> GetBallData()
     {
         return balls;
+    }
+
+    public float GetGameTime()
+    {
+        return Time.time - startTime;
     }
 }

@@ -199,7 +199,7 @@ public class BallDropper : MonoBehaviour
         BallData checkBall = ballDataList[currentBallIndex];
         float dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
 
-        if(!isFinished && dropBeat <= song.ToBeat(Time.time) - fallTimeBeats)
+        if(!isFinished && dropBeat <= song.ToBeat(game.GetGameTime()) - fallTimeBeats)
         {
             spawning = true;
             // Check other balls for spawn 

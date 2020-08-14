@@ -85,7 +85,7 @@ public class SongBuilder : EditorWindow
         game = FindObjectOfType<Game>();
         songController = FindObjectOfType<SongController>();
         
-        songData = game.GetEditorSong();
+        if(game!= null) songData = game.GetEditorSong();
         addNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/CreateNote_tex.png", typeof(Texture2D));
         deleteNoteTexture = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Editor/Textures/DeleteNote_tex.png", typeof(Texture2D));
         oldColor = GUI.color;
