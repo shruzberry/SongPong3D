@@ -23,5 +23,5 @@ MonoBehaviour:
   options:
   - opt_name: Bounce Height
     value: 4
-  activity: 0
+  activity: 100
   prefabPath: Prefabs/Balls/BounceBall

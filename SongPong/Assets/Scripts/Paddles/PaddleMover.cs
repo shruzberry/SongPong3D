@@ -25,6 +25,9 @@ public class PaddleMover : MonoBehaviour
 
     private float sprintTriggerTime;
 
+    private WLED leftWLED;
+    private WLED rightWLED;
+
     private void Awake() 
     {
         radius = GetComponent<BoxCollider>().bounds.size.x / 2;
@@ -38,6 +41,12 @@ public class PaddleMover : MonoBehaviour
         {
             led.Initialize(pm);
         }
+
+        leftWLED = this.transform.Find("paddle").transform.Find("WLED_L").GetComponent<WLED>();
+        rightWLED = this.transform.Find("paddle").transform.Find("WLED_R").GetComponent<WLED>();
+
+        leftWLED.Initialize(this);
+        rightWLED.Initialize(this);
     }
 
     public void Move(CallbackContext context)
@@ -59,6 +68,22 @@ public class PaddleMover : MonoBehaviour
         paddlePos.z = distFromTrack;
 
         transform.position = paddlePos;
+
+        if(_movement == Vector3.left)
+        {
+            leftWLED.TurnLEDOn();
+            rightWLED.TurnLEDOff();
+        }
+        else if(_movement == Vector3.right)
+        {
+            leftWLED.TurnLEDOff();
+            rightWLED.TurnLEDOn();
+        }
+        else
+        {
+            leftWLED.TurnLEDOn();
+            rightWLED.TurnLEDOn();
+        }
     }
 
     /**
