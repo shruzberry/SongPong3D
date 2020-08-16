@@ -1,32 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using Types;
 using System;
-using UnityEngine.Events;
+
+/**
+ *  An abstract Data Type that holds information about a Ball
+ */
 
 [CreateAssetMenuAttribute(fileName="Ball", menuName="Ball")]
 public abstract class BallData : ScriptableObject
 {
-    [HideInInspector]
-    public int id;
-    public bool enabled = true;
-    public BallTypes type;
-    public List<NoteData> notes;
+    //_____ REFERENCES _________________
+
+    //_____ COMPONENTS ________________
     [HideInInspector]
     public GameObject prefab;
-    public string baseBallPath;
+    public List<NoteData> notes;
+    
+    //_____ ATTRIBUTES __________________
+    [HideInInspector]
+    public int id; // unique id for the ball
 
-    [SerializeField]
+    public BallTypes type; // type of the ball
     public List<BallOption> options;
 
     public abstract int MinNotes{get;}
     public abstract int MaxNotes{get;}
 
-    //[HideInInspector]
-    public float activity;
-    
+    //_____ BOOLS _______________________
+    public bool enabled = true; // whether the ball should be spawned
+
+    //_____ OTHER _____________________
+    private string baseBallPath;
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * INITIALIZE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     public virtual void OnEnable()
     {
         SetPrefab();
@@ -37,6 +47,31 @@ public abstract class BallData : ScriptableObject
     public void SetName()
     {
         this.name = type + "Ball" + id;
+    }
+
+    protected void InitializeOptions()
+    {
+        if(options == null)
+        {
+            options = new List<BallOption>();
+        }
+    }
+
+    protected void InitializeOption(float value, string name)
+    {
+        if(!options.Exists(x => x.opt_name == name))
+        {
+            options.Add(new BallOption(value, name));
+        }
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * VALIDATE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/    
+
+    public void OnValidate() 
+    {
+        SortNotes();
     }
 
     public virtual bool CheckValid()
@@ -56,12 +91,11 @@ public abstract class BallData : ScriptableObject
         return valid;
     }
 
-    public void OnValidate() 
-    {
-        SortNotes();
-    }
-
     protected abstract void SetPrefab();
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * SORTING
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     /**
      * Sort this balls' notes according to their hit time
@@ -87,29 +121,13 @@ public abstract class BallData : ScriptableObject
         return a.notes[0].hitBeat.CompareTo(b.notes[0].hitBeat);
     }
 
-    protected void InitializeOptions()
-    {
-        if(options == null)
-        {
-            options = new List<BallOption>();
-        }
-    }
-
-    protected void InitializeOption(float value, string name)
-    {
-        if(!options.Exists(x => x.opt_name == name))
-        {
-            options.Add(new BallOption(value, name));
-        }
-    }
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * GETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public float GetOption(string name)
     {
         return options.Find(x => x.opt_name == name).value;
     }
 
-    public void PulseActive()
-    {
-        activity = 100.0f;
-    }
 }

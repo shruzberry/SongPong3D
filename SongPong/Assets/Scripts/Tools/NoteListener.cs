@@ -1,48 +1,35 @@
-﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-________ DEFENITION ________
-Class Name: NoteListener.cs
-Purpose: A toggleable tool that listens for clicks on the screen and
-adds them to a list as notes
-
-________ USAGE ________
-* Create an instance of NoteListener
-* Call NoteListener.Enable();
-* Click around the game view at different times
-* Access NoteListener.data;
-
-________ ATTRIBUTES ________
-+ NoteData data
-
-________ FUNCTIONS ________
-+ Enable()
-+ Disable()
-+ Clear()
-+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Types;
 using UnityEngine.InputSystem;
 
+/**
+ * A toggleable tool that listens for clicks on the screen and adds them to a list as notes
+ */
 public class NoteListener : MonoBehaviour
 {
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * MEMBERS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public List<NoteData> data;
-
+    //_____ SETTINGS ____________________
+    //_____ REFERENCES __________________
     public Track track;
     public Keyboard keyboard;
-
-    private bool active = true;
     private InputMaster input;
     private SongController sc;
     private BallDropper bd;
 
+    //_____ COMPONENTS __________________
+    public List<NoteData> data;
+
+    //_____ ATTRIBUTES __________________
     Vector2 mousePos;
-    
+
+    //_____ STATE  ______________________
+    private bool active = true;
+
+    //_____ OTHER _______________________
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * PUBLIC FUNCTIONS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/

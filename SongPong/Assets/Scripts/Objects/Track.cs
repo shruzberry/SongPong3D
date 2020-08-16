@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/**
+ * The plane that the paddle moves on and balls fall along
+ */
 public class Track : MonoBehaviour
 {
     //_______REFERENCES__________________
@@ -45,6 +46,15 @@ public class Track : MonoBehaviour
         this.game = game;
 
         mesh_renderer = GetComponentInChildren<MeshRenderer>();
+
+        InitializeSize();
+
+        CalcColumns();
+        if(showColumns) SpawnColumns();
+    }
+
+    private void InitializeSize()
+    {
         position = transform.position;
         size = mesh_renderer.bounds.size;
         width = size.x;
@@ -54,9 +64,6 @@ public class Track : MonoBehaviour
         left = transform.position.x - (width / 2);
         right = transform.position.x + (width / 2);
         middle = transform.position.z;
-
-        CalcColumns();
-        if(showColumns) SpawnColumns();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -95,6 +102,9 @@ public class Track : MonoBehaviour
         col.transform.parent = this.transform;
     }
 
+    /**
+     * DEPRECATED
+     */
     public int GetNearestColumn(Vector2 screenPos, bool debug = false)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
@@ -118,14 +128,6 @@ public class Track : MonoBehaviour
         if(debug){print("NEAREST COLUMN: " + nearestColumn);}
 
         return nearestColumn;
-    }
-
-    private float ConvertToUnits(Camera cam, float p)
-    {
-        float ortho = cam.orthographicSize;
-        float pixelH = cam.pixelHeight;
-
-        return (p * ortho * 2) / pixelH;
     }
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=

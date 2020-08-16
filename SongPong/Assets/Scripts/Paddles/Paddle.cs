@@ -1,32 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
+/**
+ * The paddle that the player controls to catch balls
+ */
 [RequireComponent(typeof(BoxCollider))]
-public class PaddleMover : MonoBehaviour
+public class Paddle : MonoBehaviour
 {
-    //__________ATTRIBUTES________________
+    //_____ SETTINGS ____________________
+    //_____ REFERENCES __________________
+    PaddleManager paddleManager;
+
+    //_____ COMPONENTS __________________
+    private WLED leftWLED;
+    private WLED rightWLED;
+
+    //_____ ATTRIBUTES __________________
+    public Vector3 paddleAxis;
+    public Vector2 bounds;
+
     public float radius; // the half-width or radius of the paddle
     public float height; // the height / thickness of the paddle
     public float yValue;
     public float distFromTrack;
 
-    //__________MOVEMENT________________
+    //_____ STATE  ______________________
+
+    //_____ MOVEMENT ____________________
     public float speed = 10.0f;
     public float sprint;
-
-    public Vector3 paddleAxis;
-    public Vector2 bounds;
-
     private Vector3 _movement;
     private Vector3 paddlePos;
 
     private float sprintTriggerTime;
 
-    private WLED leftWLED;
-    private WLED rightWLED;
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * INITIALIZE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void Awake() 
     {
@@ -36,10 +46,22 @@ public class PaddleMover : MonoBehaviour
 
     public void Initialize(PaddleManager pm)
     {
+        this.paddleManager = pm;
+        this.speed = pm.speed;
+        this.paddleAxis = pm.paddleAxis;
+        this.distFromTrack = pm.distFromTrack;
+        this.yValue = pm.yValue;
+        this.bounds = pm.bounds;
+
+        InitializeLEDs();
+    }
+
+    private void InitializeLEDs()
+    {
         LED[] leds = GetComponentsInChildren<LED>();
         foreach(LED led in leds)
         {
-            led.Initialize(pm);
+            led.Initialize(paddleManager);
         }
 
         leftWLED = this.transform.Find("paddle").transform.Find("WLED_L").GetComponent<WLED>();
@@ -48,6 +70,10 @@ public class PaddleMover : MonoBehaviour
         leftWLED.Initialize(this);
         rightWLED.Initialize(this);
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * MOVE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void Move(CallbackContext context)
     {
@@ -58,6 +84,10 @@ public class PaddleMover : MonoBehaviour
     {
         sprint = context.ReadValue<float>() * 5.0f;
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * UPDATE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     void Update()
     {
@@ -85,6 +115,10 @@ public class PaddleMover : MonoBehaviour
             rightWLED.TurnLEDOn();
         }
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * GETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     /**
      * Returns the paddles' axis adjusted so that it lies on the top of the paddle instead of the middle

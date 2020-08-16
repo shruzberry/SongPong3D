@@ -4,19 +4,11 @@ using Types;
 
 public class BounceBall : Ball
 {
-    //________ATTRIBUTES____________
-    protected float radius;
-    public Vector2 fallAxisBounds;
+    //_____ SETTINGS ____________________
 
-    //________MOVEMENT______________
-    [Header("Movement")]
-    protected Vector3 velocity;
-    public float speed;
-    public float gravity;
-    public float baseHeight = 5;
-    public float bounceHeight;
+    //_____ REFERENCES __________________
 
-    //________COMPONENTS____________
+    //_____ COMPONENTS __________________
     [Header("Components")]
     private Rigidbody rb;
     private Animator animator;
@@ -24,21 +16,32 @@ public class BounceBall : Ball
     public GameObject ring2;
     public GameObject ring3;
 
-    //________APPEARANCE____________
+    //_____ ATTRIBUTES __________________
     [Header("Appearance")]
     [ColorUsage(true, true)]
     public Color dissolveColor;
+    
+    private float radius;
 
-    //________MOVEMENT______________
+    //_____ BOOLS _______________________
+
+    //_____ MOVEMENT ____________________
+    [Header("Movement")]
+    protected Vector3 velocity;
+    public float speed;
+    public float gravity;
+    public float baseHeight = 5;
+    public float bounceHeight;
+    public Vector2 fallAxisBounds;
     private float deltaH;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBall(Game game, BallData data, BallDropper dropper)
+    public override void Initialize(Game game, BallData data, BallDropper dropper)
     {
-        base.InitializeBall(game, data, dropper);
+        base.Initialize(game, data, dropper);
 
         // downcast data to specific type
         BounceBallData bounceData = (data as BounceBallData);
@@ -137,14 +140,6 @@ public class BounceBall : Ball
 
         // Move along the other axis
         velocity += otherAxisVector * (otherDeltaD / moveTime);
-    }
-
-    private Vector2 Abs(Vector2 in_vec)
-    {
-        Vector2 new_vec = in_vec;
-        new_vec.x = Mathf.Abs(in_vec.x);
-        new_vec.y = Mathf.Abs(in_vec.y);
-        return new_vec;
     }
 
     public override void MoveActions()

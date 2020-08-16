@@ -1,46 +1,45 @@
-﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-________ DEFENITION ________
-Class Name: Ball
-Purpose: This abstract class defines attributes and behaviors that all balls in Song Pong have, including state info,
-        notes, sprite, animations, etc.
-Associations: All child ball types
-__________ USAGE ___________
-* To create a new type of ball, have it extend this class. You must implement ALL methods required.
-________ ATTRIBUTES ________
-+ id: the unique ball ID the player uses
-+ status: the current state of the ball
-* notes: a list of all notes this ball is associated with
-* velocity: the velocity in 2D of this ball
-________ FUNCTIONS _________
-TODO
- +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Types;
+
+/**
+ * This abstract class defines attributes and behaviors that all balls in Song Pong have, including state info,
+ * notes, sprites, animations, etc.
+ */
 
 [RequireComponent(typeof(SphereCollider))]
 public abstract class Ball : MonoBehaviour
 {
-    //___________REFERENCES_____________
+    //_____ SETTINGS ____________________
+
+    //_____ REFERENCES _________________
     private BallDropper dropper;
     public SongController song;
 
-    //___________ATTRIBUTES_____________
-    public int id;
-    public BallTypes type;
-    public Vector3 spawnLoc;
-    protected float size;
-
-    protected GameType gameType;
-    protected Vector3 axisVector; // the vector representing which axis the game is played on: (1,0) is x-axis, (0,1) is y-axis
-    protected Vector3 otherAxisVector; // the unit vector that represents the other axis (with same direction)
-
-    //___________COMPONENTS_____________
+    //_____ COMPONENTS ________________
     private SphereCollider ball_collider;
     private GameObject ball_render;
 
-    //___________STATE__________________
+    //_____ ATTRIBUTES __________________
+    public int id; // unique id each ball receives
+    public BallTypes type;
+    protected float size;
+    public List<BallOption> options;
+
+    public List<NoteData> notes;
+    public int numNotes;
+    public int currentNote;
+
+    [HideInInspector]
+    public BallData ballData;
+
+    //_____ BOOLS ______________________
+
+    //_____ OTHER ______________________
+    protected Vector3 axisVector; // the vector representing which axis the game is played on: (1,0) is x-axis, (0,1) is y-axis
+    protected Vector3 otherAxisVector; // the unit vector that represents the other axis (with same direction)
+
+    //_____ STATE_______________________
     protected BallState currentState;
 
     public bool ready = false;
@@ -48,7 +47,7 @@ public abstract class Ball : MonoBehaviour
     public bool missed = false;
     public bool exit = false;
 
-    //___________EVENTS_________________
+    //_____ EVENTS _____________________
     public delegate void BallReady(Ball ball);
     public event BallReady onBallReady;
 
@@ -58,24 +57,13 @@ public abstract class Ball : MonoBehaviour
     public delegate void BallSpawn(Ball ball);
     public event BallSpawn onBallSpawn;
 
-    //___________DATA____________________
-    public List<NoteData> notes;
-    [HideInInspector]
-    public BallData ballData;
-
-    //___________MOVEMENT________________
+    //_____ MOVEMENT ____________________
     public float negative;
 
-    //___________TIME____________________
+    //_____ TIME ________________________
     public float spawnTimeBeats;
     public float[] catchTimesBeats;
 
-    //___________NOTES___________________
-    public int numNotes;
-    public int currentNote;
-
-    //___________OPTIONS_________________
-    public List<BallOption> options;
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * STATE
@@ -96,13 +84,12 @@ public abstract class Ball : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public virtual void InitializeBall(Game game, BallData data, BallDropper dropper)
+    public virtual void Initialize(Game game, BallData data, BallDropper dropper)
     {
         // REFERENCES
         this.ballData = data;
         this.dropper = dropper;
         this.song = game.songController;
-        this.gameType = game.gameType;
 
         // COMPONENTS
         ball_collider = GetComponent<SphereCollider>();
@@ -116,25 +103,18 @@ public abstract class Ball : MonoBehaviour
         this.id = dropper.currentBallIndex;
         this.name = id.ToString() + "_" + type.ToString();
         gameObject.layer = LayerMask.NameToLayer("Balls");
-        size = dropper.size;
-        ball_collider.radius = size/2;
-        transform.localScale = new Vector2(size,size);
-        ball_render.transform.localScale = new Vector2(size, size);
+        size = dropper.GetSize();
+        SetSize();
 
         // NOTES
         this.notes = data.notes;
         currentNote = 0;
         numNotes = notes.Count;
-
-        // INDEXING
         catchTimesBeats = new float[numNotes + 1];
 
         // POSITION
-        spawnLoc = GetNotePosition(currentNote);
-        transform.position = spawnLoc;
-
-        // DIRECTION
         SetAxisVectors();
+        transform.position = GetNotePosition(currentNote);
 
         // START IN IDLE STATE
         SetState(new IdleState(this));
@@ -151,15 +131,19 @@ public abstract class Ball : MonoBehaviour
         otherAxisVector = new Vector3(1,0,0);
     }
 
+    private void SetSize()
+    {
+        ball_collider.radius = size / 2;
+        transform.localScale = new Vector2(size, size);
+        ball_render.transform.localScale = new Vector2(size, size);
+    }
+
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * NOTES
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void NextNote(){ currentNote++; }
 
-    /**
-     * Returns the position in world coordinates of the given note
-     */
     public Vector3 GetNotePosition(int index)
     {
         int spawnNum = notes[index].hitPosition;
@@ -196,6 +180,7 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void MoveActions();
+
     public virtual void ResetMove(){}
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -212,6 +197,7 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract bool CheckMiss();
+
     public abstract void MissActions();
 
  /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -219,6 +205,7 @@ public abstract class Ball : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public abstract void OnExitActions();
+    
     public abstract void ExitActions();
 
     public void DestroyBall()

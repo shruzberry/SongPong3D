@@ -1,33 +1,37 @@
-﻿using System.Collections;
-using UnityEngine;
-using Types;
+﻿using UnityEngine;
 
 public class SimpleBall : Ball
 {
-    //________ATTRIBUTES____________
+    //_____ SETTINGS ____________________
+
+    //_____ REFERENCES __________________
+
+    //_____ COMPONENTS __________________
+    private Rigidbody rb;
+    private Animator animator;
+
+    //_____ ATTRIBUTES __________________
     protected float radius;
 
-    //________MOVEMENT______________
+    //_____ BOOLS _______________________
+
+    //_____ OTHER _______________________
+
+    //_____ MOVEMENT ____________________
     [Header("Movement")]
     private Vector2 fallAxisBounds;
     protected Vector3 velocity;
     public float speed;
     public float gravity;
-
-    //________COMPONENTS____________
-    private Rigidbody rb;
-    private Animator animator;
-
-    //________MOVEMENT______________
     private float deltaH;
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public override void InitializeBall(Game game, BallData data, BallDropper dropper)
+    public override void Initialize(Game game, BallData data, BallDropper dropper)
     {
-        base.InitializeBall(game, data, dropper);
+        base.Initialize(game, data, dropper);
 
         // MOTION
         fallAxisBounds = dropper.fallAxisBounds;
@@ -78,7 +82,6 @@ public class SimpleBall : Ball
         if(positionOnAxis < minValueOnAxis)
         {
             missed = true;
-            Debug.Log("MISS");
         }
         return missed;
     }
@@ -91,10 +94,10 @@ public class SimpleBall : Ball
 
    private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Paddle"){
-            //paddle = other.gameObject.GetComponent<Paddle>();
+        if(other.gameObject.tag == "Paddle")
+        {
             caught = true;
-            catchTimesBeats[currentNote] = song.GetSongTimeBeats();
+            catchTimesBeats[currentNote] = song.GetSongTimeBeats(); // set catchBeat
         }
     }
 

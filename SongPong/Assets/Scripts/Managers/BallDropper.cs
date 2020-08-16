@@ -1,76 +1,57 @@
-﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-________ DEFENITION ________
-Class Name: BallDropper
-Purpose: Takes a list of balls spawns and drops them at the correct time
-Associations: Song
-________ USAGE ________
-* Description of how to appropriatly use
-________ ATTRIBUTES ________
-+ public: brief description of usage
-* protected: brief description of usage
-- private: brief description of usage
-________ FUNCTIONS ________
-+ publicFunction(): description of usage
-- privateFunction(): description of usage
- +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/**
+ * Takes a list of balls spawns and drops them at the correct time to hit the paddle
+**/
 public class BallDropper : MonoBehaviour
 {
-    //___________References______________
-    private Game game;
-    private Track track;
-    private SongController song;
-
-    //___________Settings________________
+    //_____ SETTINGS ____________________
     [Header("Settings")]
     public bool dropEnabled = true; // should balls drop?
     public bool debugBalls = false;
     private float lagAmount = 0.07f; // arbitrary "lag" amount apparent in all ball behaviors, meant to be 0.0f
 
-    //___________Loader__________________
-    [Header("Loader")]
-    public string dataLocation = "SongData/data/";
-    public string ballMapName; // name of the current song
+    //_____ REFERENCES __________________
+    private Game game;
+    private Track track;
+    private SongController song;
 
-    //___________SPAWN___________________
-    [HideInInspector]
-    public float ballDropHeight;
-    [HideInInspector]
-    public Vector3 spawnLoc;
-
-    //___________Balls___________________
+    //_____ COMPONENTS __________________
     private List<BallData> ballDataList = new List<BallData>(); // all ball data in this scene
         private int numBalls; // total number of balls in ballDataList
 
     private List<Ball> activeBallList = new List<Ball>(); // all balls that have been activated, and thus update
 
-    //__________Ball Attributes__________
+    //_____ ATTRIBUTES __________________
     [Header("Ball Settings")]
     public float startSpeed;
     public float gravity;
-    public float bounceHeightBase;
-    [HideInInspector]
-    public Vector3 ballAxis; // the axis that balls move down primarily
-    [HideInInspector]
-    public float size;
+    public float bounceHeightBase; // the added modifier to the bounceHeight of a bounceBall
+    private Vector3 ballAxis; // the axis that balls move down primarily
+    private float size;
+    private float ballDropHeight;
+    private Vector3 spawnLoc;
 
-    //__________Ball Types_______________
+    //_____ LOADER _______________________
+    [Header("Loader")]
+    public string dataLocation = "SongData/data/";
+    public string ballMapName; // name of the current song
+
+    //_____ BALL TYPES ___________________
     private GameObject simpleBall;
     private GameObject bounceBall;
 
-    //___________Move Behaviors__________
+    //_____ MOVE BEHAVIORS ______________
     private float fallTimeBeats;
     public Vector2 fallAxisBounds;
 
-    //___________Events__________________
+    //_____ EVENTS ______________________
     public delegate void OnBallSpawned(Ball ball);
     public event OnBallSpawned onBallSpawned;
 
-    //___________State___________________
+    //_____ STATE _______________________
     [Header("State")]
     public int currentBallIndex; // pointer that keeps track of where we are in ballDataList
     private bool isFinished = false; // any balls left to update
@@ -80,12 +61,15 @@ public class BallDropper : MonoBehaviour
  * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void Initialize(Game game, SongController song)
+    public void Initialize(Game game, SongController song, Track track)
     {
         // REFERENCES
         this.game = game;
         this.song = song;
-        track = FindObjectOfType<Track>();
+        this.track = track;
+
+        // SONG
+        ballMapName = song.GetSongName();
 
         // PREFABS
         simpleBall = Resources.Load("Prefabs/SimpleBall") as GameObject;
@@ -110,15 +94,36 @@ public class BallDropper : MonoBehaviour
         {
             Debug.LogWarning("BallDropper initialized with " + lagAmount + "sec. of lag");
         }
+
+        LoadBalls();
+        if(debugBalls) DebugLoadedBalls();
+
+        // balls not instantiated yet
+        CalcMoveTimes();
     }
 
+    /**
+     * Calculates the amount of time it takes for a ball to fall from its spawn location to
+     * the destination at a certain speed and gravity
+     */
     private void CalcMoveTimes()
     {
-        float paddleLoc = FindObjectOfType<PaddleMover>().GetPaddleTopLoc();
+        float paddleLoc = FindObjectOfType<Paddle>().GetPaddleTopLoc();
 
         float fallTime = Fall_Behavior.CalcMoveTime(size/2, spawnLoc.z, paddleLoc, startSpeed, gravity);
+
         Debug.Log("Falltime: " + fallTime + "s. Beats: " + song.ToBeat(fallTime));
+
         fallTimeBeats = song.ToBeat(fallTime);
+    }
+
+    /**
+     * Sets the spawn location for balls
+     */
+    public void SetSpawnLocation()
+    {
+        ballDropHeight = track.GetTop() - 30;
+        spawnLoc = new Vector3(0, track.gameYValue, ballDropHeight);
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -135,17 +140,14 @@ public class BallDropper : MonoBehaviour
         {
             CheckSpawn();
         }
-        UpdateActiveBalls();
-        CheckActiveBallsForDestroy();
-    }
 
-    private void UpdateActiveBalls()
-    {
         // Update all active balls
         foreach(Ball ball in activeBallList)
         {
             ball.UpdateBall();
         }
+
+        CheckActiveBallsForDestroy();
     }
 
     private void FixedUpdate()
@@ -191,8 +193,8 @@ public class BallDropper : MonoBehaviour
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     /**
-     * Spawn balls before the song starts
-     **/
+     * Spawn balls before the song starts using the game time
+     */
     public void CheckPreSpawn()
     {
         bool spawning = false;
@@ -202,12 +204,11 @@ public class BallDropper : MonoBehaviour
         if(!isFinished && dropBeat <= song.ToBeat(game.GetGameTime()) - fallTimeBeats)
         {
             spawning = true;
-            // Check other balls for spawn 
+            // Check other balls for spawn
             // Because we want balls with same hit time to spawn in same Update loop so their motions are synced
             while(spawning)
             {
                 Ball ball = SpawnBall(checkBall);
-                checkBall.PulseActive();
 
                 // if there are no balls left, exit the loop
                 if(isFinished){ spawning = false; break;}
@@ -226,7 +227,7 @@ public class BallDropper : MonoBehaviour
      * If it is, it spawns the ball and any others ready to spawn
      * 
      * NOTE: This function assumes the ballDataList is PRE-SORTED
-     **/
+     */
     public void CheckSpawn()
     {
         bool spawning = false;
@@ -249,7 +250,6 @@ public class BallDropper : MonoBehaviour
             while(spawning)
             {
                 Ball ball = SpawnBall(checkBall);
-                checkBall.PulseActive();
 
                 // if there are no balls left, exit the loop
                 if(isFinished){ spawning = false; break;}
@@ -264,6 +264,9 @@ public class BallDropper : MonoBehaviour
         }
     }
 
+    /**
+     * Spawns a ball as a child of BallDropper
+     */
     public Ball SpawnBall(BallData data)
     {
         if(!data.enabled) return null; // if the ball is disabled, don't spawn it
@@ -272,7 +275,7 @@ public class BallDropper : MonoBehaviour
             Ball ball = Instantiate(data.prefab).GetComponent<Ball>();
             ball.transform.parent = transform; // set BallDropper object to parent
 
-            ball.InitializeBall(game, data, this);
+            ball.Initialize(game, data, this);
 
             // This lets anyone who is subscribed to the onBallSpawned event subscribe to the ball's events
             if(onBallSpawned != null) onBallSpawned(ball);
@@ -299,6 +302,9 @@ public class BallDropper : MonoBehaviour
         else { isFinished = true; }
     }
 
+    /**
+     * Goes to previous ball in the order
+     */
     private void PreviousBall()
     {
         if(currentBallIndex > 0) { currentBallIndex--; isFinished = false;}
@@ -333,18 +339,6 @@ public class BallDropper : MonoBehaviour
             ball.DestroyBall();
         }
         activeBallList.Clear();
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
- * PUBLIC ACCESSORS
- *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void Activate()
-    {
-        LoadBalls();
-        if(debugBalls) DebugLoadedBalls();
-        // balls not instantiated yet
-        CalcMoveTimes();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -395,12 +389,6 @@ public class BallDropper : MonoBehaviour
  * GETTERS
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void SetSpawnLocation()
-    {
-        ballDropHeight = track.GetTop() - 30;
-        spawnLoc = new Vector3(0, track.gameYValue, ballDropHeight);
-    }
-
     public Vector3 GetSpawnLocation(int spawnNum)
     {
         return new Vector3(track.ballCols[spawnNum], track.gameYValue, ballDropHeight); 
@@ -412,12 +400,16 @@ public class BallDropper : MonoBehaviour
         BallData[] ballData = Resources.LoadAll<BallData>(path);
         return ballData;
     }
+
+    public float GetSize()
+    {
+        return size;
+    }
+
     public List<Ball> GetActiveBalls(){return activeBallList;}
+
     public float GetFallTimeBeats(){return fallTimeBeats;}
 
-    public float GetTimeToFallBeats()
-    {
-        return fallTimeBeats;
-    }
+    public float GetTimeToFallBeats(){return fallTimeBeats;}
 
 }

@@ -1,31 +1,30 @@
 ﻿using UnityEngine;
 
 /**
- * The lines that draw to form columns on the track
+ * The grid floor that the game takes place on
  */
-public class Column : MonoBehaviour
+public class GridFloor : MonoBehaviour
 {
     //_____ SETTINGS ____________________
     //_____ REFERENCES __________________
-    private Track track;
-
     //_____ COMPONENTS __________________
+    private MeshRenderer mesh_renderer;
+
     //_____ ATTRIBUTES __________________
-    public float width = 1;
+    public Vector3 size;
 
     //_____ STATE  ______________________
     //_____ OTHER _______________________
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* INITIALIZE
+ * INITIALIZE
  *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     // Start is called before the first frame update
-    public void Initialize(float position)
+    void Awake()
     {
-        track = FindObjectOfType<Track>();
-        transform.position = new Vector3(position, 0.3f, 0);
-        transform.localScale = new Vector3(width / 100, 1, track.transform.localScale.z);
+        mesh_renderer = GetComponentInChildren<MeshRenderer>();
+        size = Vector3.Scale(mesh_renderer.bounds.size, transform.localScale);
     }
 
 }

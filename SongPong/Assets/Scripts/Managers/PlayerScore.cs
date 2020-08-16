@@ -1,56 +1,33 @@
-﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-
-________ DEFENITION ________
-Class Name: PlayerScore.cs
-Purpose: Subscribes to ball events and modifies a UI based on public parameters
-
-________ USAGE ________
-* Attach to gameobject
-* Select player to subscribe to
-
-________ PUBLIC ________
-+ int Score: The score of the player
-+ (enum)Paddles player: The paddle that the Player score is listening to
-
-+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Types;
 using TMPro;
 
+/**
+ * When a ball is caught, this class gives the player points
+ * Each ball has a different method of scoring.
+ */
 [ExecuteInEditMode]
 public class PlayerScore : MonoBehaviour
 {
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* MEMBERS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public Paddles player;
-    public int score = 0;
-
+    //_____ SETTINGS ____________________
+    //_____ REFERENCES __________________
     private BallDropper ballDropper;
     private SongController songController;
+    public Paddles player;
+
+    //_____ COMPONENTS __________________
     private TextMeshProUGUI scoreText;
     private List<Ball> activeBalls;
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PUBLIC FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    //_____ ATTRIBUTES __________________
+    public int score = 0;
 
-    public void FlashEndScore()
-    {
-        Transform t = GetComponent<Transform>();
-
-        Vector3 position = t.position;
-        t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
-
-        scoreText.alignment = TextAlignmentOptions.Center;
-    }
+    //_____ STATE  ______________________
+    //_____ OTHER _______________________
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* RUNTIME FUNCTIONS
+* INITIALIZE
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     void OnEnable()
@@ -64,13 +41,11 @@ public class PlayerScore : MonoBehaviour
 
     void Awake()
     {
-        //GetComponent<RectTransform>().position = new Vector3(Screen.width - 50.0f, Screen.height - 50.0f, 0.0f);
     }
 
-    void Update()
+    private void AddBallListener(Ball ball)
     {
-        checkPlayerSelect();
-        scoreText.text = "" + score;
+        ball.onBallCaught += Score; //can i have parameters?
     }
     
     void OnDisable()
@@ -80,26 +55,31 @@ public class PlayerScore : MonoBehaviour
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PRIVATE FUNCTIONS
+* UPDATE
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-    
-    private void checkPlayerSelect()
+
+    void Update()
     {
-        switch (player)
-        {
-            case Paddles.P1:
-                //scoreText.alignment = TextAnchor.LowerLeft;
-                break;
-            case Paddles.P2:
-                //scoreText.alignment = TextAnchor.LowerRight;
-                break;
-        }
+        scoreText.text = "" + score;
     }
 
-    private void AddBallListener(Ball ball)
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* DISPLAY
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void FlashEndScore()
     {
-        ball.onBallCaught += Score; //can i have parameters?
+        Transform t = GetComponent<Transform>();
+
+        Vector3 position = t.position;
+        t.position = new Vector3 (Screen.width * 0.5f, Screen.height * 0.5f, 0);
+
+        scoreText.alignment = TextAlignmentOptions.Center;
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* CALCULATIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void Score(Ball ball)
     {

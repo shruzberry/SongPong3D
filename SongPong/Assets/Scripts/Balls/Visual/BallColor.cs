@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum ColorType {None, Main, Light, Dark};
 
@@ -9,8 +7,6 @@ public class BallColor : MonoBehaviour
     public Color color;
     private Color lighterColor;
     private Color darkColor;
-
-    private float intensity = 5.0f;
 
     private ParticleEffect[] effects;
 

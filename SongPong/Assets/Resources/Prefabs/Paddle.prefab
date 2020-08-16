@@ -323,17 +323,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2432459001415378426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b2e64bd5b5c04cebac1b029ecea2ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1.4
-  height: 0.25
+  paddleAxis: {x: 0, y: 0, z: 0}
+  bounds: {x: 0, y: 0}
+  radius: 0
+  height: 0
   yValue: 0
   distFromTrack: 0
-  speed: 7.5
+  speed: 10
   sprint: 0
-  paddleAxis: {x: 1, y: 0, z: 0}
-  bounds: {x: 0, y: 0}
 --- !u!95 &3089103530301805030
 Animator:
   serializedVersion: 3

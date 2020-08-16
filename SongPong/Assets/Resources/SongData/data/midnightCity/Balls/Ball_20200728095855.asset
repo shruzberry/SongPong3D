@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe877721e99694a4c9b1e94bc45ebc7e, type: 3}
   m_Name: Ball_20200728095855
   m_EditorClassIdentifier: 
-  id: 0
-  enabled: 1
-  type: 1
+  prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
   notes:
   - {fileID: 11400000, guid: 9529f7a2cde670247823c4ddd7a4b1c0, type: 2}
   - {fileID: 11400000, guid: f6768e15e6e75f342bc30fd2a93cfd54, type: 2}
@@ -23,10 +21,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9c30c4d7b2e4ed947957ed2428d4d153, type: 2}
   - {fileID: 11400000, guid: 35ec080d242c5b548a9d982bdf847afa, type: 2}
   - {fileID: 11400000, guid: 2eed267c40593f94f84d4df115583ba5, type: 2}
-  prefab: {fileID: 7317875046587389755, guid: ef7dc9654bac847cb81b27b2cdca5fb8, type: 3}
-  baseBallPath: 
+  id: 0
+  type: 1
   options:
   - opt_name: Bounce Height
     value: 6
-  activity: 100
+  enabled: 1
   prefabPath: Prefabs/Balls/BounceBall

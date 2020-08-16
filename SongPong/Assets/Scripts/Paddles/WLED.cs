@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WLED : MonoBehaviour
 {
     private Material material;
 
-    private bool isOn;
-
-    public void Initialize(PaddleMover pm)
+    public void Initialize(Paddle pm)
     {
         material = GetComponent<MeshRenderer>().material;
         TurnLEDOn();
@@ -16,13 +12,11 @@ public class WLED : MonoBehaviour
 
     public void TurnLEDOn()
     {
-        isOn = true;
         material.EnableKeyword("_EMISSION");
     }
 
     public void TurnLEDOff()
     {
-        isOn = false;
         material.DisableKeyword("_EMISSION");
     }
 }

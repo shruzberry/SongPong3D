@@ -6,31 +6,39 @@ public enum GameType {OnePlayer, TwoPlayer};
 [ExecuteInEditMode]
 public class Game : MonoBehaviour
 {
-    // PATH
+    //_____ SETTINGS ____________________
     [Header("Path")]
     public string rootDataPath = "SongData/data/"; // relative to Resources/
-
-    // GAME
-    [Header("Game")]
-    public GameType gameType;
-    public SongData songData;
-    private List<BallData> balls;
     private string dataPath;
 
-    // MANAGERS
+    [Header("Game")]
+    public GameType gameType;
+
+    //_____ REFERENCES __________________
+    private InputMaster inputMaster;
+    
+    //_____ COMPONENTS __________________
+    [Header("Song")]
+    [SerializeField]
+    private SongData editorSong;
+    public SongData songData;
+
     [Header("Managers")]
     public Track track;
     public SongController songController;
     public PaddleManager paddleManager;
     public BallDropper ballDropper;
+    private List<BallData> balls;
 
-    // EDITOR
-    [Header("Editor")]
-    [SerializeField]
-    private SongData editorSong;
-
-    // TIME
+    //_____ ATTRIBUTES __________________
     private float startTime;
+
+    //_____ STATE  _______________________
+    //_____ OTHER _______________________
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * INITIALIZE
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void OnEnable() 
     {
@@ -45,6 +53,7 @@ public class Game : MonoBehaviour
         startTime = Time.time;
 
         //OHCamera ohCam = FindObjectOfType<OHCamera>();
+        inputMaster = FindObjectOfType<InputHandler>().inputMaster;
         songController = FindObjectOfType<SongController>();
         paddleManager = FindObjectOfType<PaddleManager>();
         track = FindObjectOfType<Track>();
@@ -56,18 +65,18 @@ public class Game : MonoBehaviour
 
         // LOAD SONG
         this.songData = song;
+        songController.Initialize(inputMaster);
         songController.LoadSong(song);
 
         // PADDLES
-        paddleManager.Activate();
+        paddleManager.Initialize(this, track);
 
         // BALLS
         balls = LoadBallData(song.name);
         SortBalls();
 
         // BALL DROPPER
-        ballDropper.Initialize(this, songController);
-        ballDropper.Activate();
+        ballDropper.Initialize(this, songController, track);
         ballDropper.ballMapName = song.songName;
 
         float waitBeats = ballDropper.GetTimeToFallBeats();
@@ -81,7 +90,7 @@ public class Game : MonoBehaviour
     /**
      * Called by LevelLoader when game is being initialized through the Song Scene
      * Sets the song equal to the song from the SongBuilder editor
-     **/
+     */
     public bool InitializeEditor()
     {
         if(editorSong != null)
@@ -96,15 +105,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void SetEditorSong(SongData song)
-    {
-        editorSong = song;
-    }
-
-    public SongData GetEditorSong()
-    {
-        return editorSong;
-    }
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * LOADING
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     /**
      * Called by SongBuilder to reload ball data files when the song gets changed
@@ -151,9 +154,27 @@ public class Game : MonoBehaviour
         }
     }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * SETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void SetEditorSong(SongData song)
+    {
+        editorSong = song;
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+ * GETTERS
+ *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
     public List<BallData> GetBallData()
     {
         return balls;
+    }
+
+    public SongData GetEditorSong()
+    {
+        return editorSong;
     }
 
     public float GetGameTime()

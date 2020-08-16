@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
-
+/**
+ * Automatically pauses the game when the player moves the mouse outside of the editor window
+ */
 public class PlayOnHover : MonoBehaviour
 {
     public float gameSpeed = 1.0f;

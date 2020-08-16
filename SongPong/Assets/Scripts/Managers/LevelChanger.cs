@@ -1,49 +1,34 @@
-﻿/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-
-________ DEFENITION ________
-Class Name: Level Changer
-Purpose: Loads the game into the Song scene set up for a specific song
-
-__________ USAGE ___________
-* Attach to GameObject
-* Load in songData
-* Transition to Song scene
-
-_________ PUBLIC ___________
-+ FadeToNextLevel(): Fade to next scene index
-    - Song should index 1
-+ FadeToLevel(int levelIndex): Fade to specific scene
-+ SetSong(SongData sd): Set song data to be loaded in
-    - Call before you transition scene
-
-+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
+/**
+ * Load game into the Song scene for a specific SongData
+ */
 public class LevelChanger : MonoSingleton<LevelChanger>
 {
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* MEMBERS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+    //_____ SETTINGS ____________________
+    private bool firstLevelLoaded = true; // check if launch directly into the Song scene
 
-    // REFERENCES
+    //_____ REFERENCES __________________
+    private Game game;
+    private SongController songController;
+    
+    //_____ COMPONENTS __________________
     public Animator animator;
     public SongData songData;
     public Canvas canvas;
-    private Game game;
-    private SongController songController;
 
+    //_____ ATTRIBUTES __________________
+    private int levelToLoad;
+
+    //_____ STATE  ______________________
+
+    //_____ EVENTS _______________________
     public delegate void OnGameLoaded();
     public event OnGameLoaded onGameLoaded;
 
-    private int levelToLoad;
-
-    private bool firstLevelLoaded = true;
-
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* RUNTIME FUNCTIONS
+* INITIALIZE
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public override void Awake()
@@ -61,6 +46,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
+        // If launched directly into Song scene, bypassing Menu
         if(firstLevelLoaded)
         {
             CheckForNonMenuPlay();
@@ -73,37 +59,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         
         animator.SetTrigger("FadeIn");
     }
-
-    private void OnDisable() 
-    {
-        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
-        if (songController != null)
-            songController.onSongEnd -= ReturnToMenu;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PUBLIC FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-    public void FadeToNextLevel()
-    {
-        FadeToLevel(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-    public void FadeToLevel(int levelIndex)
-    {
-        levelToLoad = levelIndex;
-        animator.SetTrigger("FadeOut");
-    }
-
-    public void SetSong(SongData sd)
-    {
-        songData = sd;
-    }
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PRIVATE FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private bool CheckForNonMenuPlay()
     {
@@ -124,10 +79,42 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         return false;
     }
 
+    private void OnDisable() 
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        if(songController!= null) songController.onSongEnd -= ReturnToMenu;
+    }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* CHANGE LEVELS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    private void ReturnToMenu()
+    {
+        FadeToMenu();
+    }
+
+    private void FadeToMenu() {FadeToLevel(0);}
+
+    public void FadeToNextLevel()
+    {
+        FadeToLevel(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void FadeToLevel(int levelIndex)
+    {
+        levelToLoad = levelIndex;
+        animator.SetTrigger("FadeOut");
+    }
+
     private void OnFadeComplete()
     {
         SceneManager.LoadScene(levelToLoad);
     }
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+* PRIVATE FUNCTIONS
+*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     private void PopulateGame()
     {
@@ -138,8 +125,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
             game.Initialize(songData);
         }
     }
-
-    
+ 
     private void CheckForSongController()
     {
         songController = FindObjectOfType<SongController>();
@@ -149,11 +135,8 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         }
     }
 
-    private void ReturnToMenu()
+    public void SetSong(SongData sd)
     {
-        //Invoke("FadeToMenu", 2);
-        FadeToMenu();
+        songData = sd;
     }
-
-    private void FadeToMenu() {FadeToLevel(0);}
 }

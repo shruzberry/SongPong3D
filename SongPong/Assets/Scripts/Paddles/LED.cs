@@ -14,7 +14,6 @@ public class LED : MonoBehaviour
     public int order; // what number in the order this LED is
 
     // PRIVATE VARS
-    private bool isOn;
     private float beatsPerLoop;
 
     public void Initialize(PaddleManager pm)
@@ -42,13 +41,11 @@ public class LED : MonoBehaviour
 
     public void TurnLEDOn()
     {
-        isOn = true;
         material.EnableKeyword("_EMISSION");
     }
 
     public void TurnLEDOff()
     {
-        isOn = false;
         material.DisableKeyword("_EMISSION");
     }
 }
