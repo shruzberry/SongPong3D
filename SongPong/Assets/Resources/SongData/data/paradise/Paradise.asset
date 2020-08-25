@@ -20,5 +20,6 @@ MonoBehaviour:
   startBeat: 0
   endBeat: 636
   offset: 0
-  myPath: Assets/Resources/SongData/data/paradise/Paradise.asset
-  dataPath: Assets/Resources/SongData/data/paradise
+  myPath: Assets/Resources/SongData/data/Paradise/Paradise.asset
+  dataPath: Assets/Resources/SongData/data/Paradise
+  songLogo: {fileID: 21300000, guid: a369da082e3224417b8877cd57d37d99, type: 3}

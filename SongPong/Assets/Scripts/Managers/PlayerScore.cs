@@ -37,10 +37,7 @@ public class PlayerScore : MonoBehaviour
         ballDropper.onBallSpawned += AddBallListener;
         songController.onSongEnd += FlashEndScore;
         scoreText = GetComponent<TextMeshProUGUI>();
-    }
-
-    void Awake()
-    {
+        UpdateScoreText();
     }
 
     private void AddBallListener(Ball ball)
@@ -58,9 +55,9 @@ public class PlayerScore : MonoBehaviour
 * UPDATE
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    void Update()
+    private void UpdateScoreText()
     {
-        scoreText.text = "" + score;
+        scoreText.text = "" + score.ToString("0000000");
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -83,6 +80,7 @@ public class PlayerScore : MonoBehaviour
 
     private void Score(Ball ball)
     {
-        score += 1;
+        score += 50;
+        UpdateScoreText();
     }
 }

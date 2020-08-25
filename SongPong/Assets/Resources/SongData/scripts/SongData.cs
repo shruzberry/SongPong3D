@@ -21,6 +21,9 @@ public class SongData : ScriptableObject
     //[HideInInspector]
     public string dataPath;
 
+    [Header("UI")]
+    public Sprite songLogo;
+
     public void OnEnable()
     {
         myPath = AssetDatabase.GetAssetPath(this);
