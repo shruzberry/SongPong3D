@@ -78,6 +78,7 @@ public class BallDropper : MonoBehaviour
         // EVENTS
         song.onSongFastForward += FastForwardBalls;
         song.onSongRewind += RewindBalls;
+        game.onGameRestart += Restart;
 
         // POINTERS
         currentBallIndex = 0;
@@ -100,6 +101,13 @@ public class BallDropper : MonoBehaviour
 
         // balls not instantiated yet
         CalcMoveTimes();
+    }
+
+    public void Restart()
+    {
+        ClearActiveBalls();
+        currentBallIndex = 0;
+        isFinished = false;
     }
 
     /**
@@ -217,7 +225,7 @@ public class BallDropper : MonoBehaviour
                     checkBall = ballDataList[currentBallIndex];
                     dropBeat = checkBall.notes[0].hitBeat - fallTimeBeats;
                     // If the next ball isn't ready to drop, continue
-                    if(!(dropBeat <= song.ToBeat(Time.time - fallTimeBeats) + lagAmount)){ spawning = false; }
+                    if(!(dropBeat <= song.ToBeat(game.GetGameTime() - fallTimeBeats))){ spawning = false; }
                 }
             }
         }

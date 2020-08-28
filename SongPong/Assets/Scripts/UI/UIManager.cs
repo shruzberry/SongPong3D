@@ -11,7 +11,10 @@ public class UIManager : MonoBehaviour
 
     //_____ COMPONENTS __________________
     [Header("Components")]
+    public GameObject EndGameOverlay;
+    public GameObject InGameOverlay;
     public Image songLogo_img;
+    public Image songLogo_end;
 
     //_____ ATTRIBUTES __________________
     private Sprite songLogo;
@@ -20,23 +23,40 @@ public class UIManager : MonoBehaviour
     //_____ OTHER _______________________
 
 
-
     // Start is called before the first frame update
-    void Start()
+    public void Initialize()
     {
         game = FindObjectOfType<Game>();
+        
+        game.onGameStart += ShowInGameUI;
+        game.onGameEnd += ShowEndGameUI;
+        game.onGameRestart += ShowInGameUI;
+
         InitSongLogo();
+    }
+
+    public void Restart()
+    {
+        ShowInGameUI();
+    }
+
+    public void ShowInGameUI()
+    {
+        EndGameOverlay.SetActive(false);
+        InGameOverlay.SetActive(true);
+    }
+
+    public void ShowEndGameUI()
+    {
+        EndGameOverlay.SetActive(true);
+        InGameOverlay.SetActive(false);
     }
 
     private void InitSongLogo()
     {
         songLogo = game.songData.songLogo;
         songLogo_img.sprite = songLogo;
+        songLogo_end.sprite = songLogo;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

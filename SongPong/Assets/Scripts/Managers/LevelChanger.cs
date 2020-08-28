@@ -24,8 +24,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     //_____ STATE  ______________________
 
     //_____ EVENTS _______________________
-    public delegate void OnGameLoaded();
-    public event OnGameLoaded onGameLoaded;
+
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * INITIALIZE
@@ -37,6 +36,12 @@ public class LevelChanger : MonoSingleton<LevelChanger>
     
         animator = this.GetComponent<Animator>();
         game = FindObjectOfType<Game>(); 
+
+        // Find the return to menu button in the Song scene
+        if(SceneManager.GetActiveScene().buildIndex == 1) 
+        {
+            FindObjectOfType<MenuButton>().onMenuButtonClicked += ReturnToMenu;
+        }
     }
 
     public void OnEnable()
@@ -60,23 +65,13 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         animator.SetTrigger("FadeIn");
     }
 
-    private bool CheckForNonMenuPlay()
+    private void CheckForNonMenuPlay()
     {
         // if we start the game in song scene
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            bool success = game.InitializeEditor();
-
-            if(success)
-            {
-                if(onGameLoaded != null)
-                {
-                    onGameLoaded();
-                }
-                return true;
-            }
+            game.InitializeEditor();
         }
-        return false;
     }
 
     private void OnDisable() 
@@ -89,12 +84,10 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 * CHANGE LEVELS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    private void ReturnToMenu()
+    public void ReturnToMenu()
     {
-        FadeToMenu();
+        FadeToLevel(0);
     }
-
-    private void FadeToMenu() {FadeToLevel(0);}
 
     public void FadeToNextLevel()
     {

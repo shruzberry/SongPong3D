@@ -19,12 +19,12 @@ public class FadeOutMusic : MonoBehaviour
 
     void OnEnable()
     {
-        _sc.onSongEnd += BeginFadeOut;
+        //_sc.onSongEnd += BeginFadeOut;
     }
 
     void OnDisable()
     {
-        _sc.onSongEnd -= BeginFadeOut;
+        //_sc.onSongEnd -= BeginFadeOut;
     }
 
     void BeginFadeOut()

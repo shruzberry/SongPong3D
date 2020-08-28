@@ -170,6 +170,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153d5d64d315848afb4840e9684060ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5379145883641591634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4308722402711769026}
+  - component: {fileID: 8486989141046369192}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4308722402711769026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5379145883641591634}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7904085084687553080}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8486989141046369192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5379145883641591634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cc33e4d8492c434088f3cb9e4015417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: 0
+  score: 0
 --- !u!1 &7904085084687553081
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +247,7 @@ Transform:
   - {fileID: 5427112925761299433}
   - {fileID: 7904085084967520235}
   - {fileID: 9172618626326757372}
+  - {fileID: 4308722402711769026}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -218,14 +264,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootDataPath: SongData/data/
-  gameAxis: 0
+  gameType: 0
+  replayButton: {fileID: 0}
+  editorSong: {fileID: 0}
   songData: {fileID: 0}
   track: {fileID: 0}
+  uIManager: {fileID: 0}
   songController: {fileID: 0}
   paddleManager: {fileID: 0}
   ballDropper: {fileID: 0}
-  spawner: {fileID: 0}
-  editorSong: {fileID: 11400000, guid: 0d5dc1cc383724979b269c3342e434a2, type: 2}
 --- !u!1001 &3172429098371324110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -435,7 +482,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b2e64bd5b5c04cebac1b029ecea2ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5069459285310737684 stripped
@@ -447,7 +494,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee184339b0d154dc8b595b435327c9f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b2e64bd5b5c04cebac1b029ecea2ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7904085084864130052
@@ -658,8 +705,7 @@ PrefabInstance:
         type: 3}
       propertyPath: songData
       value: 
-      objectReference: {fileID: 11400000, guid: 0d5dc1cc383724979b269c3342e434a2,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8008791851200999231, guid: 1a6cae9c5e99a884aa07b98ef2b6b162,
         type: 3}
       propertyPath: skipIncrement

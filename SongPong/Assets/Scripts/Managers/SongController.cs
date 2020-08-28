@@ -16,6 +16,7 @@ public class SongController : MonoBehaviour
     public float skipIncrement = 1;
 
     //_____ REFERENCES __________________
+    private Game game;
     private BallDropper ballDropper;
     private InputMaster input;
 
@@ -60,9 +61,11 @@ public class SongController : MonoBehaviour
 * INITIALIZE
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
-    public void Initialize(InputMaster inputMaster)
+    public void Initialize(Game game, InputMaster inputMaster)
     {
         this.input = inputMaster;
+        this.game = game;
+        game.onGameRestart += RestartSong;
         source = GetComponent<AudioSource>();
     }
 
@@ -89,6 +92,17 @@ public class SongController : MonoBehaviour
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
 * SONG CONTROLS
 *+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
+
+    public void StartSong()
+    {
+        Play(game.GetWaitTimeBeats());
+    }
+
+    public void RestartSong()
+    {
+        GoToTime(startTime);
+        StartSong();
+    }
 
     public void Play()
     {
@@ -144,8 +158,7 @@ public class SongController : MonoBehaviour
 
     public void Update()
     {
-        CheckForEnd();
-        CheckForRetMenu();
+        if(isPlaying) CheckForEnd();
     }
 
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -154,15 +167,11 @@ public class SongController : MonoBehaviour
 
     public void CheckForEnd()
     {
-        if (isPlaying && (GetSongTimeBeats() > songData.endBeat))
+        if (GetSongTimeBeats() > songData.endBeat)
         {
             isPlaying = false;
-            if(onSongFastForward != null) 
-            {
-                onSongEnd();
-                Invoke("SendOnSceneEnd", 1.5f);
-                source.volume -= 0.01f;
-            } 
+            hasStarted = false;
+            if(onSongEnd != null) onSongEnd();
         }
     }
 
