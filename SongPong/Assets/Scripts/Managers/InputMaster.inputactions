@@ -256,33 +256,6 @@
             ]
         },
         {
-            "name": "NoteListener",
-            "id": "75c7cf47-23eb-4ced-b5cc-2157109c1c3c",
-            "actions": [
-                {
-                    "name": "MousePos",
-                    "type": "Value",
-                    "id": "e8b5d1c9-7ee3-48a7-8253-a27e5814bd33",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": ""
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "efc2faab-c735-4a69-9745-b8b8d4c660dc",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MousePos",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "Debugger",
             "id": "460c110b-0ac4-48de-9559-5606e1d64fbe",
             "actions": [
@@ -350,6 +323,33 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Rewind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "8c723441-7b0e-4fa0-8122-26fd24f4a641",
+            "actions": [
+                {
+                    "name": "TogglePauseMenu",
+                    "type": "Button",
+                    "id": "71d6b2fb-c140-4ff0-ac0f-c5e84dd1aff3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2c1352c1-2786-40ac-aacd-021df97b1bde",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TogglePauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

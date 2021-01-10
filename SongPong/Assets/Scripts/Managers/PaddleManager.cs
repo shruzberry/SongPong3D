@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /**
  * The Manager for paddles, spawns, sets attributes, etc.
@@ -12,6 +10,7 @@ public class PaddleManager : MonoBehaviour
     public float beatsPerFlash;
     [Header("Paddle")]
     public float speed = 12.0f;
+    public int numColumnsPaddleWidth = 3;
 
     //_____ REFERENCES __________________
     private Game game;
@@ -40,8 +39,13 @@ public class PaddleManager : MonoBehaviour
         // REFERENCES
         this.game = game;
         this.track = track;
+        
+        float trackWidth = track.columnWidth;
+        float paddleSize = trackWidth * numColumnsPaddleWidth;
 
         Paddle pm2 = paddle2.GetComponent<Paddle>();
+
+        pm2.transform.localScale = new Vector3(paddleSize, paddleSize, paddleSize);
 
         // VARIABLES
         paddleAxis = new Vector3(1,0,0);

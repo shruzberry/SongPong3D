@@ -6,22 +6,31 @@ using TMPro;
 
 public class ReplayButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public delegate void OnReplayButtonClicked();
-    public event OnReplayButtonClicked onReplayButtonClicked;
+    //_____ SETTINGS ____________________
 
+    //_____ REFERENCES __________________
+    private Game game;
+
+    //_____ COMPONENTS __________________
+    public TextMeshProUGUI text;
+
+    //_____ ATTRIBUTES __________________
     public Color primaryColor;
     public Color hoverColor;
 
-    public TextMeshProUGUI text;
+    //_____ STATE  ______________________
+    //_____ OTHER _______________________
+
 
     private void OnEnable() 
     {
         text.color = primaryColor;
+        game = FindObjectOfType<Game>();
     }
 
     public void ClickButton()
     {
-        if(onReplayButtonClicked != null) onReplayButtonClicked();
+        game.RestartGame();
     }
 
     public void OnPointerEnter(PointerEventData data)

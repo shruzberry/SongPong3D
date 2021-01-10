@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
     //_____ SETTINGS ____________________
+
     //_____ REFERENCES __________________
     private Game game;
+    private InputMaster input;
 
     //_____ COMPONENTS __________________
     [Header("Components")]
     public GameObject EndGameOverlay;
     public GameObject InGameOverlay;
+    public GameObject PauseGameOverlay;
     public Image songLogo_img;
     public Image songLogo_end;
 
@@ -20,17 +22,24 @@ public class UIManager : MonoBehaviour
     private Sprite songLogo;
 
     //_____ STATE  ______________________
+
     //_____ OTHER _______________________
 
 
     // Start is called before the first frame update
-    public void Initialize()
+    public void Initialize(Game game, InputMaster input)
     {
-        game = FindObjectOfType<Game>();
+        this.game = game;
+        this.input = input;
+
+        input.UI.TogglePauseMenu.performed += TogglePauseGameUI;
         
         game.onGameStart += ShowInGameUI;
         game.onGameEnd += ShowEndGameUI;
         game.onGameRestart += ShowInGameUI;
+        game.onGameResume += ResumeGame;
+
+        PauseGameOverlay.SetActive(false);
 
         InitSongLogo();
     }
@@ -38,6 +47,11 @@ public class UIManager : MonoBehaviour
     public void Restart()
     {
         ShowInGameUI();
+    }
+
+    public void ResumeGame()
+    {
+        PauseGameOverlay.SetActive(false);
     }
 
     public void ShowInGameUI()
@@ -50,6 +64,20 @@ public class UIManager : MonoBehaviour
     {
         EndGameOverlay.SetActive(true);
         InGameOverlay.SetActive(false);
+    }
+
+    public void TogglePauseGameUI(InputAction.CallbackContext context)
+    {
+        if(PauseGameOverlay.activeSelf == false)
+        {
+            PauseGameOverlay.SetActive(true);
+            game.PauseGame();
+        }
+        else
+        {
+            PauseGameOverlay.SetActive(false);
+            game.ResumeGame();
+        }
     }
 
     private void InitSongLogo()

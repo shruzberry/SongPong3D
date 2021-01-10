@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Managers/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -269,33 +269,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ]
         },
         {
-            ""name"": ""NoteListener"",
-            ""id"": ""75c7cf47-23eb-4ced-b5cc-2157109c1c3c"",
-            ""actions"": [
-                {
-                    ""name"": ""MousePos"",
-                    ""type"": ""Value"",
-                    ""id"": ""e8b5d1c9-7ee3-48a7-8253-a27e5814bd33"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""efc2faab-c735-4a69-9745-b8b8d4c660dc"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MousePos"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""Debugger"",
             ""id"": ""460c110b-0ac4-48de-9559-5606e1d64fbe"",
             ""actions"": [
@@ -367,6 +340,33 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""8c723441-7b0e-4fa0-8122-26fd24f4a641"",
+            ""actions"": [
+                {
+                    ""name"": ""TogglePauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""71d6b2fb-c140-4ff0-ac0f-c5e84dd1aff3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2c1352c1-2786-40ac-aacd-021df97b1bde"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TogglePauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -391,9 +391,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Paddle_SprintP2 = m_Paddle.FindAction("SprintP2", throwIfNotFound: true);
         m_Paddle_FastForward = m_Paddle.FindAction("Fast Forward", throwIfNotFound: true);
         m_Paddle_Rewind = m_Paddle.FindAction("Rewind", throwIfNotFound: true);
-        // NoteListener
-        m_NoteListener = asset.FindActionMap("NoteListener", throwIfNotFound: true);
-        m_NoteListener_MousePos = m_NoteListener.FindAction("MousePos", throwIfNotFound: true);
         // Debugger
         m_Debugger = asset.FindActionMap("Debugger", throwIfNotFound: true);
         m_Debugger_ToggleDebugLines = m_Debugger.FindAction("ToggleDebugLines", throwIfNotFound: true);
@@ -401,6 +398,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Song = asset.FindActionMap("Song", throwIfNotFound: true);
         m_Song_FastForward = m_Song.FindAction("Fast Forward", throwIfNotFound: true);
         m_Song_Rewind = m_Song.FindAction("Rewind", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_TogglePauseMenu = m_UI.FindAction("TogglePauseMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -520,39 +520,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     }
     public PaddleActions @Paddle => new PaddleActions(this);
 
-    // NoteListener
-    private readonly InputActionMap m_NoteListener;
-    private INoteListenerActions m_NoteListenerActionsCallbackInterface;
-    private readonly InputAction m_NoteListener_MousePos;
-    public struct NoteListenerActions
-    {
-        private @InputMaster m_Wrapper;
-        public NoteListenerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MousePos => m_Wrapper.m_NoteListener_MousePos;
-        public InputActionMap Get() { return m_Wrapper.m_NoteListener; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(NoteListenerActions set) { return set.Get(); }
-        public void SetCallbacks(INoteListenerActions instance)
-        {
-            if (m_Wrapper.m_NoteListenerActionsCallbackInterface != null)
-            {
-                @MousePos.started -= m_Wrapper.m_NoteListenerActionsCallbackInterface.OnMousePos;
-                @MousePos.performed -= m_Wrapper.m_NoteListenerActionsCallbackInterface.OnMousePos;
-                @MousePos.canceled -= m_Wrapper.m_NoteListenerActionsCallbackInterface.OnMousePos;
-            }
-            m_Wrapper.m_NoteListenerActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @MousePos.started += instance.OnMousePos;
-                @MousePos.performed += instance.OnMousePos;
-                @MousePos.canceled += instance.OnMousePos;
-            }
-        }
-    }
-    public NoteListenerActions @NoteListener => new NoteListenerActions(this);
-
     // Debugger
     private readonly InputActionMap m_Debugger;
     private IDebuggerActions m_DebuggerActionsCallbackInterface;
@@ -626,6 +593,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public SongActions @Song => new SongActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_TogglePauseMenu;
+    public struct UIActions
+    {
+        private @InputMaster m_Wrapper;
+        public UIActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @TogglePauseMenu => m_Wrapper.m_UI_TogglePauseMenu;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void SetCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            {
+                @TogglePauseMenu.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePauseMenu;
+                @TogglePauseMenu.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePauseMenu;
+                @TogglePauseMenu.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePauseMenu;
+            }
+            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @TogglePauseMenu.started += instance.OnTogglePauseMenu;
+                @TogglePauseMenu.performed += instance.OnTogglePauseMenu;
+                @TogglePauseMenu.canceled += instance.OnTogglePauseMenu;
+            }
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -644,10 +644,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnFastForward(InputAction.CallbackContext context);
         void OnRewind(InputAction.CallbackContext context);
     }
-    public interface INoteListenerActions
-    {
-        void OnMousePos(InputAction.CallbackContext context);
-    }
     public interface IDebuggerActions
     {
         void OnToggleDebugLines(InputAction.CallbackContext context);
@@ -656,5 +652,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnFastForward(InputAction.CallbackContext context);
         void OnRewind(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnTogglePauseMenu(InputAction.CallbackContext context);
     }
 }

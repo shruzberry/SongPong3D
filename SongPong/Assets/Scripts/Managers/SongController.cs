@@ -37,6 +37,7 @@ public class SongController : MonoBehaviour
     public bool isLoaded = false;
     [HideInInspector]
     public bool isPlaying;
+    public bool isReady; //song is waiting to play
     public bool hasStarted;
     public float returnToMenuConst = 2.0f;
 
@@ -66,6 +67,8 @@ public class SongController : MonoBehaviour
         this.input = inputMaster;
         this.game = game;
         game.onGameRestart += RestartSong;
+        game.onGamePause += Pause;
+        game.onGameResume += Resume;
         source = GetComponent<AudioSource>();
     }
 
@@ -95,6 +98,7 @@ public class SongController : MonoBehaviour
 
     public void StartSong()
     {
+        isReady = true;
         Play(game.GetWaitTimeBeats());
     }
 
@@ -118,10 +122,16 @@ public class SongController : MonoBehaviour
         StartCoroutine(WaitThenPlay(waitSec));
     }
 
+    public void Resume()
+    {
+        if(hasStarted) Play();
+    }
+
     IEnumerator WaitThenPlay(float waitSec)
     {
         yield return new WaitForSeconds(waitSec);
         Play();
+        isReady = false;
     }
 
     public void Pause()

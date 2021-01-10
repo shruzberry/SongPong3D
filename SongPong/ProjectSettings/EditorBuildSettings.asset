@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Development/Sean Workshop.unity
     guid: cf64b8a6e3cff2d46a73259743d29009
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 1b41f28cb2e2d4c898d9f25e9041719a,
+      type: 2}

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameStateIndicator : MonoBehaviour
@@ -8,6 +6,7 @@ public class GameStateIndicator : MonoBehaviour
     private SongController song;
     public Sprite playing;
     public Sprite paused;
+    private Vector2 mousePos;
 
     private Image image;
     // Start is called before the first frame update
@@ -15,6 +14,7 @@ public class GameStateIndicator : MonoBehaviour
     {
         song = FindObjectOfType<SongController>();
         image = GetComponent<Image>();
+        image.sprite = playing;
     }
 
     // Update is called once per frame
@@ -28,5 +28,12 @@ public class GameStateIndicator : MonoBehaviour
         {
             image.sprite = paused;
         }
+    }
+
+    bool isMouseOverGame()
+    {
+        var view = Camera.main.ScreenToViewportPoint(mousePos);
+        var isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+        return !isOutside;
     }
 }

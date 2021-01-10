@@ -1,36 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MenuButton : MonoBehaviour
 {
-    public delegate void OnMenuButtonClicked();
-    public event OnMenuButtonClicked onMenuButtonClicked;
-
-    public Color primaryColor;
-    public Color hoverColor;
-
-    public TextMeshProUGUI text;
-
-    private void OnEnable() 
+    private void Awake() 
     {
-        text.color = primaryColor;
+        GetComponent<Button>().onClick.AddListener(GoToMenu);
     }
 
-    public void ClickButton()
+    public void GoToMenu()
     {
-        if(onMenuButtonClicked != null) onMenuButtonClicked();
-    }
-
-    public void OnPointerEnter(PointerEventData data)
-    {
-        text.color = hoverColor;
-    }
-
-    public void OnPointerExit(PointerEventData data)
-    {
-        text.color = primaryColor;
+        Debug.Log("HELLO");
+        FindObjectOfType<Game>().ResumeGame();
+        FindObjectOfType<LevelChanger>().ReturnToMenu();
     }
 }

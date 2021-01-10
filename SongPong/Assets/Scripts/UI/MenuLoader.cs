@@ -29,26 +29,15 @@ using Types;
 
 public class MenuLoader : MonoBehaviour
 {
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* MEMBERS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
     public Button buttonPrefab;
     public float verticalOffset;
+
     public int spacing;
 
     private Vector2 position;
     private Object[] songs;
 
     LevelChanger levelChanger;
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PUBLIC FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
-
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* RUNTIME FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
 
     public void Awake()
     {
@@ -62,9 +51,6 @@ public class MenuLoader : MonoBehaviour
         createSongButtons();
     }
 
-/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-* PRIVATE FUNCTIONS
-*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=*/
     private void loadAllSongs()
     {
         songs = Resources.LoadAll("SongData", typeof(SongData));

@@ -26,8 +26,10 @@ public class SongData : ScriptableObject
 
     public void OnEnable()
     {
+#if UNITY_EDITOR
         myPath = AssetDatabase.GetAssetPath(this);
         dataPath = GetDataPath();
+#endif
     }
 
     public string GetDataPath()

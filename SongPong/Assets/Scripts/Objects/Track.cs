@@ -74,15 +74,14 @@ public class Track : MonoBehaviour
     {
         ballCols = new float[NUM_COL+1]; // need n+1 lines to make n column
 
-        float trackLeft = transform.position.x - (GetWidth() / 2);
-        float effScreenW = GetWidth() - (2 * padding); // the screen width minus the padding
+        float effTrackW = width - (2 * padding); // the screen width minus the padding
 
         // STEP for each column
-        columnWidth = effScreenW / NUM_COL; // amount of x to move per column
+        columnWidth = effTrackW / NUM_COL; // amount of x to move per column
 
         for(int i = 0; i < NUM_COL+1; i++)
         {
-            ballCols[i] = trackLeft + (columnWidth * i + padding);
+            ballCols[i] = left + (columnWidth * i + padding);
         }
     }
 

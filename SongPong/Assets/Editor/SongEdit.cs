@@ -69,8 +69,6 @@ public class SongEdit : MonoBehaviour
             }
         }
 
-        
-        
         SaveNotes(new_ball.notes);
         SaveBall(new_ball);
         return new_ball;
@@ -85,6 +83,7 @@ public class SongEdit : MonoBehaviour
         Game game = FindObjectOfType<Game>();
 
         string dpath = game.GetEditorSong().dataPath + "/Balls/";
+        // if the song does not already have a Balls directory, create one
         if(!Directory.Exists(dpath))
             System.IO.Directory.CreateDirectory(dpath);
 

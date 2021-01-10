@@ -37,11 +37,19 @@ public class Game : MonoBehaviour
     private float waitTimeBeats;
 
     //_____ STATE  _______________________
+    public bool isPaused = false;
+
     public delegate void OnGameStart();
     public event OnGameStart onGameStart;
 
     public delegate void OnGameEnd();
     public event OnGameEnd onGameEnd;
+
+    public delegate void OnGamePause();
+    public event OnGamePause onGamePause;
+
+    public delegate void OnGameResume();
+    public event OnGameResume onGameResume;
 
     public delegate void OnGameRestart();
     public event OnGameRestart onGameRestart;
@@ -95,9 +103,7 @@ public class Game : MonoBehaviour
         waitTimeBeats = ballDropper.GetTimeToFallBeats();
 
         // UI
-        uIManager.Initialize();
-        replayButton = FindObjectOfType<ReplayButton>();
-        replayButton.onReplayButtonClicked += RestartGame;
+        uIManager.Initialize(this, inputMaster);
 
         StartGame();
 
@@ -128,9 +134,22 @@ public class Game : MonoBehaviour
 
     public void StartGame()
     {
-        songController.Play(waitTimeBeats);
-        
-        if(onGameStart != null){onGameStart();}
+        songController.StartSong();
+        if(onGameStart != null) onGameStart();
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        if(onGamePause != null) onGamePause();
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        onGameResume?.Invoke();
     }
 
     public float GetWaitTimeBeats()
@@ -207,7 +226,7 @@ public class Game : MonoBehaviour
         editorSong = song;
     }
 
-    public void ResetGameTime()
+    private void ResetGameTime()
     {
         startTime = Time.time;
     }

@@ -35,13 +35,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
         base.Awake();
     
         animator = this.GetComponent<Animator>();
-        game = FindObjectOfType<Game>(); 
-
-        // Find the return to menu button in the Song scene
-        if(SceneManager.GetActiveScene().buildIndex == 1) 
-        {
-            FindObjectOfType<MenuButton>().onMenuButtonClicked += ReturnToMenu;
-        }
+        game = FindObjectOfType<Game>();
     }
 
     public void OnEnable()
@@ -86,6 +80,7 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void ReturnToMenu()
     {
+        Debug.Log("GO TO MENU");
         FadeToLevel(0);
     }
 

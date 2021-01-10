@@ -13,5 +13,6 @@ public class InputHandler : MonoBehaviour
         inputMaster = new InputMaster();
         inputMaster.Paddle.Enable();
         inputMaster.Song.Enable();
+        inputMaster.UI.Enable();
     }
 }
