@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: School
   m_EditorClassIdentifier: 
   currentTime: 0
-  bpm: 96
-  songName: School (Medium)
   song: {fileID: 8300000, guid: ed444094b338b49a7b5aba3b2454e1d3, type: 3}
+  songName: School (Medium)
+  artistName: Bill Wurtz
+  bpm: 96
   axis: 0
   startBeat: 0
   endBeat: 78
   offset: 0
   myPath: Assets/Resources/SongData/data/school/School.asset
   dataPath: Assets/Resources/SongData/data/school
-  songLogo: {fileID: 21300000, guid: 5e2eb98f3630b4f5eab071c37fe5d65a, type: 3}

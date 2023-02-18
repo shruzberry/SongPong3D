@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -8,15 +9,12 @@ public class UIManager : MonoBehaviour
 
     //_____ REFERENCES __________________
     private Game game;
-    private InputMaster input;
 
     //_____ COMPONENTS __________________
     [Header("Components")]
-    public GameObject EndGameOverlay;
-    public GameObject InGameOverlay;
+    public EndgameUI endgameUI;
+    public IngameUI ingameUI;
     public GameObject PauseGameOverlay;
-    public Image songLogo_img;
-    public Image songLogo_end;
 
     //_____ ATTRIBUTES __________________
     private Sprite songLogo;
@@ -30,23 +28,23 @@ public class UIManager : MonoBehaviour
     public void Initialize(Game game, InputMaster input)
     {
         this.game = game;
-        this.input = input;
 
         input.UI.TogglePauseMenu.performed += TogglePauseGameUI;
-        
+
+        // Initialize all UIs
+        ingameUI.gameObject.SetActive(true);
+        endgameUI.gameObject.SetActive(true);
+        ingameUI.Initialize();
+        endgameUI.Initialize();
+
         game.onGameStart += ShowInGameUI;
-        game.onGameEnd += ShowEndGameUI;
         game.onGameRestart += ShowInGameUI;
+
+        game.onGameEnd += ShowEndGameUI;
+
         game.onGameResume += ResumeGame;
 
         PauseGameOverlay.SetActive(false);
-
-        InitSongLogo();
-    }
-
-    public void Restart()
-    {
-        ShowInGameUI();
     }
 
     public void ResumeGame()
@@ -56,14 +54,14 @@ public class UIManager : MonoBehaviour
 
     public void ShowInGameUI()
     {
-        EndGameOverlay.SetActive(false);
-        InGameOverlay.SetActive(true);
+        endgameUI.DisableUI();
+        ingameUI.EnableUI();
     }
 
     public void ShowEndGameUI()
     {
-        EndGameOverlay.SetActive(true);
-        InGameOverlay.SetActive(false);
+        endgameUI.EnableUI();
+        ingameUI.DisableUI();
     }
 
     public void TogglePauseGameUI(InputAction.CallbackContext context)
@@ -79,12 +77,4 @@ public class UIManager : MonoBehaviour
             game.ResumeGame();
         }
     }
-
-    private void InitSongLogo()
-    {
-        songLogo = game.songData.songLogo;
-        songLogo_img.sprite = songLogo;
-        songLogo_end.sprite = songLogo;
-    }
-
 }

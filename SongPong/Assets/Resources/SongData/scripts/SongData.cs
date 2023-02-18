@@ -9,9 +9,14 @@ public class SongData : ScriptableObject
 {
     [HideInInspector]
     public float currentTime;
-    public int bpm;
-    public string songName;
+
     public AudioClip song;
+
+    // SONG METADATA
+    public string songName;
+    public string artistName;
+    public int bpm;
+
     public GameType axis;
     public int startBeat = 0;
     public int endBeat = 0;
@@ -20,9 +25,6 @@ public class SongData : ScriptableObject
     public string myPath;
     //[HideInInspector]
     public string dataPath;
-
-    [Header("UI")]
-    public Sprite songLogo;
 
     public void OnEnable()
     {

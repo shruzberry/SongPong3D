@@ -65,6 +65,11 @@ public class Game : MonoBehaviour
         ReloadBallData();
     }
 
+    private void Update()
+    {
+        
+    }
+
     /**
      * Called when the Game starts
      */

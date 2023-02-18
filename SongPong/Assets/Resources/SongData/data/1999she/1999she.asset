@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 1999she
   m_EditorClassIdentifier: 
   currentTime: 0
-  bpm: 496
-  songName: 1999 She (Medium)
   song: {fileID: 8300000, guid: f2b0611b8c7fe484b9c7e191b87f32fe, type: 3}
+  songName: 1999 She (Medium)
+  artistName: Deaton Christ Anthony
+  bpm: 496
   axis: 1
   startBeat: 0
   endBeat: 1240
   offset: 0
   myPath: Assets/Resources/SongData/data/1999she/1999she.asset
   dataPath: Assets/Resources/SongData/data/1999she
-  songLogo: {fileID: 21300000, guid: fa399349db7f547d8b37166300dd74b1, type: 3}

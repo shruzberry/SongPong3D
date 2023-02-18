@@ -80,7 +80,6 @@ public class LevelChanger : MonoSingleton<LevelChanger>
 
     public void ReturnToMenu()
     {
-        Debug.Log("GO TO MENU");
         FadeToLevel(0);
     }
 
